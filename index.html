@@ -1,0 +1,2116 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>อักษรไทย — Apprendre l'Alphabet Thaï</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Thai:wght@300;400;500;600;700&family=Sarabun:wght@300;400;500;600;700;800&family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<script src="https://www.gstatic.com/firebasejs/10.13.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.13.1/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.13.1/firebase-firestore-compat.js"></script>
+<style>
+:root {
+  --thai-font: 'Noto Sans Thai', sans-serif;
+  --bg:    #070B14;
+  --bg2:   #0D1422;
+  --bg3:   #141d2e;
+  --border: rgba(255,255,255,0.07);
+  --border-h: rgba(255,255,255,0.15);
+  --text:  #EFF2F9;
+  --text2: #8B92A8;
+  --text3: #4A5568;
+  --gold:  #F0B429;
+  --teal:  #0ED3A0;
+  --blue:  #4C8EFF;
+  --rose:  #FF5C8D;
+  --mid:   #F0B429;
+  --high:  #4C8EFF;
+  --low:   #0ED3A0;
+  --r: 16px;
+}
+body.trad{--thai-font:'Sarabun',sans-serif}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;overflow-x:hidden}
+.thai{font-family:var(--thai-font)}
+
+/* FONT TOGGLE */
+.font-btn{display:flex;align-items:center;gap:7px;background:rgba(255,255,255,.06);border:1px solid var(--border);border-radius:10px;padding:6px 14px;cursor:pointer;transition:all .2s;white-space:nowrap}
+.font-btn:hover{border-color:var(--border-h);background:rgba(255,255,255,.1)}
+.font-btn-preview{font-family:var(--thai-font);font-size:18px;line-height:1;transition:font-family .3s}
+.font-btn-label{font-family:'Inter',sans-serif;font-size:12px;font-weight:600;color:var(--text2);transition:color .2s}
+.font-btn:hover .font-btn-label{color:var(--text)}
+.font-btn-sep{width:1px;height:16px;background:var(--border);flex-shrink:0}
+.font-btn-tag{font-family:'Inter',sans-serif;font-size:10px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;padding:2px 6px;border-radius:4px;background:rgba(240,180,41,.15);color:var(--gold)}
+.nav-right{display:flex;align-items:center;gap:10px}
+
+/* LANG TOGGLE */
+.lang-sw{display:flex;align-items:center;background:rgba(255,255,255,.06);border:1px solid var(--border);border-radius:10px;overflow:hidden;flex-shrink:0}
+.lang-opt{padding:6px 13px;border:none;background:transparent;color:var(--text2);font-family:'Inter',sans-serif;font-size:12px;font-weight:700;cursor:pointer;transition:all .2s;letter-spacing:.3px}
+.lang-opt.active{background:var(--gold);color:#000}
+.lang-opt:hover:not(.active){color:var(--text);background:rgba(255,255,255,.08)}
+
+/* NAV */
+nav.topnav{
+  position:fixed;top:0;left:0;right:0;z-index:100;
+  backdrop-filter:blur(20px);
+  background:rgba(7,11,20,0.88);
+  border-bottom:1px solid var(--border);
+  height:64px;padding:0 24px;
+  display:flex;align-items:center;justify-content:space-between;
+}
+.logo{
+  font-size:20px;font-weight:800;letter-spacing:-0.5px;
+  background:linear-gradient(135deg,var(--gold),var(--teal));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+}
+.logo .thai{font-size:22px;margin-right:8px;font-weight:700}
+.nav-tabs{display:flex;gap:4px;background:rgba(255,255,255,0.04);border:1px solid var(--border);border-radius:12px;padding:4px}
+.ntab{padding:8px 18px;border-radius:8px;border:none;background:transparent;color:var(--text2);font-family:'Inter',sans-serif;font-size:14px;font-weight:500;cursor:pointer;transition:all .2s;white-space:nowrap}
+.ntab:hover{color:var(--text);background:rgba(255,255,255,0.05)}
+.ntab.active{background:var(--gold);color:#000;font-weight:700}
+.prog-badge{background:rgba(240,180,41,0.12);border:1px solid rgba(240,180,41,0.3);color:var(--gold);font-size:13px;font-weight:600;padding:6px 14px;border-radius:20px;cursor:pointer}
+
+/* TAB CONTENT */
+.tab-content{display:none;padding-top:64px}
+.tab-content.active{display:block}
+
+/* HERO */
+.hero{min-height:100vh;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden;padding:100px 24px 80px}
+.hero-bg{position:absolute;inset:0;background:radial-gradient(ellipse at 20% 50%,rgba(240,180,41,.07) 0%,transparent 60%),radial-gradient(ellipse at 80% 20%,rgba(76,142,255,.07) 0%,transparent 60%),radial-gradient(ellipse at 60% 80%,rgba(14,211,160,.05) 0%,transparent 60%)}
+.float-chars{position:absolute;inset:0;pointer-events:none;overflow:hidden}
+.fchar{position:absolute;font-family:var(--thai-font);font-weight:300;color:rgba(240,180,41,.07);animation:floatUp linear infinite;user-select:none}
+@keyframes floatUp{0%{transform:translateY(110vh) rotate(0deg);opacity:0}10%{opacity:1}90%{opacity:1}100%{transform:translateY(-20vh) rotate(360deg);opacity:0}}
+.hero-inner{text-align:center;max-width:800px;position:relative;z-index:2}
+.hero-badge{display:inline-flex;align-items:center;gap:8px;background:rgba(240,180,41,.1);border:1px solid rgba(240,180,41,.25);color:var(--gold);font-size:12px;font-weight:700;padding:8px 18px;border-radius:30px;margin-bottom:32px;letter-spacing:1px;text-transform:uppercase}
+.hero-badge::before{content:'';width:6px;height:6px;background:var(--gold);border-radius:50%;animation:blink 2s infinite}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.4}}
+.hero-th{font-family:var(--thai-font);font-size:clamp(64px,10vw,120px);font-weight:700;line-height:1;letter-spacing:-3px;margin-bottom:8px}
+.hero-fr{font-size:clamp(22px,4vw,40px);font-weight:800;letter-spacing:-1px;margin-bottom:24px}
+.gtext{background:linear-gradient(135deg,var(--gold),var(--teal));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.hero-sub{font-size:18px;color:var(--text2);max-width:520px;margin:0 auto 48px;line-height:1.7}
+.hero-btns{display:flex;gap:16px;justify-content:center;flex-wrap:wrap}
+.btn-g{background:var(--gold);color:#000;font-weight:700;font-size:15px;padding:15px 32px;border:none;border-radius:12px;cursor:pointer;transition:all .2s;font-family:'Inter',sans-serif}
+.btn-g:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(240,180,41,.4)}
+.btn-o{background:rgba(255,255,255,.06);color:var(--text);font-weight:600;font-size:15px;padding:15px 32px;border:1px solid var(--border-h);border-radius:12px;cursor:pointer;transition:all .2s;font-family:'Inter',sans-serif}
+.btn-o:hover{background:rgba(255,255,255,.1);transform:translateY(-2px)}
+.scroll-hint{position:absolute;bottom:40px;left:50%;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;gap:6px;color:var(--text3);font-size:11px;letter-spacing:1.5px;text-transform:uppercase;animation:bob 2s infinite}
+@keyframes bob{0%,100%{transform:translateX(-50%) translateY(0)}50%{transform:translateX(-50%) translateY(-8px)}}
+.scroll-arr{width:18px;height:18px;border-right:2px solid var(--text3);border-bottom:2px solid var(--text3);transform:rotate(45deg)}
+
+/* STATS */
+.stats-wrap{padding:0 24px;margin-top:-40px;position:relative;z-index:10}
+.stats-grid{max-width:1100px;margin:0 auto;display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+.scard{background:var(--bg3);border:1px solid var(--border);border-radius:var(--r);padding:24px;text-align:center;transition:all .3s}
+.scard:hover{border-color:var(--border-h);transform:translateY(-2px)}
+.scard-icon{font-size:26px;margin-bottom:10px}
+.scard-n{font-size:38px;font-weight:800;letter-spacing:-2px;background:linear-gradient(135deg,var(--gold),var(--teal));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.scard-l{font-size:12px;color:var(--text2);margin-top:4px;font-weight:500}
+
+/* SECTION */
+.sec{padding:80px 24px;max-width:1200px;margin:0 auto}
+.sec-hd{text-align:center;margin-bottom:56px}
+.sec-tag{display:inline-block;font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--gold);margin-bottom:14px}
+.sec-title{font-size:clamp(26px,4vw,44px);font-weight:800;letter-spacing:-1.5px;margin-bottom:14px}
+.sec-desc{font-size:15px;color:var(--text2);max-width:540px;margin:0 auto;line-height:1.7}
+
+/* CLASSES */
+.cls-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+.cls-card{background:var(--bg3);border:1px solid var(--border);border-radius:var(--r);padding:32px;position:relative;overflow:hidden;transition:all .3s}
+.cls-card:hover{transform:translateY(-4px);box-shadow:0 12px 40px rgba(0,0,0,.4)}
+.cls-card.mid{border-top:3px solid var(--mid)}
+.cls-card.high{border-top:3px solid var(--high)}
+.cls-card.low{border-top:3px solid var(--low)}
+.cls-glow{position:absolute;top:-40px;right:-40px;width:140px;height:140px;border-radius:50%;filter:blur(50px);opacity:.12}
+.cls-card.mid .cls-glow{background:var(--mid)}
+.cls-card.high .cls-glow{background:var(--high)}
+.cls-card.low .cls-glow{background:var(--low)}
+.cls-badge{display:inline-block;font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;padding:4px 10px;border-radius:6px;margin-bottom:14px}
+.cls-badge.mid{background:rgba(240,180,41,.15);color:var(--mid)}
+.cls-badge.high{background:rgba(76,142,255,.15);color:var(--high)}
+.cls-badge.low{background:rgba(14,211,160,.15);color:var(--low)}
+.cls-count{font-size:52px;font-weight:800;letter-spacing:-3px;margin-bottom:6px}
+.cls-card.mid .cls-count{color:var(--mid)}
+.cls-card.high .cls-count{color:var(--high)}
+.cls-card.low .cls-count{color:var(--low)}
+.cls-name{font-size:20px;font-weight:700;margin-bottom:10px}
+.cls-desc{font-size:13px;color:var(--text2);line-height:1.6}
+.mini-chars{display:flex;flex-wrap:wrap;gap:5px;margin-top:14px}
+.mchar{font-family:var(--thai-font);font-size:16px;padding:3px 7px;border-radius:5px;background:rgba(255,255,255,.05)}
+
+/* ALPHABET */
+.alph-controls{display:flex;gap:10px;margin-bottom:28px;flex-wrap:wrap;align-items:center}
+.fbtn{padding:8px 18px;border-radius:8px;border:1px solid var(--border);background:transparent;color:var(--text2);font-family:'Inter',sans-serif;font-size:13px;font-weight:500;cursor:pointer;transition:all .2s}
+.fbtn:hover{border-color:var(--border-h);color:var(--text)}
+.fbtn.active{border-color:var(--gold);color:var(--gold);background:rgba(240,180,41,.1)}
+.fbtn.fmid.active{border-color:var(--mid);color:var(--mid);background:rgba(240,180,41,.1)}
+.fbtn.fhigh.active{border-color:var(--high);color:var(--high);background:rgba(76,142,255,.1)}
+.fbtn.flow.active{border-color:var(--low);color:var(--low);background:rgba(14,211,160,.1)}
+.srch{flex:1;min-width:180px;padding:8px 16px;background:var(--bg3);border:1px solid var(--border);border-radius:8px;color:var(--text);font-family:'Inter',sans-serif;font-size:14px;outline:none;transition:border-color .2s}
+.srch::placeholder{color:var(--text3)}
+.srch:focus{border-color:var(--gold)}
+.alph-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:14px}
+
+/* PROGRESS */
+.prog-bar{max-width:1200px;margin:0 auto 32px;padding:0 24px}
+.prog-row{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}
+.prog-lbl{font-size:13px;font-weight:600;color:var(--text2)}
+.prog-val{font-size:13px;font-weight:700;color:var(--gold)}
+.prog-track{height:5px;background:var(--bg3);border-radius:3px;overflow:hidden}
+.prog-fill{height:100%;background:linear-gradient(90deg,var(--gold),var(--teal));border-radius:3px;transition:width .5s ease;width:0%}
+
+/* FLIP CARDS */
+.ccard{perspective:1000px;height:240px;cursor:pointer}
+.ccard-inner{position:relative;width:100%;height:100%;transition:transform .6s cubic-bezier(.4,.2,.2,1);transform-style:preserve-3d}
+.ccard.flipped .ccard-inner{transform:rotateY(180deg)}
+.cface{position:absolute;inset:0;border-radius:var(--r);border:1px solid var(--border);background:var(--bg3);backface-visibility:hidden;display:flex;flex-direction:column;align-items:center;justify-content:center;transition:border-color .25s,box-shadow .25s}
+.ccard:hover .cface{border-color:var(--border-h);box-shadow:0 8px 24px rgba(0,0,0,.35)}
+.cback{transform:rotateY(180deg);justify-content:flex-start;align-items:flex-start;padding:14px}
+.cface.mid{border-left:3px solid var(--mid)}
+.cface.high{border-left:3px solid var(--high)}
+.cface.low{border-left:3px solid var(--low)}
+.cchar{font-family:var(--thai-font);font-size:42px;font-weight:500;line-height:1;margin-bottom:5px}
+.cthaiword{font-family:var(--thai-font);font-size:20px;font-weight:700;color:var(--text);margin-bottom:3px;letter-spacing:.5px}
+.cfrmeaning{font-size:13px;font-weight:600;color:var(--text2);margin-bottom:5px}
+.cnr{font-size:11px;font-weight:600;color:var(--text3);margin-bottom:4px;letter-spacing:.3px}
+.cinfoline{font-size:10px;color:var(--text3);letter-spacing:.3px;display:flex;align-items:center;gap:4px}
+.cinfoline .csep{opacity:.4}
+.cinfoline .cclslbl{font-weight:700}
+.cinfoline .cclslbl.mid{color:var(--mid)}
+.cinfoline .cclslbl.high{color:var(--high)}
+.cinfoline .cclslbl.low{color:var(--low)}
+.cinfoline .csound{color:var(--text2);font-weight:600}
+.cdot{position:absolute;top:10px;right:10px;width:7px;height:7px;border-radius:50%}
+.mid .cdot{background:var(--mid)}
+.high .cdot{background:var(--high)}
+.low .cdot{background:var(--low)}
+.ldot{position:absolute;top:10px;left:10px;width:7px;height:7px;border-radius:50%;background:var(--teal);display:none}
+.ccard.learned .ldot{display:block}
+.ccard.learned .cface{background:rgba(14,211,160,.03)}
+.bchar{font-family:var(--thai-font);font-size:30px;font-weight:600;margin-bottom:0;display:block}
+.bname{font-size:10px;color:var(--text3);font-family:var(--thai-font);margin-bottom:8px;display:block}
+.bsound{font-size:11px;color:var(--text2);line-height:1.4;margin-bottom:6px}
+.bmeaning{font-size:13px;font-weight:600;margin-bottom:6px}
+.bpos{display:flex;gap:5px;font-size:10px;margin-bottom:8px}
+.bpill{padding:2px 7px;border-radius:4px;background:rgba(255,255,255,.05);color:var(--text2)}
+.lbtn{width:100%;padding:7px;border-radius:7px;border:none;font-family:'Inter',sans-serif;font-size:11px;font-weight:600;cursor:pointer;transition:all .2s;background:rgba(14,211,160,.12);color:var(--teal);margin-top:auto}
+.lbtn:hover{background:rgba(14,211,160,.22)}
+.lbtn.done{background:rgba(14,211,160,.22)}
+
+/* SPEAK BUTTON */
+.spk{position:absolute;bottom:8px;right:8px;background:rgba(255,255,255,.06);border:1px solid var(--border);border-radius:6px;padding:3px 8px;cursor:pointer;font-size:13px;color:var(--text2);transition:all .2s;line-height:1.4;z-index:5}
+.spk:hover{background:rgba(240,180,41,.18);color:var(--gold);border-color:rgba(240,180,41,.5);transform:scale(1.1)}
+.spk.playing{background:rgba(240,180,41,.25);color:var(--gold);border-color:var(--gold)}
+.vspk{background:rgba(255,255,255,.06);border:1px solid var(--border);border-radius:6px;padding:4px 9px;cursor:pointer;font-size:13px;color:var(--text2);transition:all .2s;flex-shrink:0;margin-left:4px}
+.vspk:hover{background:rgba(240,180,41,.18);color:var(--gold);border-color:rgba(240,180,41,.5)}
+.vspk.playing{background:rgba(240,180,41,.25);color:var(--gold);border-color:var(--gold)}
+.tspk{display:block;margin:8px auto 0;background:rgba(255,255,255,.06);border:1px solid var(--border);border-radius:6px;padding:4px 12px;cursor:pointer;font-size:13px;color:var(--text2);transition:all .2s}
+.tspk:hover{background:rgba(240,180,41,.18);color:var(--gold);border-color:rgba(240,180,41,.5)}
+.voice-warn{background:rgba(255,92,141,.08);border:1px solid rgba(255,92,141,.25);color:var(--rose);padding:12px 16px;border-radius:10px;font-size:13px;margin-bottom:20px;display:none;line-height:1.5}
+.voice-warn a{color:var(--rose);font-weight:700}
+
+/* VOWELS */
+.vow-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:20px}
+.vow-group{background:var(--bg3);border:1px solid var(--border);border-radius:var(--r);padding:26px}
+.vow-gtitle{font-size:11px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--text3);margin-bottom:14px}
+.vlist{display:flex;flex-direction:column;gap:8px}
+.vitem{display:flex;align-items:center;gap:14px;padding:10px 14px;border-radius:10px;background:rgba(255,255,255,.02);border:1px solid var(--border);transition:all .2s}
+.vitem:hover{border-color:var(--border-h);background:rgba(255,255,255,.04)}
+.vchar{font-family:var(--thai-font);font-size:26px;width:38px;text-align:center;flex-shrink:0}
+.vinfo{flex:1}
+.vrtgs{font-size:14px;font-weight:700}
+.vdesc{font-size:11px;color:var(--text2);margin-top:2px}
+.vtag{font-size:10px;font-weight:700;padding:2px 8px;border-radius:4px;flex-shrink:0}
+.short{background:rgba(255,92,141,.15);color:var(--rose)}
+.long{background:rgba(76,142,255,.15);color:var(--blue)}
+
+/* TONES */
+.tones-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:14px}
+.tone-card{background:var(--bg3);border:1px solid var(--border);border-radius:var(--r);padding:24px 16px;text-align:center;transition:all .3s}
+.tone-card:hover{transform:translateY(-4px);border-color:var(--border-h);box-shadow:0 12px 32px rgba(0,0,0,.35)}
+.tn{font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--text3);margin-bottom:8px}
+.tmark{font-family:var(--thai-font);font-size:44px;line-height:1.3;margin-bottom:6px}
+.tname{font-size:13px;font-weight:700;margin-bottom:3px}
+.tfr{font-size:11px;color:var(--text2);margin-bottom:14px}
+.tcurve{width:80px;height:36px;margin:0 auto;display:block}
+
+/* QUIZ */
+.quiz-wrap{max-width:640px;margin:0 auto;padding:48px 24px}
+.quiz-card{background:var(--bg3);border:1px solid var(--border);border-radius:24px;padding:40px 36px;text-align:center}
+.qnum{font-size:12px;font-weight:600;color:var(--text3);margin-bottom:20px;letter-spacing:.5px}
+.qchar{font-family:var(--thai-font);font-size:110px;font-weight:400;line-height:1;margin-bottom:12px}
+.qrtgs{font-size:44px;font-weight:800;letter-spacing:-1px;margin-bottom:12px}
+.qprompt{font-size:15px;color:var(--text2);margin-bottom:28px}
+.qopts{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-bottom:28px}
+.qopt{padding:22px 12px;border-radius:14px;border:1px solid var(--border);background:rgba(255,255,255,.04);color:var(--text);font-family:'Inter',sans-serif;font-size:24px;font-weight:700;cursor:pointer;transition:all .2s;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;min-height:80px}
+.qopt:hover:not(:disabled){border-color:var(--gold);background:rgba(240,180,41,.1);transform:translateY(-2px)}
+.qopt.correct{border-color:var(--teal);background:rgba(14,211,160,.15);color:var(--teal)}
+.qopt.wrong{border-color:var(--rose);background:rgba(255,92,141,.12);color:var(--rose)}
+.qopt.qopt-thai{font-family:var(--thai-font);font-size:44px;font-weight:500;padding:18px 8px}
+.qopt-sub{font-family:'Inter',sans-serif;font-size:12px;color:var(--text3);font-weight:500;line-height:1}
+.qopt.correct .qopt-sub{color:inherit;opacity:.7}
+.qopt.wrong .qopt-sub{color:inherit;opacity:.7}
+.qplay{background:rgba(240,180,41,.1);border:2px solid rgba(240,180,41,.3);border-radius:20px;padding:28px 52px;cursor:pointer;transition:all .3s;display:flex;flex-direction:column;align-items:center;gap:10px;margin:0 auto 28px}
+.qplay:hover{background:rgba(240,180,41,.2);border-color:var(--gold);transform:scale(1.05);box-shadow:0 8px 32px rgba(240,180,41,.2)}
+.qplay-icon{font-size:60px;line-height:1}
+.qplay-label{font-family:'Inter',sans-serif;font-size:13px;font-weight:700;color:var(--gold);letter-spacing:1px;text-transform:uppercase}
+.qscore{display:flex;justify-content:center;gap:40px;margin-bottom:20px}
+.qsi{text-align:center}
+.qsv{font-size:36px;font-weight:800;letter-spacing:-1px}
+.qsi.ok .qsv{color:var(--teal)}
+.qsi.ko .qsv{color:var(--rose)}
+.qsl{font-size:11px;color:var(--text3);font-weight:500;letter-spacing:.5px;text-transform:uppercase}
+.qmodes{display:flex;gap:8px;justify-content:center;margin-bottom:28px;flex-wrap:wrap}
+.qmode{padding:10px 18px;border-radius:10px;border:1px solid var(--border);background:transparent;color:var(--text2);font-family:'Inter',sans-serif;font-size:13px;font-weight:500;cursor:pointer;transition:all .2s}
+.qmode.active{border-color:var(--gold);color:var(--gold);background:rgba(240,180,41,.1)}
+.qmode.active{border-color:var(--gold);color:var(--gold);background:rgba(240,180,41,.1)}
+.quiz-start{text-align:center;padding:60px 24px}
+.quiz-start h2{font-size:32px;font-weight:800;margin-bottom:12px}
+.quiz-start p{color:var(--text2);margin-bottom:32px}
+
+/* FOOTER */
+footer{border-top:1px solid var(--border);padding:40px 24px;text-align:center;color:var(--text3);font-size:13px}
+
+/* MOBILE BOTTOM NAV */
+.mobnav{display:none;position:fixed;bottom:0;left:0;right:0;background:rgba(7,11,20,.95);backdrop-filter:blur(20px);border-top:1px solid var(--border);padding:8px 0 12px;z-index:100;justify-content:space-around}
+.mtab{display:flex;flex-direction:column;align-items:center;gap:3px;padding:6px 16px;border:none;background:transparent;color:var(--text3);font-family:'Inter',sans-serif;font-size:10px;font-weight:600;cursor:pointer;letter-spacing:.5px;text-transform:uppercase}
+.mtab-icon{font-size:20px}
+.mtab.active{color:var(--gold)}
+
+@media(max-width:768px){
+  .stats-grid{grid-template-columns:repeat(2,1fr)}
+  .cls-grid{grid-template-columns:1fr}
+  .tones-grid{grid-template-columns:repeat(2,1fr)}
+  .vow-grid{grid-template-columns:1fr}
+  .nav-tabs,.prog-badge{display:none}
+  .font-btn-label{display:none}
+  .mobnav{display:flex}
+  .tab-content{padding-bottom:72px}
+  .quiz-card{padding:32px 20px}
+  .qchar{font-size:80px}
+  .qrtgs{font-size:30px}
+  .sec{padding:60px 16px}
+  .alph-grid{grid-template-columns:repeat(auto-fill,minmax(110px,1fr));gap:10px}
+  .ccard{height:230px}
+  .cchar{font-size:34px}
+  .cthaiword{font-size:17px}
+  .cfrmeaning{font-size:12px}
+  .class-compare{grid-template-columns:1fr}
+  .tone-row{grid-template-columns:repeat(3,1fr)}
+  .num-grid{grid-template-columns:repeat(5,1fr)}
+  .vpos-grid{grid-template-columns:1fr}
+  .syllab-demo{gap:10px}
+  .syllab-box{padding:14px 16px;min-width:70px}
+  .syllab-char{font-size:36px}
+}
+
+/* ─── LEÇON ─────────────────────────────────────────────────────────────── */
+.lesson-wrap{max-width:860px;margin:0 auto;padding:80px 24px 60px}
+.lesson-hero{text-align:center;margin-bottom:56px;padding:48px 32px;background:var(--bg3);border:1px solid var(--border);border-radius:24px;position:relative;overflow:hidden}
+.lesson-hero-bg{position:absolute;inset:0;background:radial-gradient(ellipse at 30% 50%,rgba(240,180,41,.07),transparent 60%),radial-gradient(ellipse at 70% 50%,rgba(14,211,160,.05),transparent 60%)}
+.lesson-hero-thai{font-family:var(--thai-font);font-size:clamp(40px,6vw,72px);font-weight:700;line-height:1.2;margin-bottom:12px;position:relative}
+.lesson-hero-sub{font-size:15px;color:var(--text2);max-width:500px;margin:0 auto 28px;line-height:1.7;position:relative}
+.lesson-facts{display:flex;justify-content:center;gap:32px;flex-wrap:wrap;position:relative}
+.lf-item{text-align:center}
+.lf-n{font-size:32px;font-weight:800;letter-spacing:-1px;background:linear-gradient(135deg,var(--gold),var(--teal));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.lf-l{font-size:12px;color:var(--text2);font-weight:500}
+.lesson-card{background:var(--bg3);border:1px solid var(--border);border-radius:20px;padding:36px;margin-bottom:20px;transition:border-color .25s}
+.lesson-card:hover{border-color:var(--border-h)}
+.lcard-header{display:flex;align-items:center;gap:14px;margin-bottom:20px}
+.lcard-num{width:38px;height:38px;border-radius:11px;background:rgba(240,180,41,.15);color:var(--gold);font-size:16px;font-weight:800;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.lcard-title{font-size:22px;font-weight:800;letter-spacing:-.5px}
+.lesson-text{font-size:14px;color:var(--text2);line-height:1.8;margin-bottom:16px}
+.lesson-hl{background:rgba(240,180,41,.07);border:1px solid rgba(240,180,41,.18);border-radius:12px;padding:14px 18px;margin:14px 0;font-size:13px;color:var(--text2);line-height:1.7}
+.lesson-hl strong{color:var(--gold);font-weight:700}
+.tip-box{background:rgba(76,142,255,.06);border:1px solid rgba(76,142,255,.2);border-radius:12px;padding:14px 18px;margin:14px 0;display:flex;gap:10px;align-items:flex-start}
+.tip-icon{font-size:18px;flex-shrink:0;margin-top:1px}
+.tip-text{font-size:13px;color:var(--text2);line-height:1.6}
+.tip-text strong{color:var(--blue)}
+
+/* Syllable diagram */
+.syllab-demo{display:flex;align-items:center;justify-content:center;gap:12px;flex-wrap:wrap;margin:22px 0}
+.syllab-box{background:rgba(255,255,255,.04);border:1px solid var(--border);border-radius:14px;padding:18px 22px;text-align:center;min-width:86px}
+.syllab-char{font-family:var(--thai-font);font-size:48px;font-weight:500;line-height:1;margin-bottom:8px;display:block}
+.syllab-label{font-size:10px;color:var(--text3);text-transform:uppercase;letter-spacing:1px;font-weight:700}
+.syllab-plus{font-size:24px;color:var(--text3);font-weight:300;margin-top:-6px}
+.syllab-eq{font-size:24px;color:var(--text3);font-weight:300;margin-top:-6px}
+.syllab-result{background:rgba(14,211,160,.07);border-color:rgba(14,211,160,.3)}
+.syllab-result .syllab-char{color:var(--teal)}
+.syllab-audio{margin-top:10px;background:none;border:1px solid var(--border);border-radius:6px;padding:4px 10px;cursor:pointer;font-size:12px;color:var(--text3);transition:all .2s;display:block;width:100%}
+.syllab-audio:hover{color:var(--gold);border-color:rgba(240,180,41,.4);background:rgba(240,180,41,.07)}
+
+/* Class compare */
+.class-compare{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin:20px 0}
+.cc-card{border-radius:14px;padding:20px 16px;text-align:center;border:1px solid;cursor:default}
+.cc-card.mid{background:rgba(240,180,41,.06);border-color:rgba(240,180,41,.25)}
+.cc-card.high{background:rgba(76,142,255,.06);border-color:rgba(76,142,255,.25)}
+.cc-card.low{background:rgba(14,211,160,.06);border-color:rgba(14,211,160,.25)}
+.cc-title{font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;margin-bottom:10px}
+.cc-card.mid .cc-title{color:var(--mid)}
+.cc-card.high .cc-title{color:var(--high)}
+.cc-card.low .cc-title{color:var(--low)}
+.cc-count{font-size:28px;font-weight:800;letter-spacing:-1px;margin-bottom:6px}
+.cc-card.mid .cc-count{color:var(--mid)}
+.cc-card.high .cc-count{color:var(--high)}
+.cc-card.low .cc-count{color:var(--low)}
+.cc-chars{font-family:var(--thai-font);font-size:20px;letter-spacing:3px;margin-bottom:8px;line-height:1.6;color:var(--text)}
+.cc-desc{font-size:12px;color:var(--text2);line-height:1.5}
+
+/* Vowel positions */
+.vpos-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin:20px 0}
+.vpos-card{background:rgba(255,255,255,.03);border:1px solid var(--border);border-radius:12px;padding:20px 16px;text-align:center}
+.vpos-tag{font-size:10px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:1px;margin-bottom:10px}
+.vpos-ex{font-family:var(--thai-font);font-size:44px;font-weight:500;line-height:1.1;margin-bottom:6px;display:block;color:var(--text)}
+.vpos-rtgs{font-size:13px;font-weight:700;color:var(--text2);margin-bottom:4px}
+.vpos-desc{font-size:11px;color:var(--text3)}
+.vpos-spk{margin-top:8px;background:none;border:1px solid var(--border);border-radius:6px;padding:3px 8px;cursor:pointer;font-size:12px;color:var(--text3);transition:all .2s}
+.vpos-spk:hover{color:var(--gold);border-color:rgba(240,180,41,.4)}
+
+/* Tone demo */
+.tone-row{display:grid;grid-template-columns:repeat(5,1fr);gap:10px;margin:20px 0}
+.tone-cell{background:rgba(255,255,255,.03);border:1px solid var(--border);border-radius:12px;padding:16px 8px;text-align:center;transition:all .2s}
+.tone-cell:hover{border-color:var(--border-h);transform:translateY(-2px)}
+.tone-char-big{font-family:var(--thai-font);font-size:40px;font-weight:500;line-height:1;margin-bottom:6px;display:block}
+.tone-lbl{font-size:10px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:.5px;margin-bottom:3px}
+.tone-meaning{font-size:12px;color:var(--text2);margin-bottom:8px;line-height:1.3;min-height:32px;display:flex;align-items:center;justify-content:center}
+.tone-spk{background:none;border:1px solid var(--border);border-radius:6px;padding:3px 10px;cursor:pointer;font-size:12px;color:var(--text3);transition:all .2s;width:100%}
+.tone-spk:hover{color:var(--gold);border-color:rgba(240,180,41,.4);background:rgba(240,180,41,.07)}
+.tone-curve-mini{width:60px;height:28px;margin:0 auto 8px;display:block}
+
+/* Numbers */
+.num-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:10px;margin:20px 0}
+.num-cell{background:rgba(255,255,255,.03);border:1px solid var(--border);border-radius:12px;padding:16px 8px;text-align:center;cursor:pointer;transition:all .2s}
+.num-cell:hover{border-color:var(--gold);background:rgba(240,180,41,.08);transform:translateY(-2px)}
+.num-thai{font-family:var(--thai-font);font-size:36px;font-weight:500;line-height:1;margin-bottom:4px;display:block}
+.num-western{font-size:16px;color:var(--text2);font-weight:700}
+
+/* Ex rows */
+.ex-list{display:flex;flex-direction:column;gap:8px;margin:16px 0}
+.ex-row{display:flex;align-items:center;gap:12px;padding:10px 14px;background:rgba(255,255,255,.02);border:1px solid var(--border);border-radius:10px;transition:border-color .2s}
+.ex-row:hover{border-color:var(--border-h)}
+.ex-thai{font-family:var(--thai-font);font-size:24px;font-weight:600;min-width:60px}
+.ex-rtgs{font-size:13px;color:var(--text3);font-weight:600;min-width:48px}
+.ex-meaning{font-size:13px;color:var(--text2);flex:1}
+.ex-spk{background:none;border:1px solid var(--border);border-radius:6px;padding:3px 9px;cursor:pointer;font-size:12px;color:var(--text3);transition:all .2s;flex-shrink:0}
+.ex-spk:hover{color:var(--gold);border-color:rgba(240,180,41,.4)}
+
+/* Sign example */
+.thai-sign{background:linear-gradient(135deg,rgba(240,180,41,.12),rgba(14,211,160,.08));border:1px solid rgba(240,180,41,.3);border-radius:16px;padding:24px;text-align:center;margin:20px 0}
+.thai-sign-text{font-family:var(--thai-font);font-size:36px;font-weight:700;color:var(--text);margin-bottom:6px}
+.thai-sign-sub{font-size:13px;color:var(--text3)}
+
+/* Step path */
+.lesson-path{display:flex;flex-direction:column;gap:12px;margin:20px 0}
+.path-step{display:flex;align-items:flex-start;gap:14px;padding:14px 18px;background:rgba(255,255,255,.02);border:1px solid var(--border);border-radius:12px;cursor:pointer;transition:all .2s}
+.path-step:hover{border-color:var(--gold);background:rgba(240,180,41,.05);transform:translateX(4px)}
+.path-num{width:28px;height:28px;border-radius:8px;background:rgba(240,180,41,.15);color:var(--gold);font-size:13px;font-weight:800;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.path-content{flex:1}
+.path-title{font-size:14px;font-weight:700;margin-bottom:3px}
+.path-desc{font-size:12px;color:var(--text2)}
+
+/* ─── PHRASES DE BASE ──────────────────────────────────────────────────────── */
+.phrases-wrap{max-width:1100px;margin:0 auto;padding:80px 24px 60px}
+.pcats{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;margin-bottom:24px}
+.pcbtn{padding:8px 16px;border-radius:8px;border:1px solid var(--border);background:transparent;color:var(--text2);font-family:'Inter',sans-serif;font-size:13px;font-weight:500;cursor:pointer;transition:all .2s;white-space:nowrap}
+.pcbtn:hover{border-color:var(--border-h);color:var(--text)}
+.pcbtn.active{border-color:var(--gold);color:var(--gold);background:rgba(240,180,41,.1)}
+.psrch{width:100%;max-width:440px;display:block;margin:0 auto 16px;padding:10px 18px;background:var(--bg3);border:1px solid var(--border);border-radius:10px;color:var(--text);font-family:'Inter',sans-serif;font-size:14px;outline:none;transition:border-color .2s}
+.psrch::placeholder{color:var(--text3)}
+.psrch:focus{border-color:var(--gold)}
+.pcount{font-size:13px;color:var(--text3);text-align:center;margin-bottom:20px}
+.phrase-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
+.pcard{background:var(--bg3);border:1px solid var(--border);border-radius:14px;padding:16px 18px;display:flex;align-items:center;gap:14px;transition:all .2s}
+.pcard:hover{border-color:var(--border-h);transform:translateY(-1px)}
+.pcard-body{flex:1;min-width:0}
+.pcard-cat{font-size:10px;font-weight:700;letter-spacing:.8px;text-transform:uppercase;color:var(--gold);margin-bottom:5px;display:block}
+.pcard-thai{font-family:var(--thai-font);font-size:22px;font-weight:600;color:var(--text);line-height:1.3;margin-bottom:3px;display:block}
+.pcard-rtgs{font-size:12px;color:var(--text3);margin-bottom:5px;font-style:italic}
+.pcard-fr{font-size:14px;font-weight:600;color:var(--text2)}
+.pspk{flex-shrink:0;background:rgba(255,255,255,.06);border:1px solid var(--border);border-radius:8px;padding:9px 11px;cursor:pointer;font-size:16px;color:var(--text2);transition:all .2s;line-height:1}
+.pspk:hover{background:rgba(240,180,41,.18);color:var(--gold);border-color:rgba(240,180,41,.5);transform:scale(1.1)}
+.pspk.playing{background:rgba(240,180,41,.25);color:var(--gold);border-color:var(--gold)}
+@media(max-width:768px){
+  .phrase-grid{grid-template-columns:1fr}
+  .pcard-thai{font-size:20px}
+  .mtab{padding:6px 8px}
+}
+
+/* ─── AUTH MODAL ─────────────────────────────────────────────────────────── */
+.auth-overlay{position:fixed;inset:0;background:rgba(0,0,0,.75);backdrop-filter:blur(10px);z-index:300;display:none;align-items:center;justify-content:center}
+.auth-overlay.open{display:flex}
+.auth-modal{background:var(--bg2);border:1px solid var(--border-h);border-radius:24px;padding:36px;width:100%;max-width:420px;position:relative;margin:20px;box-shadow:0 24px 80px rgba(0,0,0,.6)}
+.auth-close{position:absolute;top:14px;right:14px;background:none;border:none;color:var(--text3);font-size:18px;cursor:pointer;padding:5px 9px;border-radius:7px;transition:all .2s;line-height:1}
+.auth-close:hover{color:var(--text);background:rgba(255,255,255,.06)}
+.auth-logo{text-align:center;font-family:var(--thai-font);font-size:36px;margin-bottom:6px}
+.auth-title{text-align:center;font-size:20px;font-weight:800;margin-bottom:24px;letter-spacing:-.5px}
+.auth-tabs{display:flex;gap:4px;background:rgba(255,255,255,.04);border:1px solid var(--border);border-radius:10px;padding:4px;margin-bottom:24px}
+.atab{flex:1;padding:9px;border-radius:7px;border:none;background:transparent;color:var(--text2);font-family:'Inter',sans-serif;font-size:13px;font-weight:600;cursor:pointer;transition:all .2s}
+.atab.active{background:var(--gold);color:#000;font-weight:700}
+.auth-field{margin-bottom:14px}
+.auth-field label{display:block;font-size:11px;font-weight:700;color:var(--text2);margin-bottom:6px;letter-spacing:.5px;text-transform:uppercase}
+.auth-field input{width:100%;padding:11px 14px;background:var(--bg3);border:1px solid var(--border);border-radius:10px;color:var(--text);font-family:'Inter',sans-serif;font-size:14px;outline:none;transition:border-color .2s}
+.auth-field input:focus{border-color:var(--gold)}
+.auth-field input::placeholder{color:var(--text3)}
+.auth-err{font-size:12px;color:var(--rose);margin-bottom:12px;min-height:18px;line-height:1.5}
+.auth-ok{font-size:12px;color:var(--teal);margin-bottom:12px;min-height:18px}
+.auth-submit{width:100%;padding:13px;background:var(--gold);color:#000;border:none;border-radius:10px;font-family:'Inter',sans-serif;font-size:15px;font-weight:700;cursor:pointer;transition:all .2s;margin-bottom:12px}
+.auth-submit:hover{transform:translateY(-1px);box-shadow:0 6px 20px rgba(240,180,41,.35)}
+.auth-submit:disabled{opacity:.5;cursor:not-allowed;transform:none}
+.auth-forgot{text-align:center;font-size:12px;color:var(--text3);cursor:pointer;transition:color .2s}
+.auth-forgot:hover{color:var(--gold)}
+.auth-sep{text-align:center;font-size:11px;color:var(--text3);margin:4px 0 8px;letter-spacing:.5px}
+/* Nav auth */
+.login-btn{background:rgba(240,180,41,.1);border:1px solid rgba(240,180,41,.3);color:var(--gold);font-family:'Inter',sans-serif;font-size:13px;font-weight:600;padding:7px 16px;border-radius:10px;cursor:pointer;transition:all .2s;white-space:nowrap}
+.login-btn:hover{background:rgba(240,180,41,.2);border-color:var(--gold)}
+.user-badge{display:flex;align-items:center;gap:8px}
+.user-avatar{width:30px;height:30px;border-radius:50%;background:linear-gradient(135deg,var(--gold),var(--teal));display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;color:#000;flex-shrink:0}
+.user-email{font-size:12px;color:var(--text2);max-width:120px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.logout-btn{background:rgba(255,255,255,.05);border:1px solid var(--border);color:var(--text3);font-family:'Inter',sans-serif;font-size:11px;font-weight:600;padding:5px 10px;border-radius:7px;cursor:pointer;transition:all .2s;white-space:nowrap}
+.logout-btn:hover{border-color:var(--rose);color:var(--rose)}
+.premium-badge{font-size:10px;font-weight:700;padding:2px 7px;border-radius:4px;background:linear-gradient(135deg,rgba(240,180,41,.2),rgba(14,211,160,.2));border:1px solid rgba(240,180,41,.4);color:var(--gold)}
+</style>
+</head>
+<body>
+
+<!-- TOP NAV -->
+<nav class="topnav">
+  <div class="logo"><span class="thai">ไทย</span>Alphabet</div>
+  <div class="nav-tabs">
+    <button class="ntab active" id="ntab-home" onclick="goTab('home',this)">Accueil</button>
+    <button class="ntab" id="ntab-lesson" onclick="goTab('lesson',this)">Leçon</button>
+    <button class="ntab" id="ntab-phrases" onclick="goTab('phrases',this)">Phrases</button>
+    <button class="ntab" id="ntab-consonnes" onclick="goTab('consonnes',this)">Consonnes</button>
+    <button class="ntab" id="ntab-voyelles" onclick="goTab('voyelles',this)">Voyelles</button>
+    <button class="ntab" id="ntab-tons" onclick="goTab('tons',this)">Tons</button>
+    <button class="ntab" id="ntab-quiz" onclick="goTab('quiz',this)">Quiz</button>
+  </div>
+  <div class="nav-right">
+    <div id="userBadge" class="user-badge" style="display:none">
+      <div class="user-avatar" id="userAvatar">?</div>
+      <span class="user-email" id="userEmailTxt"></span>
+      <span class="premium-badge" id="premiumBadge" style="display:none">Premium</span>
+      <button class="logout-btn" id="logoutBtn" onclick="doLogout()">Déconnexion</button>
+    </div>
+    <button id="loginBtn" class="login-btn" onclick="openAuth()">Connexion</button>
+    <div class="lang-sw">
+      <button class="lang-opt active" id="langFR" onclick="setLang('fr')">FR</button>
+      <button class="lang-opt" id="langEN" onclick="setLang('en')">EN</button>
+    </div>
+    <button class="font-btn" id="fontToggle" onclick="toggleFont()" title="Changer la police">
+      <span class="font-btn-preview" id="fbPreview">ก</span>
+      <span class="font-btn-sep"></span>
+      <span class="font-btn-label" id="fbLabel">Moderne</span>
+      <span class="font-btn-tag" id="fbTag">Noto</span>
+    </button>
+    <div class="prog-badge" id="topBadge" onclick="goTab('consonnes')">0 / 44 appris</div>
+  </div>
+</nav>
+
+<!-- HOME TAB -->
+<div id="tab-home" class="tab-content active">
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-bg"></div>
+    <div class="float-chars" id="floatChars"></div>
+    <div class="hero-inner">
+      <div class="hero-badge" id="heroBadge">Méthode interactive</div>
+      <div class="hero-th">อักษรไทย</div>
+      <div class="hero-fr" id="heroTitle">Maîtrisez<br><span class="gtext" id="heroSubtitle">l'Alphabet Thaï</span></div>
+      <p class="hero-sub" id="heroSub">44 consonnes, des voyelles riches, 5 tons — apprenez à votre rythme avec des cartes interactives et un quiz adaptatif.</p>
+      <div class="hero-btns">
+        <button class="btn-g" id="heroBtn1" onclick="goTab('consonnes')">Commencer maintenant</button>
+        <button class="btn-o" id="heroBtn2" onclick="goTab('quiz')">Tester mes connaissances</button>
+      </div>
+    </div>
+    <div class="scroll-hint">
+      <span id="heroScroll">Découvrir</span>
+      <div class="scroll-arr"></div>
+    </div>
+  </section>
+
+  <!-- STATS -->
+  <div class="stats-wrap">
+    <div class="stats-grid">
+      <div class="scard"><div class="scard-icon">🔤</div><div class="scard-n">44</div><div class="scard-l" id="statL1">Consonnes</div></div>
+      <div class="scard"><div class="scard-icon">🎵</div><div class="scard-n">5</div><div class="scard-l" id="statL2">Tons</div></div>
+      <div class="scard"><div class="scard-icon">🔡</div><div class="scard-n">28</div><div class="scard-l" id="statL3">Formes de voyelles</div></div>
+      <div class="scard"><div class="scard-icon">📚</div><div class="scard-n">3</div><div class="scard-l" id="statL4">Classes de consonnes</div></div>
+    </div>
+  </div>
+
+  <!-- 3 CLASSES -->
+  <section class="sec">
+    <div class="sec-hd">
+      <div class="sec-tag" id="clsTag">Structure</div>
+      <div class="sec-title" id="clsTitle">Les 3 classes de consonnes</div>
+      <p class="sec-desc" id="clsDesc">Chaque consonne appartient à une classe qui détermine le ton de la syllabe. C'est la clé pour lire le thaï !</p>
+    </div>
+    <div class="cls-grid">
+      <div class="cls-card mid">
+        <div class="cls-glow"></div>
+        <div class="cls-badge mid" id="clsBadgeMid">Classe Moyenne</div>
+        <div class="cls-count">9</div>
+        <div class="cls-name">คลาสกลาง</div>
+        <p class="cls-desc" id="clsDescMid">Les consonnes moyennes produisent le ton naturel d'une syllabe. Point de départ idéal pour les débutants.</p>
+        <div class="mini-chars">
+          <span class="mchar">ก</span><span class="mchar">จ</span><span class="mchar">ด</span><span class="mchar">ต</span><span class="mchar">บ</span><span class="mchar">ป</span><span class="mchar">อ</span><span class="mchar">ฎ</span><span class="mchar">ฏ</span>
+        </div>
+      </div>
+      <div class="cls-card high">
+        <div class="cls-glow"></div>
+        <div class="cls-badge high" id="clsBadgeHigh">Classe Haute</div>
+        <div class="cls-count">11</div>
+        <div class="cls-name">คลาสสูง</div>
+        <p class="cls-desc" id="clsDescHigh">Les consonnes hautes tendent à hausser le ton. Elles contiennent notamment les sons aspirés.</p>
+        <div class="mini-chars">
+          <span class="mchar">ข</span><span class="mchar">ฉ</span><span class="mchar">ฐ</span><span class="mchar">ถ</span><span class="mchar">ผ</span><span class="mchar">ฝ</span><span class="mchar">ศ</span><span class="mchar">ส</span><span class="mchar">ห</span>
+        </div>
+      </div>
+      <div class="cls-card low">
+        <div class="cls-glow"></div>
+        <div class="cls-badge low" id="clsBadgeLow">Classe Basse</div>
+        <div class="cls-count">24</div>
+        <div class="cls-name">คลาสต่ำ</div>
+        <p class="cls-desc" id="clsDescLow">La classe la plus grande ! Ces consonnes tendent à abaisser le ton et incluent toutes les sonores.</p>
+        <div class="mini-chars">
+          <span class="mchar">ค</span><span class="mchar">ง</span><span class="mchar">ช</span><span class="mchar">ญ</span><span class="mchar">น</span><span class="mchar">ม</span><span class="mchar">ย</span><span class="mchar">ร</span><span class="mchar">ล</span><span class="mchar">ว</span>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+
+<!-- CONSONNES TAB -->
+<div id="tab-consonnes" class="tab-content">
+  <section class="sec">
+    <div class="sec-hd">
+      <div class="sec-tag" id="conTag">44 Consonnes</div>
+      <div class="sec-title" id="conTitle">Cliquez sur une carte pour la retourner</div>
+      <p class="sec-desc" id="conDesc">Filtrez par classe, cherchez un son, et marquez les consonnes que vous maîtrisez.</p>
+    </div>
+
+    <div class="prog-bar">
+      <div class="prog-row"><span class="prog-lbl" id="progLbl">Progression</span><span class="prog-val" id="progVal">0 / 44</span></div>
+      <div class="prog-track"><div class="prog-fill" id="progFill"></div></div>
+    </div>
+
+    <div class="alph-controls">
+      <button class="fbtn active" id="fAll" onclick="setFilter('all',this)">Tous</button>
+      <button class="fbtn fmid" id="fMid" onclick="setFilter('mid',this)">Moyenne (9)</button>
+      <button class="fbtn fhigh" id="fHigh" onclick="setFilter('high',this)">Haute (11)</button>
+      <button class="fbtn flow" id="fLow" onclick="setFilter('low',this)">Basse (24)</button>
+      <input class="srch" type="text" placeholder="Chercher : ก, k, poulet…" id="srchInput" oninput="renderConsonants()">
+    </div>
+
+    <div class="voice-warn" id="voiceWarn">
+      ⚠️ Aucune voix thaïe détectée. Pour activer les sons, allez dans <strong>Préférences Système → Accessibilité → Contenu vocal</strong> et téléchargez une voix thaïe (ex. : <strong>Kanya</strong>), puis rechargez la page.
+    </div>
+    <div class="alph-grid" id="alphGrid"></div>
+  </section>
+</div>
+
+<!-- VOYELLES TAB -->
+<div id="tab-voyelles" class="tab-content">
+  <section class="sec">
+    <div class="sec-hd">
+      <div class="sec-tag" id="vowTag">Voyelles</div>
+      <div class="sec-title" id="vowTitle">Les voyelles thaïes</div>
+      <p class="sec-desc" id="vowDesc">En thaï, les voyelles se placent avant, après, au-dessus ou en dessous de la consonne. Chaque voyelle a une forme courte et une forme longue.</p>
+    </div>
+    <div class="vow-grid" id="vowGrid"></div>
+  </section>
+</div>
+
+<!-- TONS TAB -->
+<div id="tab-tons" class="tab-content">
+  <section class="sec">
+    <div class="sec-hd">
+      <div class="sec-tag" id="tonTag">Tons</div>
+      <div class="sec-title" id="tonTitle">Les 5 tons du thaï</div>
+      <p class="sec-desc" id="tonDesc">Le thaï est une langue tonale. Le même son prononcé sur 5 tons différents donne 5 mots totalement différents.</p>
+    </div>
+    <div class="tones-grid" id="tonesGrid"></div>
+  </section>
+</div>
+
+<!-- QUIZ TAB -->
+<div id="tab-quiz" class="tab-content">
+  <div class="quiz-wrap">
+    <div id="quizStart" class="quiz-start">
+      <h2 id="quizTitle">Quiz Interactif</h2>
+      <p id="quizDesc">Testez vos connaissances sur les consonnes thaïes. Choisissez votre mode d'apprentissage !</p>
+      <div class="qmodes">
+        <button class="qmode active" id="mode1" onclick="setMode('c2r',this)">ก → k &nbsp; Caractère → Son</button>
+        <button class="qmode" id="mode2" onclick="setMode('r2c',this)">k → ก &nbsp; Son → Caractère</button>
+        <button class="qmode" id="mode3" onclick="setMode('s2c',this)">🔊 → ก &nbsp; Écouter → Caractère</button>
+      </div>
+      <button class="btn-g" id="quizStartBtn" onclick="startQuiz()">Démarrer le Quiz</button>
+    </div>
+    <div id="quizPlay" style="display:none">
+      <div class="quiz-card">
+        <div class="qscore">
+          <div class="qsi ok"><div class="qsv" id="qCorrect">0</div><div class="qsl" id="qLblOk">Correct</div></div>
+          <div class="qsi ko"><div class="qsv" id="qWrong">0</div><div class="qsl" id="qLblKo">Erreur</div></div>
+        </div>
+        <div class="qnum" id="qNum">Question 1</div>
+        <div id="qCharDisplay" class="qchar"></div>
+        <div id="qRtgsDisplay" class="qrtgs" style="display:none"></div>
+        <div id="qSoundDisplay" style="display:none">
+          <button class="qplay" onclick="replaySound()">
+            <div class="qplay-icon">🔊</div>
+            <div class="qplay-label" id="qReplayLbl">Rejouer le son</div>
+          </button>
+        </div>
+        <div class="qprompt" id="qPrompt">Quelle est la prononciation ?</div>
+        <div class="qopts" id="qOpts"></div>
+        <button class="btn-o" id="quizNewBtn" onclick="startQuiz()" style="width:100%;margin-top:8px">Nouvelle partie</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- LEÇON TAB -->
+<div id="tab-lesson" class="tab-content">
+<div id="lesson-fr"><div class="lesson-wrap">
+
+  <!-- HERO -->
+  <div class="lesson-hero">
+    <div class="lesson-hero-bg"></div>
+    <div class="lesson-hero-thai">สวัสดี ครับ / ค่ะ</div>
+    <p class="lesson-hero-sub">Bienvenue dans votre première leçon de thaï. En quelques étapes simples, vous allez comprendre comment fonctionne cet alphabet magnifique.</p>
+    <div class="lesson-facts">
+      <div class="lf-item"><div class="lf-n">44</div><div class="lf-l">Consonnes</div></div>
+      <div class="lf-item"><div class="lf-n">28</div><div class="lf-l">Formes de voyelles</div></div>
+      <div class="lf-item"><div class="lf-n">5</div><div class="lf-l">Tons</div></div>
+      <div class="lf-item"><div class="lf-n">10</div><div class="lf-l">Chiffres thaïs</div></div>
+    </div>
+  </div>
+
+  <!-- 1 : Introduction -->
+  <div class="lesson-card">
+    <div class="lcard-header">
+      <div class="lcard-num">1</div>
+      <div class="lcard-title">Qu'est-ce que l'écriture thaïe ?</div>
+    </div>
+    <p class="lesson-text">L'écriture thaïe est un <strong style="color:var(--text)">abugida</strong> : un système où chaque consonne porte une voyelle implicite. Elle se lit <strong style="color:var(--text)">de gauche à droite</strong>, sans espace entre les mots (les espaces servent à séparer les phrases). Les voyelles s'écrivent <em>autour</em> des consonnes — avant, après, au-dessus ou en dessous.</p>
+    <div class="thai-sign">
+      <div class="thai-sign-text thai">ยินดีต้อนรับสู่ประเทศไทย</div>
+      <div class="thai-sign-sub">« Bienvenue en Thaïlande » — exemple de texte thaï réel</div>
+    </div>
+    <div class="lesson-hl"><strong>À retenir :</strong> Pas de majuscules en thaï. Pas de ponctuation comme en français. Les mots s'enchaînent sans espace — l'espace marque la fin d'une phrase ou d'un groupe de sens.</div>
+    <div class="tip-box"><span class="tip-icon">💡</span><div class="tip-text"><strong>Astuce :</strong> L'écriture thaïe ressemble à une succession de boucles et de courbes. Au lieu d'essayer de tout mémoriser d'un coup, apprenez <strong>5 consonnes par jour</strong> en commençant par la classe moyenne.</div></div>
+  </div>
+
+  <!-- 2 : La syllabe -->
+  <div class="lesson-card">
+    <div class="lcard-header">
+      <div class="lcard-num">2</div>
+      <div class="lcard-title">La structure d'une syllabe</div>
+    </div>
+    <p class="lesson-text">En thaï, chaque syllabe suit un schéma simple : <strong style="color:var(--text)">Consonne initiale + Voyelle + (Consonne finale)</strong>. La consonne finale est optionnelle. Voici comment ça marche :</p>
+    <div class="syllab-demo">
+      <div class="syllab-box">
+        <span class="syllab-char">ก</span>
+        <span class="syllab-label">Consonne<br>initiale</span>
+      </div>
+      <div class="syllab-plus">+</div>
+      <div class="syllab-box">
+        <span class="syllab-char">า</span>
+        <span class="syllab-label">Voyelle<br>(après)</span>
+      </div>
+      <div class="syllab-eq">=</div>
+      <div class="syllab-box syllab-result">
+        <span class="syllab-char">กา</span>
+        <span class="syllab-label">« gaa »<br>Corbeau</span>
+        <button class="syllab-audio" onclick="speakThai('กา',event)">🔊 Écouter</button>
+      </div>
+    </div>
+    <div class="syllab-demo">
+      <div class="syllab-box">
+        <span class="syllab-char">น</span>
+        <span class="syllab-label">Consonne<br>initiale</span>
+      </div>
+      <div class="syllab-plus">+</div>
+      <div class="syllab-box">
+        <span class="syllab-char">า</span>
+        <span class="syllab-label">Voyelle<br>(après)</span>
+      </div>
+      <div class="syllab-plus">+</div>
+      <div class="syllab-box">
+        <span class="syllab-char">ก</span>
+        <span class="syllab-label">Consonne<br>finale</span>
+      </div>
+      <div class="syllab-eq">=</div>
+      <div class="syllab-box syllab-result">
+        <span class="syllab-char">นาก</span>
+        <span class="syllab-label">« naak »<br>Loutre</span>
+        <button class="syllab-audio" onclick="speakThai('นาก',event)">🔊 Écouter</button>
+      </div>
+    </div>
+    <div class="tip-box"><span class="tip-icon">🎯</span><div class="tip-text"><strong>Clé :</strong> La <strong>consonne finale</strong> change complètement le son de fin de syllabe. Il n'y a que 8 sons finaux possibles en thaï : k, t, p, ng, n, m, y, w. C'est beaucoup plus simple qu'en français !</div></div>
+  </div>
+
+  <!-- 3 : Les consonnes et les 3 classes -->
+  <div class="lesson-card">
+    <div class="lcard-header">
+      <div class="lcard-num">3</div>
+      <div class="lcard-title">Les consonnes et leurs 3 classes</div>
+    </div>
+    <p class="lesson-text">Il existe <strong style="color:var(--text)">44 consonnes</strong> en thaï (42 encore utilisées). Chaque consonne a un <strong style="color:var(--text)">nom</strong> composé du caractère + un mot exemple — comme un alphabet imagier. Par exemple : <span class="thai" style="font-size:18px">ก</span> s'appelle <em>« gor gai »</em> — « gor » est le son, « gai » signifie poulet.</p>
+    <p class="lesson-text">Les consonnes sont divisées en <strong style="color:var(--text)">3 classes</strong> qui déterminent le ton naturel de la syllabe :</p>
+    <div class="class-compare">
+      <div class="cc-card mid">
+        <div class="cc-title">Classe Moyenne</div>
+        <div class="cc-count">9</div>
+        <div class="cc-chars">ก จ ด ต บ ป</div>
+        <div class="cc-desc">Sons nets et directs. La meilleure classe pour commencer. Produit des tons <em>moyen</em> et <em>bas</em>.</div>
+      </div>
+      <div class="cc-card high">
+        <div class="cc-title">Classe Haute</div>
+        <div class="cc-count">11</div>
+        <div class="cc-chars">ข ฉ ถ ผ ส ห</div>
+        <div class="cc-desc">Sons aspirés (souffle d'air). Produit des tons <em>haut</em> et <em>montant</em>.</div>
+      </div>
+      <div class="cc-card low">
+        <div class="cc-title">Classe Basse</div>
+        <div class="cc-count">24</div>
+        <div class="cc-chars">ค ง ช น ม ย ร ล ว</div>
+        <div class="cc-desc">La classe la plus grande. Sons sonores et nasaux. Produit des tons <em>moyen</em> et <em>tombant</em>.</div>
+      </div>
+    </div>
+    <div class="lesson-hl"><strong>Pourquoi c'est important ?</strong> La classe d'une consonne, combinée aux marques de ton, détermine le ton d'une syllabe. Apprendre la classe de chaque consonne est essentiel pour prononcer correctement le thaï.</div>
+    <div class="ex-list">
+      <div class="ex-row"><span class="ex-thai">ก ไก่</span><span class="ex-rtgs">gor gai</span><span class="ex-meaning">Classe moyenne — "g" de poulet</span><button class="ex-spk" onclick="speakThai('ก ไก่',event)">🔊</button></div>
+      <div class="ex-row"><span class="ex-thai">ข ไข่</span><span class="ex-rtgs">khor khai</span><span class="ex-meaning">Classe haute — "kh" de œuf (k aspiré)</span><button class="ex-spk" onclick="speakThai('ข ไข่',event)">🔊</button></div>
+      <div class="ex-row"><span class="ex-thai">ค ควาย</span><span class="ex-rtgs">khor khwai</span><span class="ex-meaning">Classe basse — "kh" de buffle</span><button class="ex-spk" onclick="speakThai('ค ควาย',event)">🔊</button></div>
+    </div>
+    <div class="tip-box"><span class="tip-icon">💡</span><div class="tip-text"><strong>Conseil :</strong> Gor Gai, Khor Khai, Khor Khwai — trois consonnes avec des sons similaires (<em>k</em>) mais de classes différentes. Apprendre leur <strong>nom complet</strong> aide à ne pas les confondre.</div></div>
+  </div>
+
+  <!-- 4 : Les voyelles -->
+  <div class="lesson-card">
+    <div class="lcard-header">
+      <div class="lcard-num">4</div>
+      <div class="lcard-title">Les voyelles — où se cachent-elles ?</div>
+    </div>
+    <p class="lesson-text">En thaï, les voyelles ne sont pas toujours <em>après</em> la consonne comme en français. Elles peuvent se placer dans <strong style="color:var(--text)">4 positions différentes</strong> autour de la consonne. Voyez comment la consonne <span class="thai" style="font-size:18px">ก</span> (gor gai) change selon la voyelle :</p>
+    <div class="vpos-grid">
+      <div class="vpos-card">
+        <div class="vpos-tag">Voyelle après</div>
+        <span class="vpos-ex">กา</span>
+        <div class="vpos-rtgs">gaa</div>
+        <div class="vpos-desc">La voyelle า se place à droite</div>
+        <button class="vpos-spk" onclick="speakThai('กา',event)">🔊 Écouter</button>
+      </div>
+      <div class="vpos-card">
+        <div class="vpos-tag">Voyelle avant</div>
+        <span class="vpos-ex">เก</span>
+        <div class="vpos-rtgs">gee</div>
+        <div class="vpos-desc">La voyelle เ se place à gauche</div>
+        <button class="vpos-spk" onclick="speakThai('เก',event)">🔊 Écouter</button>
+      </div>
+      <div class="vpos-card">
+        <div class="vpos-tag">Voyelle au-dessus</div>
+        <span class="vpos-ex">กิ</span>
+        <div class="vpos-rtgs">gi</div>
+        <div class="vpos-desc">La voyelle ิ se place au-dessus</div>
+        <button class="vpos-spk" onclick="speakThai('กิ',event)">🔊 Écouter</button>
+      </div>
+      <div class="vpos-card">
+        <div class="vpos-tag">Voyelle en dessous</div>
+        <span class="vpos-ex">กุ</span>
+        <div class="vpos-rtgs">gu</div>
+        <div class="vpos-desc">La voyelle ุ se place en dessous</div>
+        <button class="vpos-spk" onclick="speakThai('กุ',event)">🔊 Écouter</button>
+      </div>
+    </div>
+    <div class="tip-box"><span class="tip-icon">🎯</span><div class="tip-text"><strong>Astuce :</strong> Quand vous lisez du thaï, cherchez d'abord la <strong>consonne principale</strong> (souvent la plus grande), puis regardez autour d'elle pour trouver la voyelle.</div></div>
+  </div>
+
+  <!-- 5 : Les tons -->
+  <div class="lesson-card">
+    <div class="lcard-header">
+      <div class="lcard-num">5</div>
+      <div class="lcard-title">Les 5 tons — la chose la plus importante !</div>
+    </div>
+    <p class="lesson-text">Le thaï est une <strong style="color:var(--text)">langue tonale</strong>. Cela signifie que la même syllabe prononcée sur des tons différents donne des mots différents. Il existe <strong style="color:var(--text)">5 tons</strong> en thaï. Ils sont indiqués par des marques au-dessus des consonnes. Écoutez la même base <span class="thai" style="font-size:18px">กา</span> sur 5 tons différents :</p>
+    <div class="tone-row">
+      <div class="tone-cell">
+        <span class="tone-char-big">กา</span>
+        <svg class="tone-curve-mini" viewBox="0 0 60 28"><path d="M5,14 L55,14" stroke="#8B92A8" stroke-width="2.5" fill="none" stroke-linecap="round"/></svg>
+        <div class="tone-lbl">Moyen</div>
+        <div class="tone-meaning">Corbeau</div>
+        <button class="tone-spk" onclick="speakThai('กา',event)">🔊</button>
+      </div>
+      <div class="tone-cell">
+        <span class="tone-char-big">ก่า</span>
+        <svg class="tone-curve-mini" viewBox="0 0 60 28"><path d="M5,8 Q30,22 55,26" stroke="#4C8EFF" stroke-width="2.5" fill="none" stroke-linecap="round"/></svg>
+        <div class="tone-lbl">Bas</div>
+        <div class="tone-meaning">Vieille<br>femme</div>
+        <button class="tone-spk" onclick="speakThai('ก่า',event)">🔊</button>
+      </div>
+      <div class="tone-cell">
+        <span class="tone-char-big">ก้า</span>
+        <svg class="tone-curve-mini" viewBox="0 0 60 28"><path d="M5,6 Q30,12 55,24" stroke="#FF5C8D" stroke-width="2.5" fill="none" stroke-linecap="round"/></svg>
+        <div class="tone-lbl">Tombant</div>
+        <div class="tone-meaning">Avancer<br>(pied)</div>
+        <button class="tone-spk" onclick="speakThai('ก้า',event)">🔊</button>
+      </div>
+      <div class="tone-cell">
+        <span class="tone-char-big">ก๊า</span>
+        <svg class="tone-curve-mini" viewBox="0 0 60 28"><path d="M5,22 Q30,8 55,6" stroke="#F0B429" stroke-width="2.5" fill="none" stroke-linecap="round"/></svg>
+        <div class="tone-lbl">Haut</div>
+        <div class="tone-meaning">Interjec-<br>tion</div>
+        <button class="tone-spk" onclick="speakThai('ก๊า',event)">🔊</button>
+      </div>
+      <div class="tone-cell">
+        <span class="tone-char-big">ก๋า</span>
+        <svg class="tone-curve-mini" viewBox="0 0 60 28"><path d="M5,20 Q25,26 40,14 L55,6" stroke="#0ED3A0" stroke-width="2.5" fill="none" stroke-linecap="round"/></svg>
+        <div class="tone-lbl">Montant</div>
+        <div class="tone-meaning">Interjec-<br>tion</div>
+        <button class="tone-spk" onclick="speakThai('ก๋า',event)">🔊</button>
+      </div>
+    </div>
+    <p class="lesson-text" style="margin-top:8px">Un autre exemple célèbre — le mot <strong style="color:var(--text)">มา</strong> :</p>
+    <div class="ex-list">
+      <div class="ex-row"><span class="ex-thai">มา</span><span class="ex-rtgs">maa</span><span class="ex-meaning">Venir (ton moyen)</span><button class="ex-spk" onclick="speakThai('มา',event)">🔊</button></div>
+      <div class="ex-row"><span class="ex-thai">ม้า</span><span class="ex-rtgs">máa</span><span class="ex-meaning">Cheval (ton tombant)</span><button class="ex-spk" onclick="speakThai('ม้า',event)">🔊</button></div>
+      <div class="ex-row"><span class="ex-thai">หมา</span><span class="ex-rtgs">mǎa</span><span class="ex-meaning">Chien (ton montant)</span><button class="ex-spk" onclick="speakThai('หมา',event)">🔊</button></div>
+    </div>
+    <div class="lesson-hl"><strong>Marques de ton :</strong> Les 4 marques ( ่ ้ ๊ ๋ ) se placent au-dessus de la consonne. L'absence de marque = ton déterminé par la classe de consonne. <strong>Ton moyen = pas de marque</strong> sur une consonne de classe moyenne.</div>
+    <div class="tip-box"><span class="tip-icon">🎵</span><div class="tip-text"><strong>Conseil :</strong> Exercez-vous à <strong>chanter</strong> les tons — le ton bas descend, le ton montant monte comme une question, le ton tombant part haut et descend. Associez chaque ton à une image mentale !</div></div>
+  </div>
+
+  <!-- 6 : Les chiffres -->
+  <div class="lesson-card">
+    <div class="lcard-header">
+      <div class="lcard-num">6</div>
+      <div class="lcard-title">Les 10 chiffres thaïs</div>
+    </div>
+    <p class="lesson-text">Le thaï possède ses propres chiffres. Bonne nouvelle : ils sont très faciles à mémoriser car leur forme ressemble aux chiffres arabes. Cliquez sur chaque chiffre pour l'entendre !</p>
+    <div class="num-grid">
+      <div class="num-cell" onclick="speakThai('ศูนย์',event)"><span class="num-thai">๐</span><span class="num-western">0</span></div>
+      <div class="num-cell" onclick="speakThai('หนึ่ง',event)"><span class="num-thai">๑</span><span class="num-western">1</span></div>
+      <div class="num-cell" onclick="speakThai('สอง',event)"><span class="num-thai">๒</span><span class="num-western">2</span></div>
+      <div class="num-cell" onclick="speakThai('สาม',event)"><span class="num-thai">๓</span><span class="num-western">3</span></div>
+      <div class="num-cell" onclick="speakThai('สี่',event)"><span class="num-thai">๔</span><span class="num-western">4</span></div>
+      <div class="num-cell" onclick="speakThai('ห้า',event)"><span class="num-thai">๕</span><span class="num-western">5</span></div>
+      <div class="num-cell" onclick="speakThai('หก',event)"><span class="num-thai">๖</span><span class="num-western">6</span></div>
+      <div class="num-cell" onclick="speakThai('เจ็ด',event)"><span class="num-thai">๗</span><span class="num-western">7</span></div>
+      <div class="num-cell" onclick="speakThai('แปด',event)"><span class="num-thai">๘</span><span class="num-western">8</span></div>
+      <div class="num-cell" onclick="speakThai('เก้า',event)"><span class="num-thai">๙</span><span class="num-western">9</span></div>
+    </div>
+    <div class="ex-list" style="margin-top:12px">
+      <div class="ex-row"><span class="ex-thai">๑๙๘๔</span><span class="ex-rtgs">1984</span><span class="ex-meaning">Les chiffres s'utilisent exactement comme en français</span><button class="ex-spk" onclick="speakThai('หนึ่งพันเก้าร้อยแปดสิบสี่',event)">🔊</button></div>
+    </div>
+    <div class="tip-box"><span class="tip-icon">💡</span><div class="tip-text"><strong>Astuce :</strong> En pratique, les Thaïlandais utilisent aussi les chiffres arabes (1, 2, 3…) dans la vie quotidienne. Vous verrez souvent les deux formes sur les panneaux et menus.</div></div>
+  </div>
+
+  <!-- 7 : Par où commencer -->
+  <div class="lesson-card">
+    <div class="lcard-header">
+      <div class="lcard-num">7</div>
+      <div class="lcard-title">Par où commencer — votre feuille de route</div>
+    </div>
+    <p class="lesson-text">Maintenant que vous comprenez la structure de l'alphabet thaï, voici un parcours d'apprentissage recommandé pour les débutants :</p>
+    <div class="lesson-path">
+      <div class="path-step" onclick="goTab('consonnes')">
+        <div class="path-num">1</div>
+        <div class="path-content">
+          <div class="path-title">Apprenez les 9 consonnes de la classe moyenne</div>
+          <div class="path-desc">ก จ ด ต บ ป อ — ce sont les plus simples et les plus courantes. Utilisez les cartes, retournez-les, écoutez chaque son.</div>
+        </div>
+        <span style="color:var(--text3)">→</span>
+      </div>
+      <div class="path-step" onclick="goTab('voyelles')">
+        <div class="path-num">2</div>
+        <div class="path-content">
+          <div class="path-title">Mémorisez les 5 voyelles longues principales</div>
+          <div class="path-desc">อา อี อือ อู เอ — ces 5 voyelles longues couvrent la majorité des mots courants.</div>
+        </div>
+        <span style="color:var(--text3)">→</span>
+      </div>
+      <div class="path-step" onclick="goTab('tons')">
+        <div class="path-num">3</div>
+        <div class="path-content">
+          <div class="path-title">Pratiquez les 5 tons avec les consonnes apprises</div>
+          <div class="path-desc">Associez les marques de ton aux consonnes connues. L'onglet Tons vous montre les courbes mélodiques.</div>
+        </div>
+        <span style="color:var(--text3)">→</span>
+      </div>
+      <div class="path-step" onclick="goTab('consonnes')">
+        <div class="path-num">4</div>
+        <div class="path-content">
+          <div class="path-title">Continuez avec les classes haute et basse</div>
+          <div class="path-desc">Filtrez par classe dans l'onglet Consonnes. Apprenez 5 consonnes nouvelles par session.</div>
+        </div>
+        <span style="color:var(--text3)">→</span>
+      </div>
+      <div class="path-step" onclick="goTab('quiz')">
+        <div class="path-num">5</div>
+        <div class="path-content">
+          <div class="path-title">Testez-vous avec le Quiz</div>
+          <div class="path-desc">Commencez par le mode Caractère→Son, puis passez au mode 🔊→Caractère pour tester votre oreille.</div>
+        </div>
+        <span style="color:var(--text3)">→</span>
+      </div>
+    </div>
+    <div class="lesson-hl" style="margin-top:20px"><strong>🎯 Objectif réaliste :</strong> En <strong>2 à 3 semaines</strong> à raison de 15 minutes par jour, vous pouvez mémoriser les 44 consonnes et commencer à déchiffrer des mots simples. Le thaï est plus logique qu'il n'y paraît !</div>
+  </div>
+
+</div>
+</div></div>
+
+<!-- ENGLISH LESSON -->
+<div id="lesson-en" style="display:none"><div class="lesson-wrap">
+  <div class="lesson-hero">
+    <div class="lesson-hero-bg"></div>
+    <div class="lesson-hero-thai">สวัสดี ครับ / ค่ะ</div>
+    <p class="lesson-hero-sub">Welcome to your first Thai lesson. In a few simple steps, you'll understand how this beautiful alphabet works.</p>
+    <div class="lesson-facts">
+      <div class="lf-item"><div class="lf-n">44</div><div class="lf-l">Consonants</div></div>
+      <div class="lf-item"><div class="lf-n">28</div><div class="lf-l">Vowel forms</div></div>
+      <div class="lf-item"><div class="lf-n">5</div><div class="lf-l">Tones</div></div>
+      <div class="lf-item"><div class="lf-n">10</div><div class="lf-l">Thai numerals</div></div>
+    </div>
+  </div>
+
+  <div class="lesson-card">
+    <div class="lcard-header"><div class="lcard-num">1</div><div class="lcard-title">What is Thai Script?</div></div>
+    <p class="lesson-text">Thai script is an <strong style="color:var(--text)">abugida</strong>: a system where each consonant carries an implicit vowel. It reads <strong style="color:var(--text)">left to right</strong>, with no spaces between words (spaces separate sentences). Vowels are written <em>around</em> consonants — before, after, above, or below.</p>
+    <div class="thai-sign">
+      <div class="thai-sign-text thai">ยินดีต้อนรับสู่ประเทศไทย</div>
+      <div class="thai-sign-sub">"Welcome to Thailand" — example of real Thai text</div>
+    </div>
+    <div class="lesson-hl"><strong>Key point:</strong> No capital letters in Thai. No punctuation like in Western languages. Words run together — spaces mark the end of a sentence or phrase.</div>
+    <div class="tip-box"><span class="tip-icon">💡</span><div class="tip-text"><strong>Tip:</strong> Thai script looks like a series of loops and curves. Instead of trying to memorize everything at once, learn <strong>5 consonants per day</strong>, starting with the middle class.</div></div>
+  </div>
+
+  <div class="lesson-card">
+    <div class="lcard-header"><div class="lcard-num">2</div><div class="lcard-title">Syllable Structure</div></div>
+    <p class="lesson-text">In Thai, each syllable follows a simple pattern: <strong style="color:var(--text)">Initial Consonant + Vowel + (Final Consonant)</strong>. The final consonant is optional. Here's how it works:</p>
+    <div class="syllab-demo">
+      <div class="syllab-box"><span class="syllab-char">ก</span><span class="syllab-label">Initial<br>Consonant</span></div>
+      <div class="syllab-plus">+</div>
+      <div class="syllab-box"><span class="syllab-char">า</span><span class="syllab-label">Vowel<br>(after)</span></div>
+      <div class="syllab-eq">=</div>
+      <div class="syllab-box syllab-result"><span class="syllab-char">กา</span><span class="syllab-label">"gaa"<br>Crow</span><button class="syllab-audio" onclick="speakThai('กา',event)">🔊 Listen</button></div>
+    </div>
+    <div class="syllab-demo">
+      <div class="syllab-box"><span class="syllab-char">น</span><span class="syllab-label">Initial<br>Consonant</span></div>
+      <div class="syllab-plus">+</div>
+      <div class="syllab-box"><span class="syllab-char">า</span><span class="syllab-label">Vowel<br>(after)</span></div>
+      <div class="syllab-plus">+</div>
+      <div class="syllab-box"><span class="syllab-char">ก</span><span class="syllab-label">Final<br>Consonant</span></div>
+      <div class="syllab-eq">=</div>
+      <div class="syllab-box syllab-result"><span class="syllab-char">นาก</span><span class="syllab-label">"naak"<br>Otter</span><button class="syllab-audio" onclick="speakThai('นาก',event)">🔊 Listen</button></div>
+    </div>
+    <div class="tip-box"><span class="tip-icon">🎯</span><div class="tip-text"><strong>Key:</strong> The <strong>final consonant</strong> completely changes the ending sound. There are only 8 possible final sounds in Thai: k, t, p, ng, n, m, y, w — much simpler than English!</div></div>
+  </div>
+
+  <div class="lesson-card">
+    <div class="lcard-header"><div class="lcard-num">3</div><div class="lcard-title">Consonants and Their 3 Classes</div></div>
+    <p class="lesson-text">There are <strong style="color:var(--text)">44 consonants</strong> in Thai (42 still in use). Each consonant has a <strong style="color:var(--text)">name</strong> combining the character + an example word — like a picture alphabet. For example: <span class="thai" style="font-size:18px">ก</span> is called <em>"gor gai"</em> — "gor" is the sound, "gai" means chicken.</p>
+    <p class="lesson-text">Consonants are divided into <strong style="color:var(--text)">3 classes</strong> that determine the natural tone of the syllable:</p>
+    <div class="class-compare">
+      <div class="cc-card mid"><div class="cc-title">Middle Class</div><div class="cc-count">9</div><div class="cc-chars">ก จ ด ต บ ป</div><div class="cc-desc">Clear, direct sounds. Best class to start with. Produces <em>mid</em> and <em>low</em> tones.</div></div>
+      <div class="cc-card high"><div class="cc-title">High Class</div><div class="cc-count">11</div><div class="cc-chars">ข ฉ ถ ผ ส ห</div><div class="cc-desc">Aspirated sounds (with a breath of air). Produces <em>high</em> and <em>rising</em> tones.</div></div>
+      <div class="cc-card low"><div class="cc-title">Low Class</div><div class="cc-count">24</div><div class="cc-chars">ค ง ช น ม ย ร ล ว</div><div class="cc-desc">The largest class. Voiced and nasal sounds. Produces <em>mid</em> and <em>falling</em> tones.</div></div>
+    </div>
+    <div class="lesson-hl"><strong>Why does it matter?</strong> A consonant's class, combined with tone marks, determines the syllable's tone. Learning each consonant's class is essential for correct Thai pronunciation.</div>
+    <div class="ex-list">
+      <div class="ex-row"><span class="ex-thai">ก ไก่</span><span class="ex-rtgs">gor gai</span><span class="ex-meaning">Middle class — "g" of chicken</span><button class="ex-spk" onclick="speakThai('ก ไก่',event)">🔊</button></div>
+      <div class="ex-row"><span class="ex-thai">ข ไข่</span><span class="ex-rtgs">khor khai</span><span class="ex-meaning">High class — aspirated "kh" of egg</span><button class="ex-spk" onclick="speakThai('ข ไข่',event)">🔊</button></div>
+      <div class="ex-row"><span class="ex-thai">ค ควาย</span><span class="ex-rtgs">khor khwai</span><span class="ex-meaning">Low class — "kh" of buffalo</span><button class="ex-spk" onclick="speakThai('ค ควาย',event)">🔊</button></div>
+    </div>
+    <div class="tip-box"><span class="tip-icon">💡</span><div class="tip-text"><strong>Tip:</strong> Gor Gai, Khor Khai, Khor Khwai — three consonants with similar sounds (<em>k</em>) but different classes. Learning their <strong>full names</strong> helps avoid confusion.</div></div>
+  </div>
+
+  <div class="lesson-card">
+    <div class="lcard-header"><div class="lcard-num">4</div><div class="lcard-title">Vowels — Where Do They Hide?</div></div>
+    <p class="lesson-text">In Thai, vowels are not always <em>after</em> the consonant as in English. They can appear in <strong style="color:var(--text)">4 different positions</strong> around the consonant. See how consonant <span class="thai" style="font-size:18px">ก</span> (gor gai) changes depending on the vowel:</p>
+    <div class="vpos-grid">
+      <div class="vpos-card"><div class="vpos-tag">Vowel after</div><span class="vpos-ex">กา</span><div class="vpos-rtgs">gaa</div><div class="vpos-desc">Vowel า is placed to the right</div><button class="vpos-spk" onclick="speakThai('กา',event)">🔊 Listen</button></div>
+      <div class="vpos-card"><div class="vpos-tag">Vowel before</div><span class="vpos-ex">เก</span><div class="vpos-rtgs">gee</div><div class="vpos-desc">Vowel เ is placed to the left</div><button class="vpos-spk" onclick="speakThai('เก',event)">🔊 Listen</button></div>
+      <div class="vpos-card"><div class="vpos-tag">Vowel above</div><span class="vpos-ex">กิ</span><div class="vpos-rtgs">gi</div><div class="vpos-desc">Vowel ิ is placed above</div><button class="vpos-spk" onclick="speakThai('กิ',event)">🔊 Listen</button></div>
+      <div class="vpos-card"><div class="vpos-tag">Vowel below</div><span class="vpos-ex">กุ</span><div class="vpos-rtgs">gu</div><div class="vpos-desc">Vowel ุ is placed below</div><button class="vpos-spk" onclick="speakThai('กุ',event)">🔊 Listen</button></div>
+    </div>
+    <div class="tip-box"><span class="tip-icon">🎯</span><div class="tip-text"><strong>Tip:</strong> When reading Thai, first find the <strong>main consonant</strong> (usually the largest), then look around it for the vowel.</div></div>
+  </div>
+
+  <div class="lesson-card">
+    <div class="lcard-header"><div class="lcard-num">5</div><div class="lcard-title">The 5 Tones — The Most Important Thing!</div></div>
+    <p class="lesson-text">Thai is a <strong style="color:var(--text)">tonal language</strong>. The same syllable spoken on different tones gives different words. There are <strong style="color:var(--text)">5 tones</strong> in Thai. Listen to the same base <span class="thai" style="font-size:18px">กา</span> on 5 different tones:</p>
+    <div class="tone-row">
+      <div class="tone-cell"><span class="tone-char-big">กา</span><svg class="tone-curve-mini" viewBox="0 0 60 28"><path d="M5,14 L55,14" stroke="#8B92A8" stroke-width="2.5" fill="none" stroke-linecap="round"/></svg><div class="tone-lbl">Mid</div><div class="tone-meaning">Crow</div><button class="tone-spk" onclick="speakThai('กา',event)">🔊</button></div>
+      <div class="tone-cell"><span class="tone-char-big">ก่า</span><svg class="tone-curve-mini" viewBox="0 0 60 28"><path d="M5,8 Q30,22 55,26" stroke="#4C8EFF" stroke-width="2.5" fill="none" stroke-linecap="round"/></svg><div class="tone-lbl">Low</div><div class="tone-meaning">Old<br>woman</div><button class="tone-spk" onclick="speakThai('ก่า',event)">🔊</button></div>
+      <div class="tone-cell"><span class="tone-char-big">ก้า</span><svg class="tone-curve-mini" viewBox="0 0 60 28"><path d="M5,6 Q30,12 55,24" stroke="#FF5C8D" stroke-width="2.5" fill="none" stroke-linecap="round"/></svg><div class="tone-lbl">Falling</div><div class="tone-meaning">Step<br>forward</div><button class="tone-spk" onclick="speakThai('ก้า',event)">🔊</button></div>
+      <div class="tone-cell"><span class="tone-char-big">ก๊า</span><svg class="tone-curve-mini" viewBox="0 0 60 28"><path d="M5,22 Q30,8 55,6" stroke="#F0B429" stroke-width="2.5" fill="none" stroke-linecap="round"/></svg><div class="tone-lbl">High</div><div class="tone-meaning">Exclama-<br>tion</div><button class="tone-spk" onclick="speakThai('ก๊า',event)">🔊</button></div>
+      <div class="tone-cell"><span class="tone-char-big">ก๋า</span><svg class="tone-curve-mini" viewBox="0 0 60 28"><path d="M5,20 Q25,26 40,14 L55,6" stroke="#0ED3A0" stroke-width="2.5" fill="none" stroke-linecap="round"/></svg><div class="tone-lbl">Rising</div><div class="tone-meaning">Exclama-<br>tion</div><button class="tone-spk" onclick="speakThai('ก๋า',event)">🔊</button></div>
+    </div>
+    <p class="lesson-text" style="margin-top:8px">A classic example — the word <strong style="color:var(--text)">มา</strong>:</p>
+    <div class="ex-list">
+      <div class="ex-row"><span class="ex-thai">มา</span><span class="ex-rtgs">maa</span><span class="ex-meaning">To come (mid tone)</span><button class="ex-spk" onclick="speakThai('มา',event)">🔊</button></div>
+      <div class="ex-row"><span class="ex-thai">ม้า</span><span class="ex-rtgs">máa</span><span class="ex-meaning">Horse (falling tone)</span><button class="ex-spk" onclick="speakThai('ม้า',event)">🔊</button></div>
+      <div class="ex-row"><span class="ex-thai">หมา</span><span class="ex-rtgs">mǎa</span><span class="ex-meaning">Dog (rising tone)</span><button class="ex-spk" onclick="speakThai('หมา',event)">🔊</button></div>
+    </div>
+    <div class="lesson-hl"><strong>Tone marks:</strong> The 4 marks ( ่ ้ ๊ ๋ ) are placed above the consonant. No mark = tone determined by consonant class. <strong>Mid tone = no mark</strong> on a middle-class consonant.</div>
+    <div class="tip-box"><span class="tip-icon">🎵</span><div class="tip-text"><strong>Tip:</strong> Practice <strong>singing</strong> the tones — the low tone descends, the rising tone goes up like a question, the falling tone starts high and drops. Associate each tone with a mental image!</div></div>
+  </div>
+
+  <div class="lesson-card">
+    <div class="lcard-header"><div class="lcard-num">6</div><div class="lcard-title">The 10 Thai Numerals</div></div>
+    <p class="lesson-text">Thai has its own numerals. Good news: they're easy to memorize because their shapes resemble Arabic numerals. Click each number to hear it!</p>
+    <div class="num-grid">
+      <div class="num-cell" onclick="speakThai('ศูนย์',event)"><span class="num-thai">๐</span><span class="num-western">0</span></div>
+      <div class="num-cell" onclick="speakThai('หนึ่ง',event)"><span class="num-thai">๑</span><span class="num-western">1</span></div>
+      <div class="num-cell" onclick="speakThai('สอง',event)"><span class="num-thai">๒</span><span class="num-western">2</span></div>
+      <div class="num-cell" onclick="speakThai('สาม',event)"><span class="num-thai">๓</span><span class="num-western">3</span></div>
+      <div class="num-cell" onclick="speakThai('สี่',event)"><span class="num-thai">๔</span><span class="num-western">4</span></div>
+      <div class="num-cell" onclick="speakThai('ห้า',event)"><span class="num-thai">๕</span><span class="num-western">5</span></div>
+      <div class="num-cell" onclick="speakThai('หก',event)"><span class="num-thai">๖</span><span class="num-western">6</span></div>
+      <div class="num-cell" onclick="speakThai('เจ็ด',event)"><span class="num-thai">๗</span><span class="num-western">7</span></div>
+      <div class="num-cell" onclick="speakThai('แปด',event)"><span class="num-thai">๘</span><span class="num-western">8</span></div>
+      <div class="num-cell" onclick="speakThai('เก้า',event)"><span class="num-thai">๙</span><span class="num-western">9</span></div>
+    </div>
+    <div class="ex-list" style="margin-top:12px">
+      <div class="ex-row"><span class="ex-thai">๑๙๘๔</span><span class="ex-rtgs">1984</span><span class="ex-meaning">Thai numerals work exactly like Western ones</span><button class="ex-spk" onclick="speakThai('หนึ่งพันเก้าร้อยแปดสิบสี่',event)">🔊</button></div>
+    </div>
+    <div class="tip-box"><span class="tip-icon">💡</span><div class="tip-text"><strong>Tip:</strong> In practice, Thais also use Arabic numerals (1, 2, 3…) in daily life. You'll often see both forms on signs and menus.</div></div>
+  </div>
+
+  <div class="lesson-card">
+    <div class="lcard-header"><div class="lcard-num">7</div><div class="lcard-title">Where to Start — Your Learning Roadmap</div></div>
+    <p class="lesson-text">Now that you understand the structure of the Thai alphabet, here's a recommended learning path for beginners:</p>
+    <div class="lesson-path">
+      <div class="path-step" onclick="goTab('consonnes')"><div class="path-num">1</div><div class="path-content"><div class="path-title">Learn the 9 middle-class consonants</div><div class="path-desc">ก จ ด ต บ ป อ — they're the simplest and most common. Use the cards, flip them, listen to each sound.</div></div><span style="color:var(--text3)">→</span></div>
+      <div class="path-step" onclick="goTab('voyelles')"><div class="path-num">2</div><div class="path-content"><div class="path-title">Memorize the 5 main long vowels</div><div class="path-desc">อา อี อือ อู เอ — these 5 long vowels cover the majority of common words.</div></div><span style="color:var(--text3)">→</span></div>
+      <div class="path-step" onclick="goTab('tons')"><div class="path-num">3</div><div class="path-content"><div class="path-title">Practice the 5 tones with learned consonants</div><div class="path-desc">Combine tone marks with the consonants you know. The Tones tab shows the melodic curves.</div></div><span style="color:var(--text3)">→</span></div>
+      <div class="path-step" onclick="goTab('consonnes')"><div class="path-num">4</div><div class="path-content"><div class="path-title">Continue with high and low class consonants</div><div class="path-desc">Filter by class in the Consonants tab. Learn 5 new consonants per session.</div></div><span style="color:var(--text3)">→</span></div>
+      <div class="path-step" onclick="goTab('quiz')"><div class="path-num">5</div><div class="path-content"><div class="path-title">Test yourself with the Quiz</div><div class="path-desc">Start with Character→Sound mode, then switch to 🔊→Character to test your ear.</div></div><span style="color:var(--text3)">→</span></div>
+    </div>
+    <div class="lesson-hl" style="margin-top:20px"><strong>🎯 Realistic goal:</strong> In <strong>2 to 3 weeks</strong> at 15 minutes per day, you can memorize all 44 consonants and start reading simple words. Thai is more logical than it appears!</div>
+  </div>
+</div></div>
+
+<!-- PHRASES TAB -->
+<div id="tab-phrases" class="tab-content">
+  <div class="phrases-wrap">
+    <div class="sec-hd">
+      <div class="sec-tag" id="phTag">Communication</div>
+      <div class="sec-title" id="phTitle">Phrases de base</div>
+      <p class="sec-desc" id="phDesc">Les phrases essentielles pour débuter en thaïlande. Cliquez sur 🔊 pour écouter la prononciation.</p>
+    </div>
+    <div class="pcats" id="pcats"></div>
+    <input class="psrch" type="text" id="psrch" placeholder="Rechercher une phrase ou un mot…" oninput="renderPhrases()">
+    <div class="pcount" id="phraseCount"></div>
+    <div class="phrase-grid" id="phraseGrid"></div>
+  </div>
+</div>
+
+<footer>
+  <div class="thai" style="font-size:28px;margin-bottom:8px">ขอบคุณ</div>
+  <div><span id="footerTxt">Merci d'apprendre le thaï —</span> <span style="color:var(--gold)">ยิ่งเรียน ยิ่งรู้</span> <span id="footerQuote">« Plus on apprend, plus on sait »</span></div>
+</footer>
+
+<!-- MOBILE NAV -->
+<nav class="mobnav">
+  <button class="mtab active" onclick="goTab('home',this)"><span class="mtab-icon">🏠</span><span id="mtab-home">Accueil</span></button>
+  <button class="mtab" onclick="goTab('lesson',this)"><span class="mtab-icon">📖</span><span id="mtab-lesson">Leçon</span></button>
+  <button class="mtab" onclick="goTab('phrases',this)"><span class="mtab-icon">💬</span><span id="mtab-phrases">Phrases</span></button>
+  <button class="mtab" onclick="goTab('consonnes',this)"><span class="mtab-icon">🔤</span><span id="mtab-alpha">Alphabet</span></button>
+  <button class="mtab" onclick="goTab('voyelles',this)"><span class="mtab-icon">🔡</span><span id="mtab-vowels">Voyelles</span></button>
+  <button class="mtab" onclick="goTab('quiz',this)"><span class="mtab-icon">🎯</span><span id="mtab-quiz">Quiz</span></button>
+</nav>
+
+<script>
+// ─── FIREBASE ──────────────────────────────────────────────────────────────
+firebase.initializeApp({
+  apiKey: "AIzaSyBlktgKK7ol6HdwE0ahcvXi619Ney4iCic",
+  authDomain: "alphabet-thai.firebaseapp.com",
+  projectId: "alphabet-thai",
+  storageBucket: "alphabet-thai.firebasestorage.app",
+  messagingSenderId: "710772576918",
+  appId: "1:710772576918:web:48e4c715b3e020374968b7"
+});
+const auth = firebase.auth();
+const db   = firebase.firestore();
+
+// ─── DATA ──────────────────────────────────────────────────────────────────
+const consonants = [
+  // MID CLASS (9)
+  {id:1, char:'ก', rtgs:'k',  nr:'gor gai',       name:'ก ไก่',    meaning:'Poulet',      en:'Chicken',    cls:'mid', ini:'g',  fin:'k',  sound:'comme "k" dans "koala"',   emoji:'🐔'},
+  {id:2, char:'จ', rtgs:'j',  nr:'jor jaan',       name:'จ จาน',    meaning:'Assiette',    en:'Plate',      cls:'mid', ini:'j',  fin:'t',  sound:'comme "j" dans "jeu"',     emoji:'🍽️'},
+  {id:3, char:'ด', rtgs:'d',  nr:'dor dek',        name:'ด เด็ก',   meaning:'Enfant',      en:'Child',      cls:'mid', ini:'d',  fin:'t',  sound:'comme "d" dans "doux"',    emoji:'👶'},
+  {id:4, char:'ต', rtgs:'t',  nr:'tor tao',        name:'ต เต่า',   meaning:'Tortue',      en:'Turtle',     cls:'mid', ini:'dt', fin:'t',  sound:'comme "t" dans "table"',   emoji:'🐢'},
+  {id:5, char:'บ', rtgs:'b',  nr:'bor baimai',     name:'บ ใบไม้',  meaning:'Feuille',     en:'Leaf',       cls:'mid', ini:'b',  fin:'p',  sound:'comme "b" dans "ballon"',  emoji:'🍃'},
+  {id:6, char:'ป', rtgs:'p',  nr:'por plaa',       name:'ป ปลา',    meaning:'Poisson',     en:'Fish',       cls:'mid', ini:'bp', fin:'p',  sound:'comme "p" dans "papa"',    emoji:'🐟'},
+  {id:7, char:'อ', rtgs:'—',  nr:'or aang',        name:'อ อ่าง',   meaning:'Bassin',      en:'Basin',      cls:'mid', ini:'—',  fin:'—',  sound:'Support de voyelle (muet)', emoji:'🏺'},
+  {id:8, char:'ฎ', rtgs:'d',  nr:'dor cha-daa',   name:'ฎ ชฎา',   meaning:'Coiffe',      en:'Headdress',  cls:'mid', ini:'d',  fin:'t',  sound:'comme "d" dans "doux"',    emoji:'👑'},
+  {id:9, char:'ฏ', rtgs:'t',  nr:'tor pa-tak',    name:'ฏ ปฏัก',  meaning:'Aiguillon',   en:'Goad',       cls:'mid', ini:'dt', fin:'t',  sound:'comme "t" dans "table"',   emoji:'🗡️'},
+  // HIGH CLASS (11)
+  {id:10,char:'ข', rtgs:'kh', nr:'khor khai',      name:'ข ไข่',    meaning:'Œuf',         en:'Egg',        cls:'high',ini:'kh', fin:'k',  sound:'k aspiré',                emoji:'🥚'},
+  {id:11,char:'ฃ', rtgs:'kh', nr:'khor khuat',     name:'ฃ ขวด',   meaning:'Bouteille',   en:'Bottle',     cls:'high',ini:'kh', fin:'k',  sound:'k aspiré (obsolète)',     emoji:'🍾'},
+  {id:12,char:'ฉ', rtgs:'ch', nr:'chor ching',     name:'ฉ ฉิ่ง',  meaning:'Cymbales',    en:'Cymbals',    cls:'high',ini:'ch', fin:'—',  sound:'comme "ch" dans "chat"',  emoji:'🎵'},
+  {id:13,char:'ฐ', rtgs:'th', nr:'thor thaan',     name:'ฐ ฐาน',   meaning:'Base',        en:'Pedestal',   cls:'high',ini:'th', fin:'t',  sound:'t aspiré',                emoji:'🏛️'},
+  {id:14,char:'ถ', rtgs:'th', nr:'thor thung',     name:'ถ ถุง',    meaning:'Sac',         en:'Bag',        cls:'high',ini:'th', fin:'t',  sound:'t aspiré',                emoji:'👜'},
+  {id:15,char:'ผ', rtgs:'ph', nr:'phor pheung',    name:'ผ ผึ้ง',   meaning:'Abeille',     en:'Bee',        cls:'high',ini:'ph', fin:'—',  sound:'p aspiré',                emoji:'🐝'},
+  {id:16,char:'ฝ', rtgs:'f',  nr:'for faa',        name:'ฝ ฝา',    meaning:'Couvercle',   en:'Lid',        cls:'high',ini:'f',  fin:'—',  sound:'comme "f" dans "fleur"',  emoji:'🪪'},
+  {id:17,char:'ศ', rtgs:'s',  nr:'sor saala',      name:'ศ ศาลา',  meaning:'Pavillon',    en:'Pavilion',   cls:'high',ini:'s',  fin:'t',  sound:'comme "s" dans "soleil"', emoji:'⛩️'},
+  {id:18,char:'ษ', rtgs:'s',  nr:'sor reusi',      name:'ษ ฤๅษี',  meaning:'Ermite',      en:'Hermit',     cls:'high',ini:'s',  fin:'t',  sound:'comme "s" dans "soleil"', emoji:'🧙'},
+  {id:19,char:'ส', rtgs:'s',  nr:'sor suea',       name:'ส เสือ',   meaning:'Tigre',       en:'Tiger',      cls:'high',ini:'s',  fin:'t',  sound:'comme "s" dans "soleil"', emoji:'🐯'},
+  {id:20,char:'ห', rtgs:'h',  nr:'hor hiip',       name:'ห หีบ',    meaning:'Coffre',      en:'Chest',      cls:'high',ini:'h',  fin:'—',  sound:'comme "h" aspiré',        emoji:'📦'},
+  // LOW CLASS (24)
+  {id:21,char:'ค', rtgs:'kh', nr:'khor khwai',     name:'ค ควาย',  meaning:'Buffle',      en:'Buffalo',    cls:'low', ini:'kh', fin:'k',  sound:'k aspiré',                emoji:'🐃'},
+  {id:22,char:'ฅ', rtgs:'kh', nr:'khor khon',      name:'ฅ คน',    meaning:'Personne',    en:'Person',     cls:'low', ini:'kh', fin:'k',  sound:'k aspiré (obsolète)',     emoji:'👤'},
+  {id:23,char:'ฆ', rtgs:'kh', nr:'khor ra-khang',  name:'ฆ ระฆัง', meaning:'Cloche',      en:'Bell',       cls:'low', ini:'kh', fin:'k',  sound:'k aspiré',                emoji:'🔔'},
+  {id:24,char:'ง', rtgs:'ng', nr:'ngor nguu',       name:'ง งู',     meaning:'Serpent',     en:'Snake',      cls:'low', ini:'ng', fin:'ng', sound:'comme "ng" dans "parking"',emoji:'🐍'},
+  {id:25,char:'ช', rtgs:'ch', nr:'chor chaang',     name:'ช ช้าง',  meaning:'Éléphant',    en:'Elephant',   cls:'low', ini:'ch', fin:'t',  sound:'comme "ch" dans "chat"',  emoji:'🐘'},
+  {id:26,char:'ซ', rtgs:'s',  nr:'sor soo',         name:'ซ โซ่',   meaning:'Chaîne',      en:'Chain',      cls:'low', ini:'s',  fin:'t',  sound:'comme "s" dans "soleil"', emoji:'⛓️'},
+  {id:27,char:'ฌ', rtgs:'ch', nr:'chor choe',       name:'ฌ เฌอ',   meaning:'Arbre',       en:'Tree',       cls:'low', ini:'ch', fin:'—',  sound:'comme "ch" dans "chat"',  emoji:'🌳'},
+  {id:28,char:'ญ', rtgs:'y',  nr:'yor ying',        name:'ญ หญิง',  meaning:'Femme',       en:'Woman',      cls:'low', ini:'y',  fin:'n',  sound:'comme "y" dans "yoga"',   emoji:'👩'},
+  {id:29,char:'ฑ', rtgs:'th', nr:'thor monthoo',    name:'ฑ มณโฑ',  meaning:'Personnage',  en:'Character',  cls:'low', ini:'th', fin:'t',  sound:'t aspiré',                emoji:'🎭'},
+  {id:30,char:'ฒ', rtgs:'th', nr:'thor phu-thao',   name:'ฒ ผู้เฒ่า',meaning:'Vieillard', en:'Elder',      cls:'low', ini:'th', fin:'t',  sound:'t aspiré',                emoji:'👴'},
+  {id:31,char:'ณ', rtgs:'n',  nr:'nor neen',        name:'ณ เณร',   meaning:'Novice',      en:'Novice monk',cls:'low', ini:'n',  fin:'n',  sound:'comme "n" dans "nature"', emoji:'🧘'},
+  {id:32,char:'ท', rtgs:'th', nr:'thor thahaan',    name:'ท ทหาร',  meaning:'Soldat',      en:'Soldier',    cls:'low', ini:'th', fin:'t',  sound:'t aspiré',                emoji:'⚔️'},
+  {id:33,char:'ธ', rtgs:'th', nr:'thor thong',      name:'ธ ธง',    meaning:'Drapeau',     en:'Flag',       cls:'low', ini:'th', fin:'t',  sound:'t aspiré',                emoji:'🚩'},
+  {id:34,char:'น', rtgs:'n',  nr:'nor nuu',         name:'น หนู',   meaning:'Souris',      en:'Mouse',      cls:'low', ini:'n',  fin:'n',  sound:'comme "n" dans "nature"', emoji:'🐭'},
+  {id:35,char:'พ', rtgs:'ph', nr:'phor phaan',      name:'พ พาน',   meaning:'Plateau',     en:'Tray',       cls:'low', ini:'ph', fin:'p',  sound:'p aspiré',                emoji:'🫙'},
+  {id:36,char:'ฟ', rtgs:'f',  nr:'for fan',         name:'ฟ ฟัน',   meaning:'Dent',        en:'Tooth',      cls:'low', ini:'f',  fin:'p',  sound:'comme "f" dans "fleur"',  emoji:'🦷'},
+  {id:37,char:'ภ', rtgs:'ph', nr:'phor samphao',    name:'ภ สำเภา', meaning:'Jonque',      en:'Junk boat',  cls:'low', ini:'ph', fin:'p',  sound:'p aspiré',                emoji:'⛵'},
+  {id:38,char:'ม', rtgs:'m',  nr:'mor maa',         name:'ม ม้า',   meaning:'Cheval',      en:'Horse',      cls:'low', ini:'m',  fin:'m',  sound:'comme "m" dans "maison"', emoji:'🐴'},
+  {id:39,char:'ย', rtgs:'y',  nr:'yor yak',         name:'ย ยักษ์',  meaning:'Géant',       en:'Giant',      cls:'low', ini:'y',  fin:'y',  sound:'comme "y" dans "yoga"',   emoji:'👹'},
+  {id:40,char:'ร', rtgs:'r',  nr:'ror reua',        name:'ร เรือ',  meaning:'Bateau',      en:'Boat',       cls:'low', ini:'r',  fin:'n',  sound:'r roulé',                 emoji:'🚢'},
+  {id:41,char:'ล', rtgs:'l',  nr:'lor ling',        name:'ล ลิง',   meaning:'Singe',       en:'Monkey',     cls:'low', ini:'l',  fin:'n',  sound:'comme "l" dans "lion"',   emoji:'🐒'},
+  {id:42,char:'ว', rtgs:'w',  nr:'wor waen',        name:'ว แหวน',  meaning:'Bague',       en:'Ring',       cls:'low', ini:'w',  fin:'w',  sound:'comme "w" dans "wok"',    emoji:'💍'},
+  {id:43,char:'ฬ', rtgs:'l',  nr:'lor julaa',       name:'ฬ จุฬา',  meaning:'Cerf-volant', en:'Kite',       cls:'low', ini:'l',  fin:'n',  sound:'comme "l" dans "lion"',   emoji:'🪁'},
+  {id:44,char:'ฮ', rtgs:'h',  nr:'hor nok-huk',     name:'ฮ นกฮูก', meaning:'Hibou',       en:'Owl',        cls:'low', ini:'h',  fin:'—',  sound:'comme "h" aspiré',        emoji:'🦉'},
+];
+
+const vowels = {
+  short: [
+    {char:'อะ', rtgs:'a',   desc:'a bref — comme dans "patte"',      en:'a (short) — like "u" in "cut"'},
+    {char:'อิ', rtgs:'i',   desc:'i bref — comme dans "vite"',        en:'i (short) — like "i" in "bit"'},
+    {char:'อึ', rtgs:'ue',  desc:'ue bref — son central',             en:'ue (short) — central vowel sound'},
+    {char:'อุ', rtgs:'u',   desc:'u bref — comme dans "coup"',        en:'u (short) — like "u" in "put"'},
+    {char:'เอะ',rtgs:'e',   desc:'e bref — comme dans "fête"',        en:'e (short) — like "e" in "bed"'},
+    {char:'แอะ',rtgs:'ae',  desc:'ae bref — entre a et e',            en:'ae (short) — between "a" and "e"'},
+    {char:'โอะ',rtgs:'o',   desc:'o bref — comme dans "note"',        en:'o (short) — like "o" in "not"'},
+    {char:'เอาะ',rtgs:'aw', desc:'aw bref — o arrondi',               en:'aw (short) — rounded o sound'},
+    {char:'ไ / ใ',rtgs:'ai', desc:'ai — comme dans "aile"',           en:'ai — like "ai" in "aisle"'},
+  ],
+  long: [
+    {char:'อา', rtgs:'aa',  desc:'a long — prolongé',                 en:'aa (long) — prolonged a sound'},
+    {char:'อี', rtgs:'ii',  desc:'i long — prolongé',                 en:'ii (long) — prolonged i sound'},
+    {char:'อือ',rtgs:'ue',  desc:'ue long — son central prolongé',    en:'ue (long) — prolonged central vowel'},
+    {char:'อู', rtgs:'uu',  desc:'u long — prolongé',                 en:'uu (long) — prolonged u sound'},
+    {char:'เอ', rtgs:'ee',  desc:'e long — comme dans "fée"',         en:'ee (long) — like "a" in "gate"'},
+    {char:'แอ', rtgs:'ae',  desc:'ae long — prolongé',                en:'ae (long) — prolonged ae sound'},
+    {char:'โอ', rtgs:'oo',  desc:'o long — prolongé',                 en:'oo (long) — like "o" in "go"'},
+    {char:'ออ', rtgs:'aw',  desc:'aw long — o arrondi prolongé',      en:'aw (long) — prolonged rounded o'},
+    {char:'เอา',rtgs:'ao',  desc:'ao — comme dans "kaolin"',          en:'ao — like "ow" in "now"'},
+  ]
+};
+
+const tones = [
+  {num:'1er ton', mark:'กา', name:'Ton moyen',   fr:'Saamaan สามัญ',  color:'#8B92A8', path:'M10,20 L70,20'},
+  {num:'2e ton',  mark:'ก่า',name:'Ton bas',     fr:'Ek เอก',         color:'#4C8EFF', path:'M10,10 Q40,30 70,35'},
+  {num:'3e ton',  mark:'ก้า',name:'Ton descendant',fr:'Tho โท',       color:'#FF5C8D', path:'M10,8  Q40,15 70,32'},
+  {num:'4e ton',  mark:'ก๊า',name:'Ton haut',    fr:'Tri ตรี',        color:'#F0B429', path:'M10,30 Q40,10 70,8'},
+  {num:'5e ton',  mark:'ก๋า',name:'Ton montant', fr:'Jattawa จัตวา',  color:'#0ED3A0', path:'M10,25 Q30,35 50,18 L70,8'},
+];
+
+const phrases = [
+  // ── Salutations ──
+  {cat:'Salutations', thai:'สวัสดีครับ',       rtgs:'sawatdii khrâp',           fr:'Bonjour (homme)',                  en:'Hello (male)'},
+  {cat:'Salutations', thai:'สวัสดีค่ะ',        rtgs:'sawatdii khâ',             fr:'Bonjour (femme)',                  en:'Hello (female)'},
+  {cat:'Salutations', thai:'สวัสดีตอนเช้า',    rtgs:'sawatdii tawn cháo',       fr:'Bonjour (le matin)',               en:'Good morning'},
+  {cat:'Salutations', thai:'สวัสดีตอนเย็น',    rtgs:'sawatdii tawn yen',        fr:'Bonsoir',                          en:'Good evening'},
+  {cat:'Salutations', thai:'ราตรีสวัสดิ์',     rtgs:'raatrii sawàt',            fr:'Bonne nuit',                       en:'Good night'},
+  {cat:'Salutations', thai:'ลาก่อน',           rtgs:'laa gàwn',                 fr:'Au revoir',                        en:'Goodbye'},
+  {cat:'Salutations', thai:'แล้วพบกันใหม่',    rtgs:'láew phóp gan mài',        fr:'À bientôt',                        en:'See you soon'},
+  {cat:'Salutations', thai:'สบายดีไหม',        rtgs:'sabaai dii mái',           fr:'Comment allez-vous ?',             en:'How are you?'},
+  {cat:'Salutations', thai:'สบายดีครับ',       rtgs:'sabaai dii khrâp',         fr:'Je vais bien, merci',              en:"I'm fine, thank you"},
+  {cat:'Salutations', thai:'ยินดีที่ได้รู้จัก', rtgs:'yindii thîi dâi rúujàk', fr:'Enchanté(e)',                       en:'Nice to meet you'},
+  // ── Politesse ──
+  {cat:'Politesse', thai:'ขอบคุณครับ',         rtgs:'khàwp khun khrâp',         fr:'Merci (homme)',                    en:'Thank you (male)'},
+  {cat:'Politesse', thai:'ขอบคุณค่ะ',          rtgs:'khàwp khun khâ',           fr:'Merci (femme)',                    en:'Thank you (female)'},
+  {cat:'Politesse', thai:'ขอบคุณมากครับ',      rtgs:'khàwp khun mâak khrâp',    fr:'Merci beaucoup',                   en:'Thank you very much'},
+  {cat:'Politesse', thai:'ไม่เป็นไร',          rtgs:'mâi pen rai',              fr:'De rien / Pas de problème',        en:"You're welcome / No problem"},
+  {cat:'Politesse', thai:'ขอโทษครับ',          rtgs:'khǎaw thôot khrâp',        fr:'Excusez-moi / Désolé',             en:'Excuse me / Sorry'},
+  {cat:'Politesse', thai:'กรุณา',              rtgs:'garunaa',                  fr:"S'il vous plaît (formel)",         en:'Please (formal)'},
+  {cat:'Politesse', thai:'ช่วยด้วยครับ',       rtgs:'chûay dûay khrâp',         fr:"Aidez-moi s'il vous plaît",        en:'Please help me'},
+  {cat:'Politesse', thai:'ได้โปรด',            rtgs:'dâi bprôot',               fr:"S'il vous plaît (insistant)",      en:'Please (emphatic)'},
+  {cat:'Politesse', thai:'ยินดีครับ',          rtgs:'yindii khrâp',             fr:'Avec plaisir',                     en:'With pleasure'},
+  {cat:'Politesse', thai:'ขอบใจ',              rtgs:'khàwp jai',                fr:'Merci (informel)',                 en:'Thanks (informal)'},
+  // ── Présentation ──
+  {cat:'Présentation', thai:'ผมชื่อ…',         rtgs:'phǒm chêu…',               fr:"Je m'appelle… (homme)",            en:'My name is… (male)'},
+  {cat:'Présentation', thai:'ฉันชื่อ…',        rtgs:'chǎn chêu…',               fr:"Je m'appelle… (femme)",            en:'My name is… (female)'},
+  {cat:'Présentation', thai:'คุณชื่ออะไร',     rtgs:'khun chêu arai',           fr:'Comment vous appelez-vous ?',      en:'What is your name?'},
+  {cat:'Présentation', thai:'ผมมาจากฝรั่งเศส', rtgs:'phǒm maa jàak faràng sèet', fr:'Je viens de France',             en:"I'm from France"},
+  {cat:'Présentation', thai:'คุณมาจากไหน',     rtgs:'khun maa jàak nǎi',        fr:'D\'où venez-vous ?',               en:'Where are you from?'},
+  {cat:'Présentation', thai:'ผมอายุ … ปี',     rtgs:'phǒm aayú … bpii',         fr:"J'ai … ans",                       en:'I am … years old'},
+  {cat:'Présentation', thai:'ผมพูดไทยไม่เก่ง', rtgs:'phǒm phûut thai mâi gèng', fr:'Je ne parle pas bien thaï',       en:"I don't speak Thai well"},
+  {cat:'Présentation', thai:'ผมกำลังเรียนภาษาไทย', rtgs:'phǒm gamlang rian phaasǎa thai', fr:"J'apprends le thaï",  en:"I'm learning Thai"},
+  // ── Questions ──
+  {cat:'Questions', thai:'นี่คืออะไร',         rtgs:'nîi khuue arai',            fr:"Qu'est-ce que c'est ?",           en:'What is this?'},
+  {cat:'Questions', thai:'ห้องน้ำอยู่ที่ไหน',  rtgs:'hâwng náam yùu thîi nǎi',  fr:'Où sont les toilettes ?',          en:'Where is the bathroom?'},
+  {cat:'Questions', thai:'ราคาเท่าไหร่',        rtgs:'raakaa thâo rài',           fr:'Combien ça coûte ?',               en:'How much does it cost?'},
+  {cat:'Questions', thai:'คุณพูดภาษาอังกฤษได้ไหม', rtgs:'khun phûut phaasǎa anggrìt dâi mái', fr:'Parlez-vous anglais ?', en:'Do you speak English?'},
+  {cat:'Questions', thai:'ช่วยพูดช้าๆ หน่อยได้ไหม', rtgs:'chûay phûut cháa cháa nàwy dâi mái', fr:'Pouvez-vous parler plus lentement ?', en:'Can you speak more slowly?'},
+  {cat:'Questions', thai:'ช่วยเขียนให้หน่อยได้ไหม', rtgs:'chûay khǐan hâi nàwy dâi mái', fr:'Pouvez-vous écrire ça ?',  en:'Can you write that down?'},
+  {cat:'Questions', thai:'ผมไม่เข้าใจ',         rtgs:'phǒm mâi khâo jai',         fr:'Je ne comprends pas',              en:"I don't understand"},
+  {cat:'Questions', thai:'แปลว่าอะไร',           rtgs:'bplae wâa arai',            fr:'Que veut dire cela ?',             en:'What does that mean?'},
+  {cat:'Questions', thai:'มีภาษาฝรั่งเศสไหม',   rtgs:'mii phaasǎa faràng sèet mái', fr:'Avez-vous du français ?',       en:'Do you have it in French?'},
+  {cat:'Questions', thai:'ที่นี่อยู่ที่ไหน',    rtgs:'thîi nîi yùu thîi nǎi',    fr:'Où sommes-nous ?',                 en:'Where are we?'},
+  // ── Restaurant ──
+  {cat:'Restaurant', thai:'ขอดูเมนูหน่อยครับ',  rtgs:'khǎaw duu meenuu nàwy khrâp', fr:'Le menu, SVP',                  en:'May I see the menu?'},
+  {cat:'Restaurant', thai:'ขอสั่งอาหารครับ',    rtgs:'khǎaw sàng aahǎan khrâp',   fr:'Je voudrais commander',            en:"I'd like to order"},
+  {cat:'Restaurant', thai:'อันนี้คืออะไร',       rtgs:'an nîi khuue arai',          fr:'C\'est quoi ce plat ?',            en:'What is this dish?'},
+  {cat:'Restaurant', thai:'อร่อยมาก',            rtgs:'aràwy mâak',                 fr:'C\'est délicieux !',               en:'Delicious!'},
+  {cat:'Restaurant', thai:'ไม่เผ็ด',             rtgs:'mâi phèt',                   fr:'Pas épicé',                        en:'Not spicy'},
+  {cat:'Restaurant', thai:'เผ็ดนิดหน่อย',        rtgs:'phèt nít nàwy',              fr:'Un peu épicé',                     en:'A little spicy'},
+  {cat:'Restaurant', thai:'เผ็ดมาก',             rtgs:'phèt mâak',                  fr:'Très épicé',                       en:'Very spicy'},
+  {cat:'Restaurant', thai:'ไม่เอาผัก',           rtgs:'mâi ao phàk',                fr:'Sans légumes',                     en:'No vegetables'},
+  {cat:'Restaurant', thai:'เก็บเงินด้วยครับ',    rtgs:'gèp ngoen dûay khrâp',      fr:'L\'addition, SVP',                 en:'Check, please'},
+  {cat:'Restaurant', thai:'น้ำเปล่าหนึ่งขวด',   rtgs:'náam bplào nùeng khùat',     fr:'Une bouteille d\'eau',             en:'One bottle of water'},
+  {cat:'Restaurant', thai:'ขอน้ำแข็งด้วย',       rtgs:'khǎaw náam khǎeng dûay',    fr:'Avec des glaçons',                 en:'With ice please'},
+  {cat:'Restaurant', thai:'อาหารมังสวิรัติ',     rtgs:'aahǎan mangsaw witát',       fr:'Nourriture végétarienne',          en:'Vegetarian food'},
+  // ── Shopping ──
+  {cat:'Shopping', thai:'อันนี้เท่าไหร่',        rtgs:'an nîi thâo rài',            fr:'Combien coûte ceci ?',             en:'How much is this?'},
+  {cat:'Shopping', thai:'แพงเกินไป',             rtgs:'phaeng goen bpai',           fr:"C'est trop cher",                  en:'Too expensive'},
+  {cat:'Shopping', thai:'ลดราคาได้ไหม',          rtgs:'lót raakaa dâi mái',         fr:'Pouvez-vous faire un rabais ?',    en:'Can you give a discount?'},
+  {cat:'Shopping', thai:'มีสีอื่นไหม',           rtgs:'mii sǐi ùen mái',           fr:"D'autres couleurs ?",              en:'Other colors?'},
+  {cat:'Shopping', thai:'มีไซส์ใหญ่กว่าไหม',    rtgs:'mii sàis yài gwàa mái',      fr:'Une taille plus grande ?',         en:'A bigger size?'},
+  {cat:'Shopping', thai:'ผมขอลองได้ไหม',         rtgs:'phǒm khǎaw lawng dâi mái',  fr:'Puis-je essayer ?',                en:'Can I try it on?'},
+  {cat:'Shopping', thai:'เอาอันนี้',             rtgs:'ao an nîi',                  fr:'Je prends celui-ci',               en:"I'll take this one"},
+  {cat:'Shopping', thai:'ไม่เอา',               rtgs:'mâi ao',                     fr:"Je n'en veux pas",                 en:"I don't want it"},
+  {cat:'Shopping', thai:'รับบัตรเครดิตไหม',      rtgs:'ráp bàt khredit mái',        fr:'Cartes acceptées ?',               en:'Do you accept cards?'},
+  {cat:'Shopping', thai:'ตลาดอยู่ที่ไหน',        rtgs:'talàat yùu thîi nǎi',       fr:'Où est le marché ?',               en:'Where is the market?'},
+  // ── Transport ──
+  {cat:'Transport', thai:'ไปสนามบินอย่างไร',    rtgs:'bpai sanǎam bin yàang rai',  fr:"Comment aller à l'aéroport ?",    en:'How do I get to the airport?'},
+  {cat:'Transport', thai:'ขึ้นรถแท็กซี่ที่ไหน', rtgs:'khûen rót tháeksîi thîi nǎi', fr:'Où prendre un taxi ?',           en:'Where can I take a taxi?'},
+  {cat:'Transport', thai:'ไปที่นี่ได้ไหม',       rtgs:'bpai thîi nîi dâi mái',      fr:'Pouvez-vous m\'emmener ici ?',    en:'Can you take me here?'},
+  {cat:'Transport', thai:'หยุดตรงนี้เลย',        rtgs:'yùt trong nîi loie',         fr:'Arrêtez-vous ici',                 en:'Stop here'},
+  {cat:'Transport', thai:'ตั๋วราคาเท่าไหร่',     rtgs:'dtǔa raakaa thâo rài',       fr:'Combien coûte le billet ?',        en:'How much is the ticket?'},
+  {cat:'Transport', thai:'รถออกกี่โมง',          rtgs:'rót àwk gìi moong',          fr:'À quelle heure part le bus ?',     en:'What time does the bus leave?'},
+  {cat:'Transport', thai:'ใกล้แค่ไหน',           rtgs:'glâi khâe nǎi',              fr:"C'est loin ?",                     en:'Is it far?'},
+  {cat:'Transport', thai:'ใช้เวลานานไหม',        rtgs:'chái welaa naan mái',        fr:'Ça prend du temps ?',              en:'Does it take long?'},
+  {cat:'Transport', thai:'ขอแผนที่หน่อยได้ไหม', rtgs:'khǎaw phǎen thîi nàwy dâi mái', fr:'Puis-je avoir une carte ?',     en:'Can I have a map?'},
+  {cat:'Transport', thai:'รถไฟฟ้าสถานีไหน',      rtgs:'rót fai fáa sathaanii nǎi',  fr:'Quelle station de BTS ?',          en:'Which BTS station?'},
+  // ── Hôtel ──
+  {cat:'Hôtel', thai:'มีห้องว่างไหม',            rtgs:'mii hâwng wâang mái',        fr:'Avez-vous une chambre libre ?',    en:'Do you have a free room?'},
+  {cat:'Hôtel', thai:'ราคาคืนละเท่าไหร่',        rtgs:'raakaa khuuen lá thâo rài',  fr:'Quel est le prix par nuit ?',      en:'What is the price per night?'},
+  {cat:'Hôtel', thai:'ขอเช็คอินได้เลยไหม',       rtgs:'khǎaw chék in dâi loie mái', fr:'Puis-je m\'enregistrer maintenant ?', en:'Can I check in now?'},
+  {cat:'Hôtel', thai:'กุญแจห้องอยู่ที่ไหน',      rtgs:'gunjae hâwng yùu thîi nǎi', fr:'Où est la clé de ma chambre ?',    en:'Where is my room key?'},
+  {cat:'Hôtel', thai:'ห้องน้ำใช้ไม่ได้',          rtgs:'hâwng náam chái mâi dâi',   fr:'La salle de bain ne fonctionne pas', en:"The bathroom doesn't work"},
+  {cat:'Hôtel', thai:'แอร์ใช้ไม่ได้',             rtgs:'ae chái mâi dâi',            fr:'La clim ne fonctionne pas',        en:"The AC doesn't work"},
+  {cat:'Hôtel', thai:'ขอผ้าเช็ดตัวเพิ่มได้ไหม',  rtgs:'khǎaw phâa chét tua phûem dâi mái', fr:'Plus de serviettes, SVP',  en:'More towels please'},
+  {cat:'Hôtel', thai:'เช็คเอาท์กี่โมง',           rtgs:'chék ao gìi moong',          fr:'À quelle heure est le check-out ?', en:'What time is check-out?'},
+  // ── Urgences ──
+  {cat:'Urgences', thai:'ช่วยด้วย',              rtgs:'chûay dûay',                 fr:'À l\'aide !',                      en:'Help!'},
+  {cat:'Urgences', thai:'โทรตำรวจ',              rtgs:'thoo tamrùat',               fr:'Appelez la police !',              en:'Call the police!'},
+  {cat:'Urgences', thai:'โทรหมอ',                rtgs:'thoo mǎaw',                  fr:'Appelez un médecin !',             en:'Call a doctor!'},
+  {cat:'Urgences', thai:'ผมเจ็บ',               rtgs:'phǒm jèp',                   fr:"J'ai mal",                         en:"I'm in pain"},
+  {cat:'Urgences', thai:'ผมหายไป',              rtgs:'phǒm hǎai bpai',             fr:'Je suis perdu(e)',                 en:"I'm lost"},
+  {cat:'Urgences', thai:'โรงพยาบาลอยู่ที่ไหน',  rtgs:'roong phayaabaan yùu thîi nǎi', fr:"Où est l'hôpital ?",           en:'Where is the hospital?'},
+  {cat:'Urgences', thai:'ผมแพ้ยา',              rtgs:'phǒm pháe yaa',              fr:'Je suis allergique aux médicaments', en:"I'm allergic to medication"},
+  {cat:'Urgences', thai:'ขโมย',                 rtgs:'khamooei',                   fr:'Au voleur !',                      en:'Thief!'},
+  // ── Temps ──
+  {cat:'Temps', thai:'วันนี้อากาศเป็นอย่างไร',  rtgs:'wan nîi aagàat bpen yàang rai', fr:"Quel temps fait-il ?",          en:"What's the weather like?"},
+  {cat:'Temps', thai:'ร้อนมาก',                 rtgs:'ráwn mâak',                  fr:'Il fait très chaud',               en:"It's very hot"},
+  {cat:'Temps', thai:'ฝนตก',                    rtgs:'fǒn tòk',                    fr:'Il pleut',                         en:"It's raining"},
+  {cat:'Temps', thai:'วันนี้วันที่เท่าไหร่',    rtgs:'wan nîi wan thîi thâo rài',  fr:"Quelle est la date aujourd'hui ?", en:"What's today's date?"},
+  {cat:'Temps', thai:'กี่โมงแล้ว',              rtgs:'gìi moong láew',             fr:'Quelle heure est-il ?',            en:'What time is it?'},
+  {cat:'Temps', thai:'เมื่อวานนี้',             rtgs:'mûea waan nîi',              fr:'Hier',                             en:'Yesterday'},
+  {cat:'Temps', thai:'พรุ่งนี้',               rtgs:'phrûng nîi',                 fr:'Demain',                           en:'Tomorrow'},
+  {cat:'Temps', thai:'สัปดาห์หน้า',             rtgs:'sàpdaa nâa',                 fr:'La semaine prochaine',             en:'Next week'},
+  // ── Expressions ──
+  {cat:'Expressions', thai:'ใช่',               rtgs:'châi',                       fr:"Oui (c'est exact)",                en:"Yes (that's right)"},
+  {cat:'Expressions', thai:'ไม่ใช่',            rtgs:'mâi châi',                   fr:"Non (ce n'est pas ça)",            en:"No (that's wrong)"},
+  {cat:'Expressions', thai:'ได้',               rtgs:'dâi',                        fr:'OK / Possible / Oui',              en:'OK / Yes / Possible'},
+  {cat:'Expressions', thai:'ไม่ได้',            rtgs:'mâi dâi',                    fr:'Non / Impossible',                 en:'No / Impossible'},
+  {cat:'Expressions', thai:'ไม่เป็นไร',         rtgs:'mâi pen rai',                fr:'Pas grave / Ça va',                en:"Never mind / It's OK"},
+  {cat:'Expressions', thai:'เดี๋ยวก่อน',        rtgs:'dǐao gàwn',                  fr:'Un moment / Attendez',             en:'Wait a moment'},
+  {cat:'Expressions', thai:'รีบหน่อย',           rtgs:'rîip nàwy',                  fr:'Dépêchez-vous !',                  en:'Hurry up!'},
+  {cat:'Expressions', thai:'เข้าใจแล้ว',         rtgs:'khâo jai láew',              fr:"J'ai compris",                     en:'I understand now'},
+  {cat:'Expressions', thai:'สนุกมาก',            rtgs:'sanùk mâak',                 fr:"C'est très amusant",               en:'Very fun!'},
+  {cat:'Expressions', thai:'ประเทศไทยสวยมาก',   rtgs:'bpràthêet thai sǔay mâak',   fr:'La Thaïlande est magnifique',       en:'Thailand is beautiful'},
+];
+
+// ─── LANGUAGE ──────────────────────────────────────────────────────────────
+let currentLang = localStorage.getItem('thai-lang') || 'fr';
+
+const T = {
+  fr: {
+    navHome:'Accueil', navLesson:'Leçon', navPhrases:'Phrases', navConsonants:'Consonnes',
+    navVowels:'Voyelles', navTones:'Tons', navQuiz:'Quiz',
+    navLogin:'Connexion', navLogout:'Déconnexion',
+    fontModern:'Moderne', fontTrad:'Traditionnel',
+    progressLabel:'Progression', learnedBadge:(n)=>`${n} / 44 appris`,
+    heroBadge:'Méthode interactive', heroTitle:'Maîtrisez', heroSubtitle:"l'Alphabet Thaï",
+    heroSub:'44 consonnes, des voyelles riches, 5 tons — apprenez à votre rythme avec des cartes interactives et un quiz adaptatif.',
+    heroBtn1:'Commencer maintenant', heroBtn2:'Tester mes connaissances', heroScroll:'Découvrir',
+    statL1:'Consonnes', statL2:'Tons', statL3:'Formes de voyelles', statL4:'Classes de consonnes',
+    clsTag:'Structure', clsTitle:'Les 3 classes de consonnes',
+    clsDesc:"Chaque consonne appartient à une classe qui détermine le ton de la syllabe. C'est la clé pour lire le thaï !",
+    clsMid:'Classe Moyenne', clsHigh:'Classe Haute', clsLow:'Classe Basse',
+    clsDescMid:"Les consonnes moyennes produisent le ton naturel d'une syllabe. Point de départ idéal pour les débutants.",
+    clsDescHigh:"Les consonnes hautes tendent à hausser le ton. Elles contiennent notamment les sons aspirés.",
+    clsDescLow:"La classe la plus grande ! Ces consonnes tendent à abaisser le ton et incluent toutes les sonores.",
+    conTag:'44 Consonnes', conTitle:'Cliquez sur une carte pour la retourner',
+    conDesc:'Filtrez par classe, cherchez un son, et marquez les consonnes que vous maîtrisez.',
+    progLbl:'Progression',
+    fAll:'Tous', fMid:'Moyenne (9)', fHigh:'Haute (11)', fLow:'Basse (24)',
+    srchPh:'Chercher : ก, k, poulet…',
+    voiceWarnTxt:'⚠️ Aucune voix thaïe détectée. Pour activer les sons, allez dans <strong>Préférences Système → Accessibilité → Contenu vocal</strong> et téléchargez une voix thaïe (ex. : <strong>Kanya</strong>), puis rechargez la page.',
+    cardIni:'Début', cardFin:'Fin', cardMark:'Marquer appris', cardDone:'✓ Maîtrisé',
+    vowTag:'Voyelles', vowTitle:'Les voyelles thaïes',
+    vowDesc:'En thaï, les voyelles se placent avant, après, au-dessus ou en dessous de la consonne. Chaque voyelle a une forme courte et une forme longue.',
+    vowShortGroup:'Voyelles courtes', vowLongGroup:'Voyelles longues',
+    vowShortTag:'Court', vowLongTag:'Long',
+    tonTag:'Tons', tonTitle:'Les 5 tons du thaï',
+    tonDesc:'Le thaï est une langue tonale. Le même son prononcé sur 5 tons différents donne 5 mots totalement différents.',
+    tonListen:'🔊 Écouter',
+    toneNames:['Ton moyen','Ton bas','Ton descendant','Ton haut','Ton montant'],
+    quizTitle:'Quiz Interactif', quizDesc:"Testez vos connaissances sur les consonnes thaïes. Choisissez votre mode d'apprentissage !",
+    quizM1:'ก → k   Caractère → Son', quizM2:'k → ก   Son → Caractère', quizM3:'🔊 → ก   Écouter → Caractère',
+    quizStart:'Démarrer le Quiz', quizOk:'Correct', quizKo:'Erreur',
+    quizQ:(n)=>`Question ${n}`,
+    quizPC2R:'Quelle est la romanisation de ce caractère ?',
+    quizPR2C:'Quel caractère thaï correspond à ce son ?',
+    quizPS2C:'Quel caractère correspond au son entendu ?',
+    quizReplay:'Rejouer le son', quizNew:'Nouvelle partie',
+    phTag:'Communication', phTitle:'Phrases de base',
+    phDesc:'Les phrases essentielles pour débuter en thaïlande. Cliquez sur 🔊 pour écouter la prononciation.',
+    phSrchPh:'Rechercher une phrase ou un mot…',
+    phAll:(n)=>`Tout (${n})`, phCount:(n)=>`${n} phrase${n>1?'s':''}`,
+    catMap:{'Salutations':'Salutations','Politesse':'Politesse','Présentation':'Présentation',
+      'Questions':'Questions','Restaurant':'Restaurant','Shopping':'Shopping',
+      'Transport':'Transport','Hôtel':'Hôtel','Urgences':'Urgences','Temps':'Temps','Expressions':'Expressions'},
+    phField:'fr',
+    footerTxt:"Merci d'apprendre le thaï —", footerQ:'« Plus on apprend, plus on sait »',
+    mobHome:'Accueil', mobLesson:'Leçon', mobPhrases:'Phrases',
+    mobAlpha:'Alphabet', mobVowels:'Voyelles', mobQuiz:'Quiz',
+    authWelcome:'Bienvenue', authBack:'Bon retour !', authCreate:'Créer un compte',
+    authTabLogin:'Connexion', authTabReg:'Inscription',
+    authLblEmail:'Email', authLblPw:'Mot de passe', authLblConfirm:'Confirmer le mot de passe',
+    authLoginBtn:'Se connecter', authRegBtn:'Créer mon compte',
+    authForgot:'Mot de passe oublié ?', authSaveNote:'Votre progression sera sauvegardée en ligne',
+    authConnecting:'Connexion…', authCreating:'Création…',
+    authErrPwNoMatch:'Les mots de passe ne correspondent pas.',
+    authErrPwShort:'Minimum 6 caractères.',
+    authForgotNeedEmail:"Entrez votre email d'abord.",
+    authForgotOk:'✓ Email de réinitialisation envoyé !',
+    authErrors:{
+      'auth/user-not-found':'Aucun compte avec cet email.',
+      'auth/wrong-password':'Mot de passe incorrect.',
+      'auth/invalid-credential':'Email ou mot de passe incorrect.',
+      'auth/email-already-in-use':'Cet email est déjà utilisé.',
+      'auth/invalid-email':'Adresse email invalide.',
+      'auth/weak-password':'Mot de passe trop faible (6 caractères min).',
+      'auth/too-many-requests':'Trop de tentatives. Réessayez plus tard.',
+      'auth/network-request-failed':'Erreur réseau. Vérifiez votre connexion.',
+      'default':'Une erreur est survenue. Réessayez.'
+    }
+  },
+  en: {
+    navHome:'Home', navLesson:'Lesson', navPhrases:'Phrases', navConsonants:'Consonants',
+    navVowels:'Vowels', navTones:'Tones', navQuiz:'Quiz',
+    navLogin:'Log in', navLogout:'Log out',
+    fontModern:'Modern', fontTrad:'Traditional',
+    progressLabel:'Progress', learnedBadge:(n)=>`${n} / 44 learned`,
+    heroBadge:'Interactive method', heroTitle:'Master', heroSubtitle:'the Thai Alphabet',
+    heroSub:'44 consonants, rich vowels, 5 tones — learn at your own pace with interactive flashcards and an adaptive quiz.',
+    heroBtn1:'Start now', heroBtn2:'Test my knowledge', heroScroll:'Discover',
+    statL1:'Consonants', statL2:'Tones', statL3:'Vowel forms', statL4:'Consonant classes',
+    clsTag:'Structure', clsTitle:'The 3 consonant classes',
+    clsDesc:"Every consonant belongs to a class that determines the syllable's tone. This is the key to reading Thai!",
+    clsMid:'Middle Class', clsHigh:'High Class', clsLow:'Low Class',
+    clsDescMid:'Middle-class consonants produce the natural tone of a syllable. The ideal starting point for beginners.',
+    clsDescHigh:'High-class consonants tend to raise the pitch. They include the aspirated sounds.',
+    clsDescLow:'The largest class! These consonants tend to lower the pitch and include all voiced consonants.',
+    conTag:'44 Consonants', conTitle:'Click a card to flip it',
+    conDesc:'Filter by class, search for a sound, and mark the consonants you have mastered.',
+    progLbl:'Progress',
+    fAll:'All', fMid:'Middle (9)', fHigh:'High (11)', fLow:'Low (24)',
+    srchPh:'Search: ก, k, chicken…',
+    voiceWarnTxt:'⚠️ No Thai voice detected. To enable audio, go to <strong>System Preferences → Accessibility → Spoken Content</strong> and download a Thai voice (e.g. <strong>Kanya</strong>), then reload the page.',
+    cardIni:'Initial', cardFin:'Final', cardMark:'Mark as learned', cardDone:'✓ Mastered',
+    vowTag:'Vowels', vowTitle:'Thai Vowels',
+    vowDesc:'In Thai, vowels are placed before, after, above, or below the consonant. Each vowel has a short and a long form.',
+    vowShortGroup:'Short Vowels', vowLongGroup:'Long Vowels',
+    vowShortTag:'Short', vowLongTag:'Long',
+    tonTag:'Tones', tonTitle:'The 5 Thai Tones',
+    tonDesc:'Thai is a tonal language. The same sound spoken on 5 different tones gives 5 completely different words.',
+    tonListen:'🔊 Listen',
+    toneNames:['Mid tone','Low tone','Falling tone','High tone','Rising tone'],
+    quizTitle:'Interactive Quiz', quizDesc:'Test your knowledge of Thai consonants. Choose your learning mode!',
+    quizM1:'ก → k   Character → Sound', quizM2:'k → ก   Sound → Character', quizM3:'🔊 → ก   Listen → Character',
+    quizStart:'Start Quiz', quizOk:'Correct', quizKo:'Wrong',
+    quizQ:(n)=>`Question ${n}`,
+    quizPC2R:'What is the romanization of this character?',
+    quizPR2C:'Which Thai character matches this sound?',
+    quizPS2C:'Which character matches the sound you heard?',
+    quizReplay:'Replay sound', quizNew:'New game',
+    phTag:'Communication', phTitle:'Basic Phrases',
+    phDesc:'Essential phrases for your first time in Thailand. Click 🔊 to hear the pronunciation.',
+    phSrchPh:'Search for a phrase or word…',
+    phAll:(n)=>`All (${n})`, phCount:(n)=>`${n} phrase${n>1?'s':''}`,
+    catMap:{'Salutations':'Greetings','Politesse':'Courtesy','Présentation':'Introductions',
+      'Questions':'Questions','Restaurant':'Restaurant','Shopping':'Shopping',
+      'Transport':'Transport','Hôtel':'Hotel','Urgences':'Emergencies','Temps':'Weather','Expressions':'Expressions'},
+    phField:'en',
+    footerTxt:'Thank you for learning Thai —', footerQ:'"The more you learn, the more you know"',
+    mobHome:'Home', mobLesson:'Lesson', mobPhrases:'Phrases',
+    mobAlpha:'Alphabet', mobVowels:'Vowels', mobQuiz:'Quiz',
+    authWelcome:'Welcome', authBack:'Welcome back!', authCreate:'Create an account',
+    authTabLogin:'Log In', authTabReg:'Sign Up',
+    authLblEmail:'Email', authLblPw:'Password', authLblConfirm:'Confirm password',
+    authLoginBtn:'Log in', authRegBtn:'Create account',
+    authForgot:'Forgot password?', authSaveNote:'Your progress will be saved online',
+    authConnecting:'Logging in…', authCreating:'Creating…',
+    authErrPwNoMatch:'Passwords do not match.',
+    authErrPwShort:'Minimum 6 characters.',
+    authForgotNeedEmail:'Enter your email first.',
+    authForgotOk:'✓ Password reset email sent!',
+    authErrors:{
+      'auth/user-not-found':'No account with this email.',
+      'auth/wrong-password':'Incorrect password.',
+      'auth/invalid-credential':'Incorrect email or password.',
+      'auth/email-already-in-use':'This email is already in use.',
+      'auth/invalid-email':'Invalid email address.',
+      'auth/weak-password':'Password too weak (6 characters min).',
+      'auth/too-many-requests':'Too many attempts. Try again later.',
+      'auth/network-request-failed':'Network error. Check your connection.',
+      'default':'An error occurred. Please try again.'
+    }
+  }
+};
+
+function setLang(lang) {
+  currentLang = lang;
+  localStorage.setItem('thai-lang', lang);
+  document.getElementById('langFR').classList.toggle('active', lang==='fr');
+  document.getElementById('langEN').classList.toggle('active', lang==='en');
+  document.getElementById('lesson-fr').style.display = lang==='fr' ? '' : 'none';
+  document.getElementById('lesson-en').style.display = lang==='en' ? '' : 'none';
+  applyLang();
+  renderConsonants();
+  renderVowels();
+  renderTones();
+  renderPhrases();
+  updateProgress();
+}
+
+function applyLang() {
+  const t = T[currentLang];
+  const s = (id, txt) => { const el=document.getElementById(id); if(el) el.textContent=txt; };
+  const h = (id, html) => { const el=document.getElementById(id); if(el) el.innerHTML=html; };
+  const p = (id, ph) => { const el=document.getElementById(id); if(el) el.placeholder=ph; };
+  // Nav
+  s('ntab-home', t.navHome); s('ntab-lesson', t.navLesson); s('ntab-phrases', t.navPhrases);
+  s('ntab-consonnes', t.navConsonants); s('ntab-voyelles', t.navVowels);
+  s('ntab-tons', t.navTones); s('ntab-quiz', t.navQuiz);
+  s('loginBtn', t.navLogin); s('logoutBtn', t.navLogout);
+  // Font button
+  const isTrad = document.body.classList.contains('trad');
+  s('fbLabel', isTrad ? t.fontTrad : t.fontModern);
+  // Hero
+  s('heroBadge', t.heroBadge); s('heroTitle', t.heroTitle); s('heroSubtitle', t.heroSubtitle);
+  s('heroSub', t.heroSub); s('heroBtn1', t.heroBtn1); s('heroBtn2', t.heroBtn2);
+  s('heroScroll', t.heroScroll);
+  // Stats
+  s('statL1', t.statL1); s('statL2', t.statL2); s('statL3', t.statL3); s('statL4', t.statL4);
+  // Classes section
+  s('clsTag', t.clsTag); s('clsTitle', t.clsTitle); s('clsDesc', t.clsDesc);
+  s('clsBadgeMid', t.clsMid); s('clsDescMid', t.clsDescMid);
+  s('clsBadgeHigh', t.clsHigh); s('clsDescHigh', t.clsDescHigh);
+  s('clsBadgeLow', t.clsLow); s('clsDescLow', t.clsDescLow);
+  // Consonants tab
+  s('conTag', t.conTag); s('conTitle', t.conTitle); s('conDesc', t.conDesc);
+  s('progLbl', t.progLbl);
+  s('fAll', t.fAll); s('fMid', t.fMid); s('fHigh', t.fHigh); s('fLow', t.fLow);
+  p('srchInput', t.srchPh);
+  h('voiceWarn', t.voiceWarnTxt);
+  // Vowels tab
+  s('vowTag', t.vowTag); s('vowTitle', t.vowTitle); s('vowDesc', t.vowDesc);
+  // Tones tab
+  s('tonTag', t.tonTag); s('tonTitle', t.tonTitle); s('tonDesc', t.tonDesc);
+  // Quiz
+  s('quizTitle', t.quizTitle); s('quizDesc', t.quizDesc);
+  s('mode1', t.quizM1); s('mode2', t.quizM2); s('mode3', t.quizM3);
+  s('quizStartBtn', t.quizStart); s('qLblOk', t.quizOk); s('qLblKo', t.quizKo);
+  s('qReplayLbl', t.quizReplay); s('quizNewBtn', t.quizNew);
+  // Phrases tab
+  s('phTag', t.phTag); s('phTitle', t.phTitle); s('phDesc', t.phDesc);
+  p('psrch', t.phSrchPh);
+  // Footer
+  s('footerTxt', t.footerTxt); s('footerQuote', t.footerQ);
+  // Mobile nav
+  s('mtab-home', t.mobHome); s('mtab-lesson', t.mobLesson); s('mtab-phrases', t.mobPhrases);
+  s('mtab-alpha', t.mobAlpha); s('mtab-vowels', t.mobVowels); s('mtab-quiz', t.mobQuiz);
+  // Auth modal
+  s('authTabLogin', t.authTabLogin); s('authTabReg', t.authTabReg);
+  s('authLblEmail1', t.authLblEmail); s('authLblEmail2', t.authLblEmail);
+  s('authLblPw1', t.authLblPw); s('authLblPw2', t.authLblPw);
+  s('authLblConfirm', t.authLblConfirm);
+  s('loginSubmit', t.authLoginBtn); s('regSubmit', t.authRegBtn);
+  s('authForgotLink', t.authForgot); s('authSaveNote', t.authSaveNote);
+  // Lesson toggle
+  document.getElementById('lesson-fr').style.display = currentLang==='fr' ? '' : 'none';
+  document.getElementById('lesson-en').style.display = currentLang==='en' ? '' : 'none';
+  // Title tag
+  document.title = currentLang==='en' ? 'อักษรไทย — Learn the Thai Alphabet' : 'อักษรไทย — Apprendre l\'Alphabet Thaï';
+  document.querySelector('html').lang = currentLang;
+}
+
+function loadLangPref() {
+  currentLang = localStorage.getItem('thai-lang') || 'fr';
+  document.getElementById('langFR').classList.toggle('active', currentLang==='fr');
+  document.getElementById('langEN').classList.toggle('active', currentLang==='en');
+}
+
+// ─── STATE ─────────────────────────────────────────────────────────────────
+const learned = new Set(JSON.parse(localStorage.getItem('thai-learned')||'[]'));
+let filter = 'all';
+let quizMode = 'c2r';
+let quizScore = {ok:0, ko:0};
+let quizQ = null;
+
+// ─── NAVIGATION ────────────────────────────────────────────────────────────
+function goTab(tab, btnEl) {
+  document.querySelectorAll('.tab-content').forEach(t=>t.classList.remove('active'));
+  document.getElementById('tab-'+tab).classList.add('active');
+  // top nav
+  document.querySelectorAll('.ntab').forEach(b=>b.classList.remove('active'));
+  // mob nav
+  document.querySelectorAll('.mtab').forEach(b=>b.classList.remove('active'));
+  if(btnEl) btnEl.classList.add('active');
+  // sync both navs
+  const didx = {home:0,lesson:1,phrases:2,consonnes:3,voyelles:4,tons:5,quiz:6}[tab];
+  const midx = {home:0,lesson:1,phrases:2,consonnes:3,voyelles:4,quiz:5}[tab];
+  const ntabs = document.querySelectorAll('.ntab');
+  const mtabs = document.querySelectorAll('.mtab');
+  if(ntabs[didx]!=null) ntabs[didx].classList.add('active');
+  if(mtabs[midx]!=null) mtabs[midx].classList.add('active');
+  window.scrollTo(0,0);
+  if(tab==='quiz' && !quizQ) resetQuizUI();
+}
+
+// ─── CONSONANTS ────────────────────────────────────────────────────────────
+function setFilter(f, btn) {
+  filter = f;
+  document.querySelectorAll('.fbtn').forEach(b=>b.classList.remove('active'));
+  if(btn) btn.classList.add('active');
+  renderConsonants();
+}
+
+function renderConsonants() {
+  const q = (document.getElementById('srchInput')||{}).value||'';
+  const grid = document.getElementById('alphGrid');
+  const items = consonants.filter(c => {
+    if(filter !== 'all' && c.cls !== filter) return false;
+    if(q) {
+      const s = q.toLowerCase();
+      return c.char.includes(q) || c.rtgs.includes(s) || c.name.toLowerCase().includes(s) || c.meaning.toLowerCase().includes(s);
+    }
+    return true;
+  });
+  grid.innerHTML = items.map((c,i) => cardHTML(c,i)).join('');
+  updateProgress();
+}
+
+function cardHTML(c, i) {
+  const isL = learned.has(c.id);
+  const exWord = c.name.split(' ').slice(1).join(' ');
+  const finD = (c.fin === '—' || c.fin === '-') ? '—' : '-' + c.fin;
+  const iniD = (c.ini === '—') ? '—' : c.ini + '-';
+  return `
+  <div class="ccard ${c.cls} ${isL?'learned':''}" onclick="flipCard(this,${c.id})" style="animation-delay:${i*0.03}s">
+    <div class="ccard-inner">
+      <div class="cface ${c.cls}">
+        <div class="ldot"></div>
+        <div class="cdot"></div>
+        <div class="cchar">${c.char}</div>
+        <div class="cthaiword">${exWord}</div>
+        <div class="cfrmeaning">${c.emoji} ${currentLang==='en'&&c.en ? c.en : c.meaning}</div>
+        <div class="cnr">${c.nr}</div>
+        <div class="cinfoline">
+          <span class="cclslbl ${c.cls}">${c.cls}</span>
+          <span class="csep">•</span>
+          <span class="csound">${iniD}</span>
+          <span class="csep">•</span>
+          <span class="csound">${finD}</span>
+        </div>
+        <button class="spk" onclick="speakById(${c.id},event)" title="Écouter">🔊</button>
+      </div>
+      <div class="cface cback ${c.cls}">
+        <span class="bchar">${c.char}</span>
+        <span class="bname">${c.name}</span>
+        <div class="bmeaning">${c.emoji} ${currentLang==='en'&&c.en ? c.en : c.meaning}</div>
+        <div class="bpos">
+          <span class="bpill">${T[currentLang].cardIni}: ${c.ini}</span>
+          <span class="bpill">${T[currentLang].cardFin}: ${c.fin}</span>
+        </div>
+        <button class="lbtn ${isL?'done':''}" onclick="toggleLearned(event,${c.id})">${isL?T[currentLang].cardDone:T[currentLang].cardMark}</button>
+      </div>
+    </div>
+  </div>`;
+}
+
+function flipCard(el, id) {
+  el.classList.toggle('flipped');
+}
+
+function toggleLearned(e, id) {
+  e.stopPropagation();
+  if(learned.has(id)) learned.delete(id);
+  else learned.add(id);
+  localStorage.setItem('thai-learned', JSON.stringify([...learned]));
+  saveProgressToCloud();
+  renderConsonants();
+}
+
+function updateProgress() {
+  const n = learned.size;
+  const pct = Math.round(n/44*100);
+  const pf = document.getElementById('progFill');
+  const pv = document.getElementById('progVal');
+  const tb = document.getElementById('topBadge');
+  if(pf) pf.style.width = pct+'%';
+  if(pv) pv.textContent = n+' / 44';
+  if(tb) tb.textContent = T[currentLang].learnedBadge(n);
+}
+
+// ─── VOWELS ────────────────────────────────────────────────────────────────
+function renderVowels() {
+  const g = document.getElementById('vowGrid');
+  g.innerHTML = `
+    <div class="vow-group">
+      <div class="vow-gtitle">${T[currentLang].vowShortGroup}</div>
+      <div class="vlist">${vowels.short.map((v,i)=>`
+        <div class="vitem">
+          <div class="vchar">${v.char}</div>
+          <div class="vinfo"><div class="vrtgs">${v.rtgs}</div><div class="vdesc">${currentLang==='en'?v.en:v.desc}</div></div>
+          <div class="vtag short">${T[currentLang].vowShortTag}</div>
+          <button class="vspk" onclick="speakVowel(${i},'short',event)" title="Listen">🔊</button>
+        </div>`).join('')}</div>
+    </div>
+    <div class="vow-group">
+      <div class="vow-gtitle">${T[currentLang].vowLongGroup}</div>
+      <div class="vlist">${vowels.long.map((v,i)=>`
+        <div class="vitem">
+          <div class="vchar">${v.char}</div>
+          <div class="vinfo"><div class="vrtgs">${v.rtgs}</div><div class="vdesc">${currentLang==='en'?v.en:v.desc}</div></div>
+          <div class="vtag long">${T[currentLang].vowLongTag}</div>
+          <button class="vspk" onclick="speakVowel(${i},'long',event)" title="Listen">🔊</button>
+        </div>`).join('')}</div>
+    </div>`;
+}
+
+// ─── TONES ─────────────────────────────────────────────────────────────────
+function renderTones() {
+  const g = document.getElementById('tonesGrid');
+  g.innerHTML = tones.map((t,i) => `
+    <div class="tone-card">
+      <div class="tn">${t.num}</div>
+      <div class="tmark">${t.mark}</div>
+      <div class="tname">${T[currentLang].toneNames[i]}</div>
+      <div class="tfr">${t.fr}</div>
+      <svg class="tcurve" viewBox="0 0 80 40">
+        <path d="${t.path}" stroke="${t.color}" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+      </svg>
+      <button class="tspk" onclick="speakTone(${i},event)">${T[currentLang].tonListen}</button>
+    </div>`).join('');
+}
+
+// ─── QUIZ ──────────────────────────────────────────────────────────────────
+function setMode(m, btn) {
+  quizMode = m;
+  document.querySelectorAll('.qmode').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+}
+
+function resetQuizUI() {
+  document.getElementById('quizStart').style.display='block';
+  document.getElementById('quizPlay').style.display='none';
+}
+
+function startQuiz() {
+  quizScore = {ok:0, ko:0};
+  document.getElementById('qCorrect').textContent='0';
+  document.getElementById('qWrong').textContent='0';
+  document.getElementById('quizStart').style.display='none';
+  document.getElementById('quizPlay').style.display='block';
+  nextQuestion();
+}
+
+function nextQuestion() {
+  const idx = Math.floor(Math.random()*consonants.length);
+  const correct = consonants[idx];
+  quizQ = correct;
+
+  // build 4 options
+  let opts = [correct];
+  while(opts.length < 4) {
+    const r = consonants[Math.floor(Math.random()*consonants.length)];
+    const notSameAnswer = quizMode==='c2r' ? r.rtgs!==correct.rtgs : r.char!==correct.char;
+    if(!opts.find(o=>o.id===r.id) && notSameAnswer) {
+      opts.push(r);
+    }
+  }
+  opts = opts.sort(()=>Math.random()-.5);
+
+  document.getElementById('qNum').textContent = T[currentLang].quizQ(quizScore.ok+quizScore.ko+1);
+
+  const cd = document.getElementById('qCharDisplay');
+  const rd = document.getElementById('qRtgsDisplay');
+  const sd = document.getElementById('qSoundDisplay');
+  cd.style.display='none'; rd.style.display='none'; sd.style.display='none';
+
+  if(quizMode==='c2r') {
+    cd.textContent = correct.char; cd.style.display='block';
+    document.getElementById('qPrompt').textContent = T[currentLang].quizPC2R;
+    document.getElementById('qOpts').innerHTML = opts.map(o=>
+      `<button class="qopt" data-val="${o.rtgs}" onclick="answerQuiz(this,'${o.rtgs}','${correct.rtgs}')">${o.rtgs}</button>`
+    ).join('');
+
+  } else if(quizMode==='r2c') {
+    rd.textContent = correct.rtgs; rd.style.display='block';
+    document.getElementById('qPrompt').textContent = T[currentLang].quizPR2C;
+    document.getElementById('qOpts').innerHTML = opts.map(o=>
+      `<button class="qopt qopt-thai" data-val="${o.char}" onclick="answerQuiz(this,'${o.char}','${correct.char}')">${o.char}</button>`
+    ).join('');
+
+  } else {
+    sd.style.display='block';
+    document.getElementById('qPrompt').textContent = T[currentLang].quizPS2C;
+    document.getElementById('qOpts').innerHTML = opts.map(o=>
+      `<button class="qopt qopt-thai" data-val="${o.char}" onclick="answerQuiz(this,'${o.char}','${correct.char}')">${o.char}</button>`
+    ).join('');
+    setTimeout(()=>speakThai(correct.name), 400);
+  }
+}
+
+function replaySound() {
+  if(quizQ) speakThai(quizQ.name);
+}
+
+function answerQuiz(btn, chosen, correct) {
+  const opts = document.querySelectorAll('.qopt');
+  opts.forEach(b=>b.disabled=true);
+  const isCorrect = chosen===correct;
+  btn.classList.add(isCorrect?'correct':'wrong');
+  if(!isCorrect) {
+    opts.forEach(b=>{ if(b.dataset.val===correct) b.classList.add('correct'); });
+  }
+  if(isCorrect) { quizScore.ok++; document.getElementById('qCorrect').textContent=quizScore.ok; }
+  else { quizScore.ko++; document.getElementById('qWrong').textContent=quizScore.ko; }
+  setTimeout(nextQuestion, 1400);
+}
+
+// ─── PHRASES ───────────────────────────────────────────────────────────────
+let phraseFilter = 'all';
+
+function setPhraseFilter(cat) {
+  phraseFilter = cat;
+  renderPhrases();
+}
+
+function renderPhrases() {
+  const t = T[currentLang];
+  const cats = [...new Set(phrases.map(p=>p.cat))];
+  const pcats = document.getElementById('pcats');
+  if(pcats) {
+    pcats.innerHTML = `<button class="pcbtn${phraseFilter==='all'?' active':''}" onclick="setPhraseFilter('all')">${t.phAll(phrases.length)}</button>`
+      + cats.map(c=>`<button class="pcbtn${phraseFilter===c?' active':''}" onclick="setPhraseFilter('${c}')">${t.catMap[c]||c}</button>`).join('');
+  }
+  const q = (document.getElementById('psrch')||{}).value||'';
+  let items = phrases.filter(p=>{
+    if(phraseFilter!=='all' && p.cat!==phraseFilter) return false;
+    if(q){ const s=q.toLowerCase(); const tr=p[t.phField]||p.fr; return p.thai.includes(q)||p.rtgs.toLowerCase().includes(s)||tr.toLowerCase().includes(s); }
+    return true;
+  });
+  const count = document.getElementById('phraseCount');
+  if(count) count.textContent = t.phCount(items.length);
+  const grid = document.getElementById('phraseGrid');
+  if(grid) grid.innerHTML = items.map(p=>`
+    <div class="pcard">
+      <div class="pcard-body">
+        <span class="pcard-cat">${t.catMap[p.cat]||p.cat}</span>
+        <span class="pcard-thai">${p.thai}</span>
+        <div class="pcard-rtgs">${p.rtgs}</div>
+        <div class="pcard-fr">${p[t.phField]||p.fr}</div>
+      </div>
+      <button class="pspk" data-phrase="${p.thai}" onclick="speakThai(this.dataset.phrase,this)" title="Listen">🔊</button>
+    </div>`).join('');
+}
+
+// ─── FONT TOGGLE ──────────────────────────────────────────────────────────
+function toggleFont() {
+  const isTrad = document.body.classList.toggle('trad');
+  document.getElementById('fbLabel').textContent = isTrad ? T[currentLang].fontTrad : T[currentLang].fontModern;
+  document.getElementById('fbTag').textContent   = isTrad ? 'Sarabun' : 'Noto';
+  localStorage.setItem('thai-font', isTrad ? 'trad' : 'noto');
+}
+function loadFontPref() {
+  if(localStorage.getItem('thai-font') === 'trad') {
+    document.body.classList.add('trad');
+    document.getElementById('fbLabel').textContent = T[currentLang].fontTrad;
+    document.getElementById('fbTag').textContent   = 'Sarabun';
+  }
+}
+
+// ─── SPEECH ────────────────────────────────────────────────────────────────
+let thaiVoice = null;
+let activeSpeakBtn = null;
+
+function initVoices() {
+  function find() {
+    const voices = window.speechSynthesis.getVoices();
+    thaiVoice = voices.find(v => v.lang === 'th-TH' || v.lang === 'th') || null;
+    const warn = document.getElementById('voiceWarn');
+    if(warn) warn.style.display = thaiVoice ? 'none' : 'block';
+  }
+  find();
+  window.speechSynthesis.addEventListener('voiceschanged', find);
+}
+
+function speakThai(text, triggerBtn) {
+  if(!window.speechSynthesis) return;
+  window.speechSynthesis.cancel();
+  if(activeSpeakBtn) { activeSpeakBtn.classList.remove('playing'); activeSpeakBtn = null; }
+  const u = new SpeechSynthesisUtterance(text);
+  u.lang = 'th-TH';
+  u.rate = 0.8;
+  u.pitch = 1;
+  if(thaiVoice) u.voice = thaiVoice;
+  const btn = (triggerBtn && triggerBtn.classList) ? triggerBtn
+             : (triggerBtn && triggerBtn.currentTarget) ? triggerBtn.currentTarget
+             : null;
+  if(btn) {
+    btn.classList.add('playing');
+    activeSpeakBtn = btn;
+    u.onend = () => { btn.classList.remove('playing'); activeSpeakBtn = null; };
+  }
+  window.speechSynthesis.speak(u);
+}
+
+function speakById(id, e) {
+  e.stopPropagation(); e.preventDefault();
+  const c = consonants.find(x => x.id === id);
+  if(c) speakThai(c.name, e.currentTarget);
+}
+
+function speakVowel(idx, group, e) {
+  e.stopPropagation(); e.preventDefault();
+  const arr = group === 'short' ? vowels.short : vowels.long;
+  if(arr[idx]) speakThai(arr[idx].char, e.currentTarget);
+}
+
+function speakTone(idx, e) {
+  e.stopPropagation(); e.preventDefault();
+  if(tones[idx]) speakThai(tones[idx].mark, e.currentTarget);
+}
+
+// ─── FLOATING CHARS (HERO) ─────────────────────────────────────────────────
+function spawnFloatChars() {
+  const container = document.getElementById('floatChars');
+  const chars = 'กขคงจฉชซญดตถทธนบปผฝพฟภมยรลวศสหอฮ';
+  for(let i=0;i<18;i++) {
+    const el = document.createElement('div');
+    el.className = 'fchar';
+    el.textContent = chars[Math.floor(Math.random()*chars.length)];
+    el.style.left = Math.random()*100+'%';
+    el.style.fontSize = (20+Math.random()*60)+'px';
+    el.style.animationDuration = (12+Math.random()*20)+'s';
+    el.style.animationDelay = (Math.random()*15)+'s';
+    container.appendChild(el);
+  }
+}
+
+// ─── AUTH UI ───────────────────────────────────────────────────────────────
+function openAuth(tab) {
+  document.getElementById('authOverlay').classList.add('open');
+  switchAuthTab(tab || 'login');
+}
+function closeAuth() {
+  document.getElementById('authOverlay').classList.remove('open');
+}
+function closeAuthIfOutside(e) {
+  if(e.target === document.getElementById('authOverlay')) closeAuth();
+}
+function switchAuthTab(tab) {
+  document.getElementById('authLogin').style.display    = tab==='login'    ? '' : 'none';
+  document.getElementById('authRegister').style.display = tab==='register' ? '' : 'none';
+  document.querySelectorAll('.atab').forEach(b => b.classList.remove('active'));
+  document.getElementById('atab-'+tab).classList.add('active');
+  document.getElementById('authModalTitle').textContent = tab==='login' ? T[currentLang].authBack : T[currentLang].authCreate;
+  document.getElementById('loginErr').textContent = '';
+  document.getElementById('regErr').textContent   = '';
+}
+
+// ─── AUTH ACTIONS ──────────────────────────────────────────────────────────
+async function doLogin() {
+  const email = document.getElementById('loginEmail').value.trim();
+  const pass  = document.getElementById('loginPassword').value;
+  const errEl = document.getElementById('loginErr');
+  const btn   = document.getElementById('loginSubmit');
+  const t = T[currentLang];
+  errEl.textContent = ''; btn.disabled = true; btn.textContent = t.authConnecting;
+  try {
+    await auth.signInWithEmailAndPassword(email, pass);
+    closeAuth();
+  } catch(e) { errEl.textContent = authErr(e.code); }
+  btn.disabled = false; btn.textContent = t.authLoginBtn;
+}
+
+async function doRegister() {
+  const email   = document.getElementById('regEmail').value.trim();
+  const pass    = document.getElementById('regPassword').value;
+  const confirm = document.getElementById('regConfirm').value;
+  const errEl   = document.getElementById('regErr');
+  const btn     = document.getElementById('regSubmit');
+  const t = T[currentLang];
+  errEl.textContent = '';
+  if(pass !== confirm) { errEl.textContent = t.authErrPwNoMatch; return; }
+  if(pass.length < 6)  { errEl.textContent = t.authErrPwShort; return; }
+  btn.disabled = true; btn.textContent = t.authCreating;
+  try {
+    const cred = await auth.createUserWithEmailAndPassword(email, pass);
+    await db.collection('users').doc(cred.user.uid).set({
+      email:     email,
+      createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+      premium:   false,
+      learned:   [...learned]
+    });
+    closeAuth();
+  } catch(e) { errEl.textContent = authErr(e.code); }
+  btn.disabled = false; btn.textContent = T[currentLang].authRegBtn;
+}
+
+async function doLogout() {
+  await auth.signOut();
+}
+
+async function doForgot() {
+  const email = document.getElementById('loginEmail').value.trim();
+  const errEl = document.getElementById('loginErr');
+  const t = T[currentLang];
+  if(!email) { errEl.textContent = t.authForgotNeedEmail; return; }
+  try {
+    await auth.sendPasswordResetEmail(email);
+    errEl.style.color = 'var(--teal)';
+    errEl.textContent = t.authForgotOk;
+  } catch(e) { errEl.style.color = 'var(--rose)'; errEl.textContent = authErr(e.code); }
+}
+
+function authErr(code) {
+  const m = T[currentLang].authErrors;
+  return m[code] || m['default'];
+}
+
+// ─── FIRESTORE SYNC ────────────────────────────────────────────────────────
+async function saveProgressToCloud() {
+  const user = auth.currentUser;
+  if(!user) return;
+  try { await db.collection('users').doc(user.uid).update({ learned: [...learned] }); } catch(e) {}
+}
+
+auth.onAuthStateChanged(async (user) => {
+  const loginBtn    = document.getElementById('loginBtn');
+  const userBadge   = document.getElementById('userBadge');
+  const userEmailTxt= document.getElementById('userEmailTxt');
+  const userAvatar  = document.getElementById('userAvatar');
+  const premiumBadge= document.getElementById('premiumBadge');
+  if(user) {
+    loginBtn.style.display  = 'none';
+    userBadge.style.display = 'flex';
+    userEmailTxt.textContent = user.email;
+    userAvatar.textContent   = user.email[0].toUpperCase();
+    try {
+      const snap = await db.collection('users').doc(user.uid).get();
+      if(snap.exists) {
+        const data = snap.data();
+        if(data.premium) premiumBadge.style.display = '';
+        if(data.learned && data.learned.length) {
+          data.learned.forEach(id => learned.add(id));
+          localStorage.setItem('thai-learned', JSON.stringify([...learned]));
+          renderConsonants();
+          updateProgress();
+        }
+      }
+    } catch(e) {}
+  } else {
+    loginBtn.style.display  = '';
+    userBadge.style.display = 'none';
+    premiumBadge.style.display = 'none';
+  }
+});
+
+// ─── INIT ──────────────────────────────────────────────────────────────────
+loadLangPref();
+applyLang();
+loadFontPref();
+spawnFloatChars();
+renderConsonants();
+renderVowels();
+renderTones();
+renderPhrases();
+updateProgress();
+initVoices();
+</script>
+
+<!-- AUTH MODAL -->
+<div id="authOverlay" class="auth-overlay" onclick="closeAuthIfOutside(event)">
+  <div class="auth-modal">
+    <button class="auth-close" onclick="closeAuth()">✕</button>
+    <div class="auth-logo">อักษรไทย</div>
+    <div class="auth-title" id="authModalTitle">Bienvenue</div>
+    <div class="auth-tabs">
+      <button class="atab active" id="atab-login" onclick="switchAuthTab('login')"><span id="authTabLogin">Connexion</span></button>
+      <button class="atab" id="atab-register" onclick="switchAuthTab('register')"><span id="authTabRegister">Inscription</span></button>
+    </div>
+
+    <!-- LOGIN -->
+    <div id="authLogin">
+      <div class="auth-field">
+        <label id="authLblEmail1">Email</label>
+        <input type="email" id="loginEmail" placeholder="votre@email.com" onkeydown="if(event.key==='Enter')doLogin()">
+      </div>
+      <div class="auth-field">
+        <label id="authLblPw1">Mot de passe</label>
+        <input type="password" id="loginPassword" placeholder="••••••••" onkeydown="if(event.key==='Enter')doLogin()">
+      </div>
+      <div class="auth-err" id="loginErr"></div>
+      <button class="auth-submit" id="loginSubmit" onclick="doLogin()">Se connecter</button>
+      <div class="auth-forgot" id="authForgotLink" onclick="doForgot()">Mot de passe oublié ?</div>
+    </div>
+
+    <!-- REGISTER -->
+    <div id="authRegister" style="display:none">
+      <div class="auth-field">
+        <label id="authLblEmail2">Email</label>
+        <input type="email" id="regEmail" placeholder="votre@email.com" onkeydown="if(event.key==='Enter')doRegister()">
+      </div>
+      <div class="auth-field">
+        <label id="authLblPw2">Mot de passe</label>
+        <input type="password" id="regPassword" placeholder="6 caractères minimum" onkeydown="if(event.key==='Enter')doRegister()">
+      </div>
+      <div class="auth-field">
+        <label id="authLblConfirm">Confirmer le mot de passe</label>
+        <input type="password" id="regConfirm" placeholder="••••••••" onkeydown="if(event.key==='Enter')doRegister()">
+      </div>
+      <div class="auth-err" id="regErr"></div>
+      <button class="auth-submit" id="regSubmit" onclick="doRegister()">Créer mon compte</button>
+      <div class="auth-sep" id="authSaveNote">Votre progression sera sauvegardée en ligne</div>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>
