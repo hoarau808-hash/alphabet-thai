@@ -46,6 +46,21 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-h
 .font-btn-tag{font-family:'Inter',sans-serif;font-size:10px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;padding:2px 6px;border-radius:4px;background:rgba(240,180,41,.15);color:var(--gold)}
 .nav-right{display:flex;align-items:center;gap:10px}
 
+/* NEWSLETTER */
+.newsletter-wrap{margin-top:40px;display:flex;flex-direction:column;align-items:center;gap:10px}
+.newsletter-label{font-size:12px;color:var(--text3);letter-spacing:.5px;text-transform:uppercase;font-weight:600}
+.newsletter-row{display:flex;gap:8px;width:100%;max-width:420px}
+.newsletter-input{flex:1;padding:12px 18px;background:rgba(255,255,255,.06);border:1px solid var(--border-h);border-radius:10px;color:var(--text);font-family:'Inter',sans-serif;font-size:14px;outline:none;transition:border-color .2s}
+.newsletter-input::placeholder{color:var(--text3)}
+.newsletter-input:focus{border-color:var(--gold)}
+.newsletter-btn{padding:12px 22px;background:var(--gold);color:#000;border:none;border-radius:10px;font-family:'Inter',sans-serif;font-size:14px;font-weight:700;cursor:pointer;transition:all .2s;white-space:nowrap;flex-shrink:0}
+.newsletter-btn:hover{transform:translateY(-2px);box-shadow:0 6px 20px rgba(240,180,41,.4)}
+.newsletter-btn:disabled{opacity:.5;cursor:not-allowed;transform:none}
+.newsletter-msg{font-size:13px;min-height:18px;font-weight:600;transition:all .2s}
+.newsletter-msg.ok{color:var(--teal)}
+.newsletter-msg.err{color:var(--rose)}
+@media(max-width:480px){.newsletter-row{flex-direction:column}.newsletter-btn{width:100%}}
+
 /* LANG TOGGLE */
 .lang-sw{display:flex;align-items:center;background:rgba(255,255,255,.06);border:1px solid var(--border);border-radius:10px;overflow:hidden;flex-shrink:0}
 .lang-opt{padding:6px 13px;border:none;background:transparent;color:var(--text2);font-family:'Inter',sans-serif;font-size:12px;font-weight:700;cursor:pointer;transition:all .2s;letter-spacing:.3px}
@@ -470,6 +485,31 @@ footer{border-top:1px solid var(--border);padding:40px 24px;text-align:center;co
 .logout-btn{background:rgba(255,255,255,.05);border:1px solid var(--border);color:var(--text3);font-family:'Inter',sans-serif;font-size:11px;font-weight:600;padding:5px 10px;border-radius:7px;cursor:pointer;transition:all .2s;white-space:nowrap}
 .logout-btn:hover{border-color:var(--rose);color:var(--rose)}
 .premium-badge{font-size:10px;font-weight:700;padding:2px 7px;border-radius:4px;background:linear-gradient(135deg,rgba(240,180,41,.2),rgba(14,211,160,.2));border:1px solid rgba(240,180,41,.4);color:var(--gold)}
+
+/* ─── PHRASES QUIZ ────────────────────────────────────────────────────────── */
+.qtype-sw{display:flex;gap:4px;background:rgba(255,255,255,.04);border:1px solid var(--border);border-radius:12px;padding:4px;margin-bottom:24px}
+.qtype-btn{flex:1;padding:10px 16px;border-radius:8px;border:none;background:transparent;color:var(--text2);font-family:'Inter',sans-serif;font-size:14px;font-weight:600;cursor:pointer;transition:all .2s}
+.qtype-btn.active{background:var(--gold);color:#000;font-weight:700}
+.qtype-btn:hover:not(.active){color:var(--text);background:rgba(255,255,255,.05)}
+.ph-cats-wrap{margin:16px 0 20px}
+.ph-cats-title{font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--text3);margin-bottom:10px}
+.ph-cats-grid{display:flex;flex-wrap:wrap;gap:8px;justify-content:center}
+.pcat-btn{padding:7px 14px;border-radius:8px;border:1px solid var(--border);background:transparent;color:var(--text2);font-family:'Inter',sans-serif;font-size:12px;font-weight:600;cursor:pointer;transition:all .2s}
+.pcat-btn.active{border-color:var(--gold);color:var(--gold);background:rgba(240,180,41,.1)}
+.pcat-btn.locked{opacity:.4;cursor:not-allowed}
+.cat-lock-box{background:rgba(255,255,255,.02);border:1px solid var(--border);border-radius:10px;padding:14px 16px;text-align:center;margin-top:10px}
+.cat-lock-icon{font-size:20px;margin-bottom:5px}
+.cat-lock-text{font-size:12px;color:var(--text3);line-height:1.6}
+.free-bar{display:flex;align-items:center;gap:10px;background:rgba(255,255,255,.03);border:1px solid var(--border);border-radius:8px;padding:9px 14px;margin-bottom:16px;font-size:12px}
+.free-bar-label{color:var(--text3);flex-shrink:0}
+.free-bar-track{flex:1;height:4px;background:rgba(255,255,255,.07);border-radius:2px;overflow:hidden;min-width:50px}
+.free-bar-fill{height:100%;background:linear-gradient(90deg,var(--gold),var(--rose));border-radius:2px;transition:width .4s}
+.free-bar-count{font-weight:800;color:var(--gold);flex-shrink:0}
+.premium-gate-box{background:rgba(240,180,41,.05);border:1px solid rgba(240,180,41,.2);border-radius:16px;padding:32px 24px;text-align:center;margin-top:8px}
+.pg-icon{font-size:40px;margin-bottom:12px}
+.pg-title{font-size:20px;font-weight:800;letter-spacing:-.5px;margin-bottom:8px}
+.pg-desc{font-size:13px;color:var(--text2);line-height:1.7;margin-bottom:24px;max-width:360px;margin-left:auto;margin-right:auto}
+.pg-btns{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
 </style>
 </head>
 <body>
@@ -523,6 +563,14 @@ footer{border-top:1px solid var(--border);padding:40px 24px;text-align:center;co
       <div class="hero-btns">
         <button class="btn-g" id="heroBtn1" onclick="goTab('consonnes')">Commencer maintenant</button>
         <button class="btn-o" id="heroBtn2" onclick="goTab('quiz')">Tester mes connaissances</button>
+      </div>
+      <div class="newsletter-wrap">
+        <div class="newsletter-label" id="nlLabel">Recevoir les nouveautés du site</div>
+        <div class="newsletter-row">
+          <input class="newsletter-input" type="email" id="nlEmail" placeholder="votre@email.com" onkeydown="if(event.key==='Enter')doSubscribe()">
+          <button class="newsletter-btn" id="nlBtn" onclick="doSubscribe()">S'inscrire</button>
+        </div>
+        <div class="newsletter-msg" id="nlMsg"></div>
       </div>
     </div>
     <div class="scroll-hint">
@@ -639,36 +687,109 @@ footer{border-top:1px solid var(--border);padding:40px 24px;text-align:center;co
 <!-- QUIZ TAB -->
 <div id="tab-quiz" class="tab-content">
   <div class="quiz-wrap">
-    <div id="quizStart" class="quiz-start">
-      <h2 id="quizTitle">Quiz Interactif</h2>
-      <p id="quizDesc">Testez vos connaissances sur les consonnes thaïes. Choisissez votre mode d'apprentissage !</p>
-      <div class="qmodes">
-        <button class="qmode active" id="mode1" onclick="setMode('c2r',this)">ก → k &nbsp; Caractère → Son</button>
-        <button class="qmode" id="mode2" onclick="setMode('r2c',this)">k → ก &nbsp; Son → Caractère</button>
-        <button class="qmode" id="mode3" onclick="setMode('s2c',this)">🔊 → ก &nbsp; Écouter → Caractère</button>
-      </div>
-      <button class="btn-g" id="quizStartBtn" onclick="startQuiz()">Démarrer le Quiz</button>
+
+    <!-- Type toggle -->
+    <div class="qtype-sw">
+      <button class="qtype-btn active" id="qtype-cons" onclick="setQuizType('cons',this)">ก Consonnes</button>
+      <button class="qtype-btn" id="qtype-phrases" onclick="setQuizType('phrases',this)">💬 Phrases</button>
     </div>
-    <div id="quizPlay" style="display:none">
-      <div class="quiz-card">
-        <div class="qscore">
-          <div class="qsi ok"><div class="qsv" id="qCorrect">0</div><div class="qsl" id="qLblOk">Correct</div></div>
-          <div class="qsi ko"><div class="qsv" id="qWrong">0</div><div class="qsl" id="qLblKo">Erreur</div></div>
+
+    <!-- CONSONANTS QUIZ (existing) -->
+    <div id="consQuizWrap">
+      <div id="quizStart" class="quiz-start">
+        <h2 id="quizTitle">Quiz Interactif</h2>
+        <p id="quizDesc">Testez vos connaissances sur les consonnes thaïes. Choisissez votre mode d'apprentissage !</p>
+        <div class="qmodes">
+          <button class="qmode active" id="mode1" onclick="setMode('c2r',this)">ก → k &nbsp; Caractère → Son</button>
+          <button class="qmode" id="mode2" onclick="setMode('r2c',this)">k → ก &nbsp; Son → Caractère</button>
+          <button class="qmode" id="mode3" onclick="setMode('s2c',this)">🔊 → ก &nbsp; Écouter → Caractère</button>
         </div>
-        <div class="qnum" id="qNum">Question 1</div>
-        <div id="qCharDisplay" class="qchar"></div>
-        <div id="qRtgsDisplay" class="qrtgs" style="display:none"></div>
-        <div id="qSoundDisplay" style="display:none">
-          <button class="qplay" onclick="replaySound()">
-            <div class="qplay-icon">🔊</div>
-            <div class="qplay-label" id="qReplayLbl">Rejouer le son</div>
-          </button>
+        <button class="btn-g" id="quizStartBtn" onclick="startQuiz()">Démarrer le Quiz</button>
+      </div>
+      <div id="quizPlay" style="display:none">
+        <div class="quiz-card">
+          <div class="qscore">
+            <div class="qsi ok"><div class="qsv" id="qCorrect">0</div><div class="qsl" id="qLblOk">Correct</div></div>
+            <div class="qsi ko"><div class="qsv" id="qWrong">0</div><div class="qsl" id="qLblKo">Erreur</div></div>
+          </div>
+          <div class="qnum" id="qNum">Question 1</div>
+          <div id="qCharDisplay" class="qchar"></div>
+          <div id="qRtgsDisplay" class="qrtgs" style="display:none"></div>
+          <div id="qSoundDisplay" style="display:none">
+            <button class="qplay" onclick="replaySound()">
+              <div class="qplay-icon">🔊</div>
+              <div class="qplay-label" id="qReplayLbl">Rejouer le son</div>
+            </button>
+          </div>
+          <div class="qprompt" id="qPrompt">Quelle est la prononciation ?</div>
+          <div class="qopts" id="qOpts"></div>
+          <button class="btn-o" id="quizNewBtn" onclick="startQuiz()" style="width:100%;margin-top:8px">Nouvelle partie</button>
         </div>
-        <div class="qprompt" id="qPrompt">Quelle est la prononciation ?</div>
-        <div class="qopts" id="qOpts"></div>
-        <button class="btn-o" id="quizNewBtn" onclick="startQuiz()" style="width:100%;margin-top:8px">Nouvelle partie</button>
       </div>
     </div>
+
+    <!-- PHRASES QUIZ (new) -->
+    <div id="phQuizWrap" style="display:none">
+
+      <!-- Start screen -->
+      <div id="phQuizStart" class="quiz-start">
+        <h2 id="phQuizTitle">Quiz Phrases</h2>
+        <p id="phQuizDesc">Testez votre compréhension des phrases de base.</p>
+        <div class="qmodes">
+          <button class="qmode phmode active" id="phmode1" onclick="setPhMode('t2f',this)">ไทย → FR</button>
+          <button class="qmode phmode" id="phmode2" onclick="setPhMode('f2t',this)">FR → ไทย</button>
+        </div>
+        <div class="ph-cats-wrap">
+          <div class="ph-cats-title" id="phCatTitle">Catégories</div>
+          <div class="ph-cats-grid" id="phCatGrid"></div>
+          <div class="cat-lock-box" id="phCatLockBox">
+            <div class="cat-lock-icon">🔒</div>
+            <div class="cat-lock-text" id="phCatLockText">Les catégories sont disponibles en Premium. En gratuit, toutes les catégories sont incluses aléatoirement.</div>
+          </div>
+        </div>
+        <div class="free-bar" id="phStartFreeBar">
+          <span class="free-bar-label" id="phStartFreeLabel">Questions gratuites utilisées</span>
+          <div class="free-bar-track"><div class="free-bar-fill" id="phStartBarFill"></div></div>
+          <span class="free-bar-count" id="phStartFreeCount">0 / 20</span>
+        </div>
+        <button class="btn-g" id="phStartBtn" onclick="startPhraseQuiz()">Démarrer</button>
+      </div>
+
+      <!-- Play area -->
+      <div id="phQuizPlay" style="display:none">
+        <div class="quiz-card">
+          <div class="qscore">
+            <div class="qsi ok"><div class="qsv" id="phQCorrect">0</div><div class="qsl" id="phQLblOk">Correct</div></div>
+            <div class="qsi ko"><div class="qsv" id="phQWrong">0</div><div class="qsl" id="phQLblKo">Erreur</div></div>
+          </div>
+          <div class="free-bar" id="phPlayFreeBar">
+            <span class="free-bar-label" id="phPlayFreeLabel">Questions gratuites</span>
+            <div class="free-bar-track"><div class="free-bar-fill" id="phPlayBarFill"></div></div>
+            <span class="free-bar-count" id="phPlayFreeCount">0 / 20</span>
+          </div>
+          <div class="qnum" id="phQNum">Question 1</div>
+          <div id="phQDisplay"></div>
+          <div class="qprompt" id="phQPrompt"></div>
+          <div class="qopts" id="phQOpts"></div>
+          <button class="btn-o" id="phNewBtn" onclick="resetPhraseQuiz()" style="width:100%;margin-top:8px">Nouvelle partie</button>
+        </div>
+      </div>
+
+      <!-- Premium gate -->
+      <div id="phPremiumGate" style="display:none">
+        <div class="premium-gate-box">
+          <div class="pg-icon">⭐</div>
+          <div class="pg-title" id="phGateTitle">Limite gratuite atteinte</div>
+          <div class="pg-desc" id="phGateDesc">Vous avez utilisé vos 20 questions gratuites. Passez à Premium pour un accès illimité et le choix des catégories.</div>
+          <div class="pg-btns">
+            <button class="btn-g" id="phGateLogin" onclick="openAuth()">Se connecter</button>
+            <button class="btn-o" id="phGateReset" onclick="resetPhQuizCount()">Recommencer</button>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /phQuizWrap -->
+
   </div>
 </div>
 
@@ -1343,6 +1464,7 @@ const phrases = [
 
 // ─── LANGUAGE ──────────────────────────────────────────────────────────────
 let currentLang = localStorage.getItem('thai-lang') || 'fr';
+const FREE_PH_QUIZ_LIMIT = 20;
 
 const T = {
   fr: {
@@ -1415,7 +1537,26 @@ const T = {
       'auth/too-many-requests':'Trop de tentatives. Réessayez plus tard.',
       'auth/network-request-failed':'Erreur réseau. Vérifiez votre connexion.',
       'default':'Une erreur est survenue. Réessayez.'
-    }
+    },
+    quizTypeCons:'ก Consonnes', quizTypePhrases:'💬 Phrases',
+    phQuizTitle:'Quiz Phrases', phQuizDesc:'Testez votre compréhension des phrases de base. Deux modes : Thaï → Traduction ou Traduction → Thaï.',
+    phQuizM1:'ไทย → FR   Thaï → Traduction', phQuizM2:'FR → ไทย   Traduction → Thaï',
+    phQPromptT2F:'Quelle est la traduction de cette phrase ?', phQPromptF2T:'Quelle est la phrase en thaï ?',
+    phCatTitle:'Catégories (toutes incluses)', phCatTitlePremium:'Choisir les catégories',
+    phCatLockText:'Les catégories sont disponibles en Premium. En gratuit, toutes les catégories sont incluses aléatoirement.',
+    phFreeLabel:'Questions gratuites utilisées',
+    phFreeInfo:(n,max)=>`${n} / ${max} utilisées`,
+    phGateTitle:'Limite gratuite atteinte',
+    phGateDesc:(max)=>`Vous avez utilisé vos ${max} questions gratuites. Connectez-vous pour un accès illimité et le choix des catégories.`,
+    phGateLogin:'Se connecter / S\'inscrire', phGateReset:'Recommencer (reset)',
+    phStartBtn:'Démarrer', phNewBtn:'Nouvelle partie',
+    nlLabel:'Recevoir les nouveautés du site',
+    nlBtn:"S'inscrire",
+    nlLoading:'…',
+    nlOk:'✓ Inscrit(e) ! Merci.',
+    nlErrInvalid:'Adresse email invalide.',
+    nlErrAlready:'Cet email est déjà inscrit.',
+    nlErrServer:'Erreur réseau. Réessayez.'
   },
   en: {
     navHome:'Home', navLesson:'Lesson', navPhrases:'Phrases', navConsonants:'Consonants',
@@ -1487,7 +1628,26 @@ const T = {
       'auth/too-many-requests':'Too many attempts. Try again later.',
       'auth/network-request-failed':'Network error. Check your connection.',
       'default':'An error occurred. Please try again.'
-    }
+    },
+    quizTypeCons:'ก Consonants', quizTypePhrases:'💬 Phrases',
+    phQuizTitle:'Phrases Quiz', phQuizDesc:'Test your understanding of basic phrases. Two modes: Thai → Translation or Translation → Thai.',
+    phQuizM1:'ไทย → EN   Thai → Translation', phQuizM2:'EN → ไทย   Translation → Thai',
+    phQPromptT2F:'What is the translation of this phrase?', phQPromptF2T:'Which Thai phrase matches?',
+    phCatTitle:'Categories (all included)', phCatTitlePremium:'Choose categories',
+    phCatLockText:'Category selection is a Premium feature. Free users play on all categories randomly.',
+    phFreeLabel:'Free questions used',
+    phFreeInfo:(n,max)=>`${n} / ${max} used`,
+    phGateTitle:'Free limit reached',
+    phGateDesc:(max)=>`You've used your ${max} free questions. Log in to get unlimited access and category selection.`,
+    phGateLogin:'Log in / Sign up', phGateReset:'Reset (restart)',
+    phStartBtn:'Start', phNewBtn:'New game',
+    nlLabel:'Get site updates',
+    nlBtn:'Subscribe',
+    nlLoading:'…',
+    nlOk:'✓ Subscribed! Thank you.',
+    nlErrInvalid:'Invalid email address.',
+    nlErrAlready:'This email is already subscribed.',
+    nlErrServer:'Network error. Please try again.'
   }
 };
 
@@ -1563,6 +1723,21 @@ function applyLang() {
   // Lesson toggle
   document.getElementById('lesson-fr').style.display = currentLang==='fr' ? '' : 'none';
   document.getElementById('lesson-en').style.display = currentLang==='en' ? '' : 'none';
+  // Newsletter
+  s('nlLabel', t.nlLabel); s('nlBtn', t.nlBtn);
+  p('nlEmail', currentLang==='en' ? 'your@email.com' : 'votre@email.com');
+  // Phrases quiz
+  s('qtype-cons', t.quizTypeCons); s('qtype-phrases', t.quizTypePhrases);
+  s('phQuizTitle', t.phQuizTitle); s('phQuizDesc', t.phQuizDesc);
+  s('phmode1', t.phQuizM1); s('phmode2', t.phQuizM2);
+  s('phCatLockText', t.phCatLockText);
+  s('phStartFreeLabel', t.phFreeLabel); s('phPlayFreeLabel', t.phFreeLabel);
+  s('phGateTitle', t.phGateTitle);
+  s('phGateLogin', t.phGateLogin); s('phGateReset', t.phGateReset);
+  s('phStartBtn', t.phStartBtn); s('phNewBtn', t.phNewBtn);
+  s('phQLblOk', t.quizOk); s('phQLblKo', t.quizKo);
+  const gd=document.getElementById('phGateDesc'); if(gd) gd.textContent=t.phGateDesc(FREE_PH_QUIZ_LIMIT);
+  renderPhCatBtns(); updatePhStartFreeBar();
   // Title tag
   document.title = currentLang==='en' ? 'อักษรไทย — Learn the Thai Alphabet' : 'อักษรไทย — Apprendre l\'Alphabet Thaï';
   document.querySelector('html').lang = currentLang;
@@ -1813,6 +1988,193 @@ function answerQuiz(btn, chosen, correct) {
   setTimeout(nextQuestion, 1400);
 }
 
+// ─── PHRASES QUIZ ──────────────────────────────────────────────────────────
+let userPremium = false;
+let phQuizMode = 't2f';
+let selectedPhCats = [...new Set(phrases.map(p=>p.cat))];
+let phQuizScore = {ok:0, ko:0};
+let phQuizQ = null;
+let phQuizOpts = [];
+let phQuizCount = parseInt(localStorage.getItem('ph-quiz-count')||'0');
+
+function setQuizType(type, btn) {
+  document.querySelectorAll('.qtype-btn').forEach(b=>b.classList.remove('active'));
+  if(btn) btn.classList.add('active');
+  document.getElementById('consQuizWrap').style.display = type==='cons' ? '' : 'none';
+  document.getElementById('phQuizWrap').style.display   = type==='phrases' ? '' : 'none';
+  if(type==='phrases') { renderPhCatBtns(); updatePhStartFreeBar(); }
+}
+
+function setPhMode(m, btn) {
+  phQuizMode = m;
+  document.querySelectorAll('.phmode').forEach(b=>b.classList.remove('active'));
+  if(btn) btn.classList.add('active');
+}
+
+function renderPhCatBtns() {
+  const cats = [...new Set(phrases.map(p=>p.cat))];
+  const t = T[currentLang];
+  const grid = document.getElementById('phCatGrid');
+  if(!grid) return;
+  if(userPremium) {
+    grid.innerHTML = cats.map(c=>
+      `<button class="pcat-btn ${selectedPhCats.includes(c)?'active':''}" onclick="togglePhCat('${c}')">${t.catMap[c]||c}</button>`
+    ).join('');
+    const lb = document.getElementById('phCatLockBox');
+    if(lb) lb.style.display = 'none';
+    const ct = document.getElementById('phCatTitle');
+    if(ct) ct.textContent = t.phCatTitlePremium;
+  } else {
+    grid.innerHTML = cats.map(c=>
+      `<button class="pcat-btn active locked">${t.catMap[c]||c}</button>`
+    ).join('');
+    const lb = document.getElementById('phCatLockBox');
+    if(lb) lb.style.display = '';
+    const ct = document.getElementById('phCatTitle');
+    if(ct) ct.textContent = t.phCatTitle;
+  }
+}
+
+function togglePhCat(cat) {
+  if(!userPremium) return;
+  const idx = selectedPhCats.indexOf(cat);
+  if(idx > -1) {
+    if(selectedPhCats.length > 1) selectedPhCats.splice(idx, 1);
+  } else {
+    selectedPhCats.push(cat);
+  }
+  renderPhCatBtns();
+}
+
+function updatePhStartFreeBar() {
+  const bar = document.getElementById('phStartFreeBar');
+  if(!bar) return;
+  if(userPremium) { bar.style.display = 'none'; return; }
+  bar.style.display = '';
+  const pct = Math.min(phQuizCount / FREE_PH_QUIZ_LIMIT * 100, 100);
+  const fill = document.getElementById('phStartBarFill');
+  const count = document.getElementById('phStartFreeCount');
+  if(fill) fill.style.width = pct+'%';
+  if(count) count.textContent = `${phQuizCount} / ${FREE_PH_QUIZ_LIMIT}`;
+}
+
+function updatePhPlayFreeBar() {
+  const bar = document.getElementById('phPlayFreeBar');
+  if(!bar) return;
+  if(userPremium) { bar.style.display = 'none'; return; }
+  bar.style.display = '';
+  const pct = Math.min(phQuizCount / FREE_PH_QUIZ_LIMIT * 100, 100);
+  const fill = document.getElementById('phPlayBarFill');
+  const count = document.getElementById('phPlayFreeCount');
+  if(fill) fill.style.width = pct+'%';
+  if(count) count.textContent = `${phQuizCount} / ${FREE_PH_QUIZ_LIMIT}`;
+}
+
+function startPhraseQuiz() {
+  if(!userPremium && phQuizCount >= FREE_PH_QUIZ_LIMIT) { showPhPremiumGate(); return; }
+  phQuizScore = {ok:0, ko:0};
+  document.getElementById('phQCorrect').textContent = '0';
+  document.getElementById('phQWrong').textContent   = '0';
+  document.getElementById('phQuizStart').style.display   = 'none';
+  document.getElementById('phPremiumGate').style.display = 'none';
+  document.getElementById('phQuizPlay').style.display    = '';
+  updatePhPlayFreeBar();
+  nextPhraseQuestion();
+}
+
+function nextPhraseQuestion() {
+  if(!userPremium && phQuizCount >= FREE_PH_QUIZ_LIMIT) {
+    document.getElementById('phQuizPlay').style.display = 'none';
+    showPhPremiumGate();
+    return;
+  }
+  const pool = phrases.filter(p => selectedPhCats.includes(p.cat));
+  if(pool.length < 4) return;
+  const correct = pool[Math.floor(Math.random()*pool.length)];
+  phQuizQ = correct;
+  let opts = [correct];
+  let tries = 0;
+  while(opts.length < 4 && tries++ < 200) {
+    const r = pool[Math.floor(Math.random()*pool.length)];
+    if(!opts.find(o=>o.thai===r.thai)) opts.push(r);
+  }
+  phQuizOpts = opts.sort(()=>Math.random()-.5);
+  const t = T[currentLang];
+  const field = t.phField;
+  document.getElementById('phQNum').textContent = t.quizQ(phQuizScore.ok+phQuizScore.ko+1);
+  if(phQuizMode === 't2f') {
+    document.getElementById('phQDisplay').innerHTML =
+      `<div style="font-family:var(--thai-font);font-size:clamp(22px,5vw,44px);font-weight:600;margin-bottom:6px;line-height:1.3">${correct.thai}</div>
+       <div style="font-size:12px;color:var(--text3);margin-bottom:14px;font-style:italic">${correct.rtgs}</div>
+       <button class="qplay" style="padding:10px 20px;margin:0 auto 16px;display:flex" onclick="speakPhraseQ()">
+         <div class="qplay-icon" style="font-size:22px">🔊</div></button>`;
+    document.getElementById('phQPrompt').textContent = t.phQPromptT2F;
+    document.getElementById('phQOpts').innerHTML = phQuizOpts.map((o,i)=>
+      `<button class="qopt" style="font-size:13px;min-height:68px;padding:12px 10px;line-height:1.5;text-align:left" data-idx="${i}" onclick="answerPhraseQuiz(this,${i})">${o[field]||o.fr}</button>`
+    ).join('');
+  } else {
+    document.getElementById('phQDisplay').innerHTML =
+      `<div style="font-size:clamp(15px,3vw,20px);font-weight:700;line-height:1.5;margin-bottom:8px;color:var(--text)">${correct[field]||correct.fr}</div>`;
+    document.getElementById('phQPrompt').textContent = t.phQPromptF2T;
+    document.getElementById('phQOpts').innerHTML = phQuizOpts.map((o,i)=>
+      `<button class="qopt" style="font-family:var(--thai-font);font-size:clamp(14px,3vw,20px);min-height:80px;padding:12px 8px;line-height:1.5" data-idx="${i}" onclick="answerPhraseQuiz(this,${i})">${o.thai}</button>`
+    ).join('');
+  }
+}
+
+function speakPhraseQ() {
+  if(phQuizQ) speakThai(phQuizQ.thai);
+}
+
+function answerPhraseQuiz(btn, chosenIdx) {
+  const opts = document.querySelectorAll('#phQOpts .qopt');
+  opts.forEach(b=>b.disabled=true);
+  const chosen  = phQuizOpts[chosenIdx];
+  const t = T[currentLang];
+  const field = t.phField;
+  const isCorrect = phQuizMode==='t2f'
+    ? (chosen[field]||chosen.fr)===(phQuizQ[field]||phQuizQ.fr)
+    : chosen.thai===phQuizQ.thai;
+  btn.classList.add(isCorrect?'correct':'wrong');
+  if(!isCorrect) {
+    const ci = phQuizOpts.indexOf(phQuizQ);
+    opts.forEach(b=>{ if(parseInt(b.dataset.idx)===ci) b.classList.add('correct'); });
+  }
+  if(isCorrect) { phQuizScore.ok++; document.getElementById('phQCorrect').textContent=phQuizScore.ok; }
+  else          { phQuizScore.ko++; document.getElementById('phQWrong').textContent=phQuizScore.ko; }
+  if(!userPremium) {
+    phQuizCount++;
+    localStorage.setItem('ph-quiz-count', phQuizCount);
+    updatePhPlayFreeBar();
+  }
+  setTimeout(nextPhraseQuestion, 1400);
+}
+
+function showPhPremiumGate() {
+  document.getElementById('phQuizStart').style.display   = 'none';
+  document.getElementById('phQuizPlay').style.display    = 'none';
+  document.getElementById('phPremiumGate').style.display = '';
+  const t = T[currentLang];
+  const gd = document.getElementById('phGateDesc');
+  if(gd) gd.textContent = t.phGateDesc(FREE_PH_QUIZ_LIMIT);
+}
+
+function resetPhraseQuiz() {
+  document.getElementById('phQuizPlay').style.display    = 'none';
+  document.getElementById('phPremiumGate').style.display = 'none';
+  document.getElementById('phQuizStart').style.display   = '';
+  renderPhCatBtns();
+  updatePhStartFreeBar();
+}
+
+function resetPhQuizCount() {
+  phQuizCount = 0;
+  localStorage.setItem('ph-quiz-count', 0);
+  document.getElementById('phPremiumGate').style.display = 'none';
+  document.getElementById('phQuizStart').style.display   = '';
+  updatePhStartFreeBar();
+}
+
 // ─── PHRASES ───────────────────────────────────────────────────────────────
 let phraseFilter = 'all';
 
@@ -2014,6 +2376,51 @@ function authErr(code) {
   return m[code] || m['default'];
 }
 
+// ─── NEWSLETTER ────────────────────────────────────────────────────────────
+async function doSubscribe() {
+  const emailEl = document.getElementById('nlEmail');
+  const btn     = document.getElementById('nlBtn');
+  const msg     = document.getElementById('nlMsg');
+  const email   = emailEl.value.trim();
+  const t       = T[currentLang];
+
+  msg.className = 'newsletter-msg';
+  msg.textContent = '';
+
+  if(!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+    msg.className = 'newsletter-msg err';
+    msg.textContent = t.nlErrInvalid;
+    return;
+  }
+
+  btn.disabled = true;
+  btn.textContent = t.nlLoading;
+
+  try {
+    const snap = await db.collection('subscribers').where('email','==',email).limit(1).get();
+    if(!snap.empty) {
+      msg.className = 'newsletter-msg err';
+      msg.textContent = t.nlErrAlready;
+    } else {
+      await db.collection('subscribers').add({
+        email,
+        lang: currentLang,
+        createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+        source: 'newsletter'
+      });
+      emailEl.value = '';
+      msg.className = 'newsletter-msg ok';
+      msg.textContent = t.nlOk;
+    }
+  } catch(e) {
+    msg.className = 'newsletter-msg err';
+    msg.textContent = t.nlErrServer;
+  }
+
+  btn.disabled = false;
+  btn.textContent = T[currentLang].nlBtn;
+}
+
 // ─── FIRESTORE SYNC ────────────────────────────────────────────────────────
 async function saveProgressToCloud() {
   const user = auth.currentUser;
@@ -2036,7 +2443,9 @@ auth.onAuthStateChanged(async (user) => {
       const snap = await db.collection('users').doc(user.uid).get();
       if(snap.exists) {
         const data = snap.data();
+        userPremium = data.premium || false;
         if(data.premium) premiumBadge.style.display = '';
+        renderPhCatBtns(); updatePhStartFreeBar();
         if(data.learned && data.learned.length) {
           data.learned.forEach(id => learned.add(id));
           localStorage.setItem('thai-learned', JSON.stringify([...learned]));
@@ -2049,6 +2458,8 @@ auth.onAuthStateChanged(async (user) => {
     loginBtn.style.display  = '';
     userBadge.style.display = 'none';
     premiumBadge.style.display = 'none';
+    userPremium = false;
+    renderPhCatBtns(); updatePhStartFreeBar();
   }
 });
 
