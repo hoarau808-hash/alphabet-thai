@@ -617,6 +617,23 @@ footer{border-top:1px solid var(--border);padding:40px 24px;text-align:center;co
 .pg-title{font-size:20px;font-weight:800;letter-spacing:-.5px;margin-bottom:8px}
 .pg-desc{font-size:13px;color:var(--text2);line-height:1.7;margin-bottom:24px;max-width:360px;margin-left:auto;margin-right:auto}
 .pg-btns{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
+
+/* ─── COMPTAGE 1-50 ──────────────────────────────────────────────────────── */
+.cnt-section{padding:0 24px 80px;max-width:1200px;margin:0 auto}
+.cnt-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(110px,1fr));gap:12px;margin-top:24px}
+.cnt-cell{background:var(--bg3);border:1px solid var(--border);border-radius:14px;padding:16px 8px;text-align:center;cursor:pointer;transition:all .2s;user-select:none}
+.cnt-cell:hover{border-color:var(--gold);background:rgba(240,180,41,.08);transform:translateY(-2px)}
+.cnt-cell:active{transform:scale(.95)}
+.cnt-cell.playing{border-color:var(--gold);background:rgba(240,180,41,.12)}
+.cnt-n{font-size:20px;font-weight:800;color:var(--gold);margin-bottom:4px;display:block}
+.cnt-thai{font-family:var(--thai-font);font-size:22px;font-weight:500;line-height:1.2;margin-bottom:3px;display:block}
+.cnt-rtgs{font-size:11px;color:var(--text3);font-style:italic}
+@media(max-width:768px){
+  .cnt-grid{grid-template-columns:repeat(auto-fill,minmax(88px,1fr));gap:10px}
+  .cnt-cell{padding:13px 6px}
+  .cnt-n{font-size:17px}
+  .cnt-thai{font-size:19px}
+}
 </style>
 </head>
 <body>
@@ -765,6 +782,67 @@ footer{border-top:1px solid var(--border);padding:40px 24px;text-align:center;co
     </div>
     <div class="alph-grid" id="alphGrid"></div>
   </section>
+
+  <!-- CHIFFRES 1-50 -->
+  <div class="cnt-section">
+    <div class="sec-hd">
+      <div class="sec-tag">Compter en thaï</div>
+      <div class="sec-title">Les nombres de 1 à 50</div>
+      <p class="sec-desc">Cliquez sur un nombre pour l'entendre. Apprenez à compter en thaï !</p>
+    </div>
+    <div class="cnt-grid">
+      <div class="cnt-cell" onclick="speakCnt(this,'หนึ่ง')"><span class="cnt-n">1</span><span class="cnt-thai">หนึ่ง</span><span class="cnt-rtgs">nueng</span></div>
+      <div class="cnt-cell" onclick="speakCnt(this,'สอง')"><span class="cnt-n">2</span><span class="cnt-thai">สอง</span><span class="cnt-rtgs">song</span></div>
+      <div class="cnt-cell" onclick="speakCnt(this,'สาม')"><span class="cnt-n">3</span><span class="cnt-thai">สาม</span><span class="cnt-rtgs">sam</span></div>
+      <div class="cnt-cell" onclick="speakCnt(this,'สี่')"><span class="cnt-n">4</span><span class="cnt-thai">สี่</span><span class="cnt-rtgs">si</span></div>
+      <div class="cnt-cell" onclick="speakCnt(this,'ห้า')"><span class="cnt-n">5</span><span class="cnt-thai">ห้า</span><span class="cnt-rtgs">ha</span></div>
+      <div class="cnt-cell" onclick="speakCnt(this,'หก')"><span class="cnt-n">6</span><span class="cnt-thai">หก</span><span class="cnt-rtgs">hok</span></div>
+      <div class="cnt-cell" onclick="speakCnt(this,'เจ็ด')"><span class="cnt-n">7</span><span class="cnt-thai">เจ็ด</span><span class="cnt-rtgs">jet</span></div>
+      <div class="cnt-cell" onclick="speakCnt(this,'แปด')"><span class="cnt-n">8</span><span class="cnt-thai">แปด</span><span class="cnt-rtgs">paet</span></div>
+      <div class="cnt-cell" onclick="speakCnt(this,'เก้า')"><span class="cnt-n">9</span><span class="cnt-thai">เก้า</span><span class="cnt-rtgs">kao</span></div>
+      <div class="cnt-cell" onclick="speakCnt(this,'สิบ')"><span class="cnt-n">10</span><span class="cnt-thai">สิบ</span><span class="cnt-rtgs">sip</span></div>
+      <div class="cnt-cell" onclick="speakCnt(this,'สิบเอ็ด')"><span class="cnt-n">11</span><span class="cnt-thai">สิบเอ็ด</span><span class="cnt-rtgs">sip et</span></div>
+      <div class="cnt-cell" onclick="speakCnt(this,'สิบสอง')"><span class="cnt-n">12</span><span class="cnt-thai">สิบสอง</span><span class="cnt-rtgs">sip song</span></div>
+      <div class="cnt-cell" onclick="speakCnt(this,'สิบสาม')"><span class="cnt-n">13</span><span class="cnt-thai">สิบสาม</span><span class="cnt-rtgs">sip sam</span></div>
+      <div class="cnt-cell" onclick="speakCnt(this,'สิบสี่')"><span class="cnt-n">14</span><span class="cnt-thai">สิบสี่</span><span class="cnt-rtgs">sip si</span></div>
+      <div class="cnt-cell" onclick="speakCnt(this,'สิบห้า')"><span class="cnt-n">15</span><span class="cnt-thai">สิบห้า</span><span class="cnt-rtgs">sip ha</span></div>
+      <div class="cnt-cell" onclick="speakCnt(this,'สิบหก')"><span class="cnt-n">16</span><span class="cnt-thai">สิบหก</span><span class="cnt-rtgs">sip hok</span></div>
+      <div class="cnt-cell" onclick="speakCnt(this,'สิบเจ็ด')"><span class="cnt-n">17</span><span class="cnt-thai">สิบเจ็ด</span><span class="cnt-rtgs">sip jet</span></div>
+      <div class="cnt-cell" onclick="speakCnt(this,'สิบแปด')"><span class="cnt-n">18</span><span class="cnt-thai">สิบแปด</span><span class="cnt-rtgs">sip paet</span></div>
+      <div class="cnt-cell" onclick="speakCnt(this,'สิบเก้า')"><span class="cnt-n">19</span><span class="cnt-thai">สิบเก้า</span><span class="cnt-rtgs">sip kao</span></div>
+      <div class="cnt-cell" onclick="speakCnt(this,'ยี่สิบ')"><span class="cnt-n">20</span><span class="cnt-thai">ยี่สิบ</span><span class="cnt-rtgs">yi sip</span></div>
+      <div class="cnt-cell" onclick="speakCnt(this,'ยี่สิบเอ็ด')"><span class="cnt-n">21</span><span class="cnt-thai">ยี่สิบเอ็ด</span><span class="cnt-rtgs">yi sip et</span></div>
+      <div class="cnt-cell" onclick="speakCnt(this,'ยี่สิบสอง')"><span class="cnt-n">22</span><span class="cnt-thai">ยี่สิบสอง</span><span class="cnt-rtgs">yi sip song</span></div>
+      <div class="cnt-cell" onclick="speakCnt(this,'ยี่สิบสาม')"><span class="cnt-n">23</span><span class="cnt-thai">ยี่สิบสาม</span><span class="cnt-rtgs">yi sip sam</span></div>
+      <div class="cnt-cell" onclick="speakCnt(this,'ยี่สิบสี่')"><span class="cnt-n">24</span><span class="cnt-thai">ยี่สิบสี่</span><span class="cnt-rtgs">yi sip si</span></div>
+      <div class="cnt-cell" onclick="speakCnt(this,'ยี่สิบห้า')"><span class="cnt-n">25</span><span class="cnt-thai">ยี่สิบห้า</span><span class="cnt-rtgs">yi sip ha</span></div>
+      <div class="cnt-cell" onclick="speakCnt(this,'ยี่สิบหก')"><span class="cnt-n">26</span><span class="cnt-thai">ยี่สิบหก</span><span class="cnt-rtgs">yi sip hok</span></div>
+      <div class="cnt-cell" onclick="speakCnt(this,'ยี่สิบเจ็ด')"><span class="cnt-n">27</span><span class="cnt-thai">ยี่สิบเจ็ด</span><span class="cnt-rtgs">yi sip jet</span></div>
+      <div class="cnt-cell" onclick="speakCnt(this,'ยี่สิบแปด')"><span class="cnt-n">28</span><span class="cnt-thai">ยี่สิบแปด</span><span class="cnt-rtgs">yi sip paet</span></div>
+      <div class="cnt-cell" onclick="speakCnt(this,'ยี่สิบเก้า')"><span class="cnt-n">29</span><span class="cnt-thai">ยี่สิบเก้า</span><span class="cnt-rtgs">yi sip kao</span></div>
+      <div class="cnt-cell" onclick="speakCnt(this,'สามสิบ')"><span class="cnt-n">30</span><span class="cnt-thai">สามสิบ</span><span class="cnt-rtgs">sam sip</span></div>
+      <div class="cnt-cell" onclick="speakCnt(this,'สามสิบเอ็ด')"><span class="cnt-n">31</span><span class="cnt-thai">สามสิบเอ็ด</span><span class="cnt-rtgs">sam sip et</span></div>
+      <div class="cnt-cell" onclick="speakCnt(this,'สามสิบสอง')"><span class="cnt-n">32</span><span class="cnt-thai">สามสิบสอง</span><span class="cnt-rtgs">sam sip song</span></div>
+      <div class="cnt-cell" onclick="speakCnt(this,'สามสิบสาม')"><span class="cnt-n">33</span><span class="cnt-thai">สามสิบสาม</span><span class="cnt-rtgs">sam sip sam</span></div>
+      <div class="cnt-cell" onclick="speakCnt(this,'สามสิบสี่')"><span class="cnt-n">34</span><span class="cnt-thai">สามสิบสี่</span><span class="cnt-rtgs">sam sip si</span></div>
+      <div class="cnt-cell" onclick="speakCnt(this,'สามสิบห้า')"><span class="cnt-n">35</span><span class="cnt-thai">สามสิบห้า</span><span class="cnt-rtgs">sam sip ha</span></div>
+      <div class="cnt-cell" onclick="speakCnt(this,'สามสิบหก')"><span class="cnt-n">36</span><span class="cnt-thai">สามสิบหก</span><span class="cnt-rtgs">sam sip hok</span></div>
+      <div class="cnt-cell" onclick="speakCnt(this,'สามสิบเจ็ด')"><span class="cnt-n">37</span><span class="cnt-thai">สามสิบเจ็ด</span><span class="cnt-rtgs">sam sip jet</span></div>
+      <div class="cnt-cell" onclick="speakCnt(this,'สามสิบแปด')"><span class="cnt-n">38</span><span class="cnt-thai">สามสิบแปด</span><span class="cnt-rtgs">sam sip paet</span></div>
+      <div class="cnt-cell" onclick="speakCnt(this,'สามสิบเก้า')"><span class="cnt-n">39</span><span class="cnt-thai">สามสิบเก้า</span><span class="cnt-rtgs">sam sip kao</span></div>
+      <div class="cnt-cell" onclick="speakCnt(this,'สี่สิบ')"><span class="cnt-n">40</span><span class="cnt-thai">สี่สิบ</span><span class="cnt-rtgs">si sip</span></div>
+      <div class="cnt-cell" onclick="speakCnt(this,'สี่สิบเอ็ด')"><span class="cnt-n">41</span><span class="cnt-thai">สี่สิบเอ็ด</span><span class="cnt-rtgs">si sip et</span></div>
+      <div class="cnt-cell" onclick="speakCnt(this,'สี่สิบสอง')"><span class="cnt-n">42</span><span class="cnt-thai">สี่สิบสอง</span><span class="cnt-rtgs">si sip song</span></div>
+      <div class="cnt-cell" onclick="speakCnt(this,'สี่สิบสาม')"><span class="cnt-n">43</span><span class="cnt-thai">สี่สิบสาม</span><span class="cnt-rtgs">si sip sam</span></div>
+      <div class="cnt-cell" onclick="speakCnt(this,'สี่สิบสี่')"><span class="cnt-n">44</span><span class="cnt-thai">สี่สิบสี่</span><span class="cnt-rtgs">si sip si</span></div>
+      <div class="cnt-cell" onclick="speakCnt(this,'สี่สิบห้า')"><span class="cnt-n">45</span><span class="cnt-thai">สี่สิบห้า</span><span class="cnt-rtgs">si sip ha</span></div>
+      <div class="cnt-cell" onclick="speakCnt(this,'สี่สิบหก')"><span class="cnt-n">46</span><span class="cnt-thai">สี่สิบหก</span><span class="cnt-rtgs">si sip hok</span></div>
+      <div class="cnt-cell" onclick="speakCnt(this,'สี่สิบเจ็ด')"><span class="cnt-n">47</span><span class="cnt-thai">สี่สิบเจ็ด</span><span class="cnt-rtgs">si sip jet</span></div>
+      <div class="cnt-cell" onclick="speakCnt(this,'สี่สิบแปด')"><span class="cnt-n">48</span><span class="cnt-thai">สี่สิบแปด</span><span class="cnt-rtgs">si sip paet</span></div>
+      <div class="cnt-cell" onclick="speakCnt(this,'สี่สิบเก้า')"><span class="cnt-n">49</span><span class="cnt-thai">สี่สิบเก้า</span><span class="cnt-rtgs">si sip kao</span></div>
+      <div class="cnt-cell" onclick="speakCnt(this,'ห้าสิบ')"><span class="cnt-n">50</span><span class="cnt-thai">ห้าสิบ</span><span class="cnt-rtgs">ha sip</span></div>
+    </div>
+  </div>
 </div>
 
 <!-- VOYELLES TAB -->
@@ -2366,6 +2444,18 @@ function speakThai(text, triggerBtn) {
     activeSpeakBtn = btn;
     u.onend = () => { btn.classList.remove('playing'); activeSpeakBtn = null; };
   }
+  window.speechSynthesis.speak(u);
+}
+
+function speakCnt(cell, text) {
+  if(!window.speechSynthesis) return;
+  window.speechSynthesis.cancel();
+  document.querySelectorAll('.cnt-cell.playing').forEach(c => c.classList.remove('playing'));
+  cell.classList.add('playing');
+  const u = new SpeechSynthesisUtterance(text);
+  u.lang = 'th-TH'; u.rate = 0.8; u.pitch = 1;
+  if(thaiVoice) u.voice = thaiVoice;
+  u.onend = () => cell.classList.remove('playing');
   window.speechSynthesis.speak(u);
 }
 
