@@ -654,6 +654,10 @@ footer{border-top:1px solid var(--border);padding:40px 24px;text-align:center;co
 .sit-spk{flex-shrink:0;background:none;border:1px solid var(--border);border-radius:7px;padding:5px 9px;cursor:pointer;font-size:14px;color:var(--text3);transition:all .2s;align-self:center;line-height:1}
 .sit-spk:hover{color:var(--gold);border-color:rgba(240,180,41,.4);background:rgba(240,180,41,.07)}
 .sit-spk.playing{color:var(--gold);border-color:var(--gold)}
+.icon-711{display:inline-flex;align-items:baseline;gap:0px;font-family:'Arial Black','Arial',sans-serif;font-weight:900;line-height:1;flex-shrink:0}
+.icon-711 .i7{color:#F47920;font-size:22px;font-style:italic}
+.icon-711 .idash{color:#CC0000;font-size:14px;margin:0 1px}
+.icon-711 .ieleven{color:#007A4D;font-size:12px;letter-spacing:-0.5px;align-self:center}
 @media(max-width:768px){
   .sit-grid{grid-template-columns:1fr}
   .ph-view-btn{font-size:13px;padding:9px 10px}
@@ -2887,6 +2891,18 @@ const situations = [
     {who:'autre', whoFr:'Hôtesse',   whoEn:'Staff',    thai:'แรงไปไหมครับ',                 rtgs:'raeng bpai mai khrap',                          fr:'Trop fort ?',                                 en:'Too hard?'},
     {who:'vous',  whoFr:'Vous',      whoEn:'You',      thai:'ดีครับ ขอบคุณครับ',             rtgs:'dee khrap, khop-khun khrap',                    fr:'Parfait, merci.',                             en:'Perfect, thank you.'},
   ]},
+  { id:'seveneleven', icon:'🏪', customIcon:'<span class="icon-711"><span class="i7">7</span><span class="idash">-</span><span class="ieleven">ELEVEN</span></span>', title:'Au 7-Eleven / magasin', titleEn:'At the 7-Eleven / shop', lines:[
+    {who:'vous',  whoFr:'Vous',      whoEn:'You',      thai:'สวัสดีครับ',                        rtgs:'sa-wat-dee khrap',                               fr:'Bonjour.',                                    en:'Hello.'},
+    {who:'autre', whoFr:'Caissier',  whoEn:'Cashier',  thai:'สวัสดีครับ',                        rtgs:'sa-wat-dee khrap',                               fr:'Bonjour.',                                    en:'Hello.'},
+    {who:'vous',  whoFr:'Vous',      whoEn:'You',      thai:'ขอน้ำเปล่าหนึ่งขวดครับ',           rtgs:'kor naam bplao nueng khuat khrap',               fr:'Je voudrais une bouteille d\'eau.',            en:'I\'d like a bottle of water.'},
+    {who:'vous',  whoFr:'Vous',      whoEn:'You',      thai:'มีแซนด์วิชไหมครับ',                rtgs:'mee saen-wit mai khrap',                         fr:'Avez-vous des sandwichs ?',                   en:'Do you have sandwiches?'},
+    {who:'autre', whoFr:'Caissier',  whoEn:'Cashier',  thai:'มีครับ อยู่ตรงนั้นครับ',           rtgs:'mee khrap, yoo dtrong nan khrap',                fr:'Oui, ils sont là-bas.',                       en:'Yes, they\'re over there.'},
+    {who:'vous',  whoFr:'Vous',      whoEn:'You',      thai:'เท่าไรทั้งหมดครับ',                rtgs:'tao-rai tang-mot khrap',                         fr:'C\'est combien en tout ?',                    en:'How much is it in total?'},
+    {who:'autre', whoFr:'Caissier',  whoEn:'Cashier',  thai:'สี่สิบห้าบาทครับ',                 rtgs:'see-sip-ha baht khrap',                          fr:'45 baht.',                                    en:'45 baht.'},
+    {who:'vous',  whoFr:'Vous',      whoEn:'You',      thai:'นี่ครับ ห้าสิบบาท',                rtgs:'nee khrap, ha-sip baht',                         fr:'Voilà, 50 baht.',                             en:'Here, 50 baht.'},
+    {who:'autre', whoFr:'Caissier',  whoEn:'Cashier',  thai:'เงินทอนห้าบาทครับ ขอบคุณครับ',    rtgs:'ngern ton ha baht khrap, khop-khun khrap',       fr:'Voici 5 baht de monnaie, merci.',             en:'Here\'s 5 baht change, thank you.'},
+    {who:'vous',  whoFr:'Vous',      whoEn:'You',      thai:'ขอใบเสร็จด้วยครับ',                rtgs:'kor bai-set duay khrap',                         fr:'Un reçu s\'il vous plaît.',                   en:'A receipt please.'},
+  ]},
 ];
 
 function setPhView(view, btn) {
@@ -2906,7 +2922,7 @@ function renderSituations() {
   document.getElementById('sitGrid').innerHTML = situations.map(s=>`
     <div class="sit-card" id="sit-${s.id}" onclick="toggleSituation('${s.id}')">
       <div class="sit-header">
-        <span class="sit-icon">${s.icon}</span>
+        <span class="sit-icon">${s.customIcon||s.icon}</span>
         <span class="sit-meta">
           <span class="sit-title">${lang==='fr'?s.title:s.titleEn}</span>
           <span class="sit-count">${s.lines.length} répliques</span>
