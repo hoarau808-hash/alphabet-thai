@@ -295,30 +295,128 @@ footer{border-top:1px solid var(--border);padding:40px 24px;text-align:center;co
 .mtab.active{color:var(--gold)}
 
 @media(max-width:768px){
+  /* GRIDS */
   .stats-grid{grid-template-columns:repeat(2,1fr)}
   .cls-grid{grid-template-columns:1fr}
   .tones-grid{grid-template-columns:repeat(2,1fr)}
   .vow-grid{grid-template-columns:1fr}
-  .nav-tabs,.prog-badge{display:none}
-  .font-btn-label{display:none}
-  .mobnav{display:flex}
-  .tab-content{padding-bottom:72px}
-  .quiz-card{padding:32px 20px}
-  .qchar{font-size:80px}
-  .qrtgs{font-size:30px}
-  .sec{padding:60px 16px}
-  .alph-grid{grid-template-columns:repeat(auto-fill,minmax(110px,1fr));gap:10px}
-  .ccard{height:230px}
-  .cchar{font-size:34px}
-  .cthaiword{font-size:17px}
-  .cfrmeaning{font-size:12px}
   .class-compare{grid-template-columns:1fr}
   .tone-row{grid-template-columns:repeat(3,1fr)}
   .num-grid{grid-template-columns:repeat(5,1fr)}
   .vpos-grid{grid-template-columns:1fr}
+
+  /* NAV */
+  .nav-tabs,.prog-badge{display:none}
+  .font-btn-label{display:none}
+  nav.topnav{height:56px;padding:0 14px}
+  .logo{font-size:17px}
+  .logo .thai{font-size:19px;margin-right:5px}
+  .nav-right{gap:6px}
+  .login-btn{padding:7px 11px;font-size:12px}
+  .logout-btn{font-size:10px;padding:4px 8px}
+  .user-email{max-width:70px}
+
+  /* BOTTOM NAV — gros boutons pouce */
+  .mobnav{display:flex;padding:10px 0 18px}
+  .mtab{padding:8px 10px;font-size:10px;min-width:44px;min-height:44px;justify-content:center}
+  .mtab-icon{font-size:22px}
+
+  /* TAB CONTENT */
+  .tab-content{padding-top:56px;padding-bottom:84px}
+
+  /* HERO — plus court sur mobile */
+  .hero{min-height:auto;padding:72px 16px 48px}
+  .hero-sub{font-size:16px;margin:0 auto 28px;max-width:100%}
+  .hero-btns{flex-direction:column;gap:12px;padding:0 4px}
+  .float-chars{display:none}
+
+  /* CTA BUTTONS — largeur pleine, taille pouce */
+  .btn-g,.btn-o{width:100%;padding:18px 24px;font-size:16px;border-radius:14px;text-align:center}
+
+  /* NEWSLETTER */
+  .newsletter-row{flex-direction:column}
+  .newsletter-input{padding:15px 18px;font-size:16px}
+  .newsletter-btn{width:100%;padding:15px;font-size:16px}
+
+  /* SECTIONS */
+  .sec{padding:48px 14px}
+  .sec-hd{margin-bottom:28px}
+  .sec-title{font-size:clamp(22px,6vw,32px)}
+
+  /* FILTER BUTTONS — min 44px touch */
+  .fbtn{padding:11px 16px;font-size:14px;min-height:44px}
+  .pcbtn{padding:11px 16px;font-size:14px;min-height:44px}
+  .qmode{padding:12px 18px;font-size:14px;min-height:44px}
+  .alph-controls{gap:8px}
+
+  /* SEARCH INPUTS — 16px évite zoom iOS */
+  .srch{padding:13px 16px;font-size:16px}
+  .psrch{padding:13px 16px;font-size:16px;max-width:100%}
+
+  /* ALPHABET GRID */
+  .alph-grid{grid-template-columns:repeat(auto-fill,minmax(100px,1fr));gap:10px}
+  .ccard{height:220px}
+  .cchar{font-size:34px}
+  .cthaiword{font-size:17px}
+  .cfrmeaning{font-size:12px}
+
+  /* QUIZ */
+  .quiz-wrap{padding:24px 14px}
+  .quiz-card{padding:28px 16px;border-radius:18px}
+  .qchar{font-size:80px}
+  .qrtgs{font-size:30px}
+  .qprompt{font-size:16px}
+  .qopts{gap:10px}
+  .qopt{padding:20px 10px;min-height:88px;font-size:20px;border-radius:12px}
+  .qopt.qopt-thai{font-size:36px;padding:14px 8px}
+  .qplay{padding:24px 36px}
+  .qmodes{gap:8px}
+  .qmode{padding:11px 14px}
+
+  /* LESSON */
+  .lesson-wrap{padding:24px 14px 48px}
+  .lesson-hero{padding:32px 16px;border-radius:16px}
+  .lesson-card{padding:24px 16px;border-radius:16px}
+  .lcard-title{font-size:18px}
+  .lesson-text{font-size:16px;line-height:1.8}
+  .lesson-hl{font-size:14px}
+  .tip-text{font-size:14px}
+
+  /* SYLLAB */
   .syllab-demo{gap:10px}
   .syllab-box{padding:14px 16px;min-width:70px}
   .syllab-char{font-size:36px}
+
+  /* TONES */
+  .tone-card{padding:18px 10px}
+
+  /* NUMBERS */
+  .num-cell{padding:10px 4px}
+  .num-thai{font-size:28px}
+  .num-western{font-size:14px}
+
+  /* AUTH MODAL */
+  .auth-modal{padding:24px 18px;margin:12px;border-radius:18px}
+  .auth-field input{padding:14px 16px;font-size:16px}
+  .auth-submit{padding:16px;font-size:16px;min-height:52px}
+  .auth-title{font-size:18px}
+
+  /* STATS CARDS */
+  .scard{padding:18px 12px}
+  .scard-n{font-size:30px}
+}
+
+@media(max-width:480px){
+  .hero{padding:64px 12px 40px}
+  nav.topnav{padding:0 10px}
+  .logo{font-size:15px}
+  .mtab{padding:6px 8px;font-size:9px}
+  .mtab-icon{font-size:20px}
+  .btn-g,.btn-o{font-size:15px;padding:16px 20px}
+  .qchar{font-size:64px}
+  .qrtgs{font-size:26px}
+  .qopt{min-height:78px;font-size:18px}
+  .qopt.qopt-thai{font-size:30px}
 }
 
 /* ─── LEÇON ─────────────────────────────────────────────────────────────── */
@@ -448,8 +546,16 @@ footer{border-top:1px solid var(--border);padding:40px 24px;text-align:center;co
 .pspk.playing{background:rgba(240,180,41,.25);color:var(--gold);border-color:var(--gold)}
 @media(max-width:768px){
   .phrase-grid{grid-template-columns:1fr}
+  .phrases-wrap{padding:24px 14px 48px}
+  .pcard{padding:14px 16px;gap:12px}
   .pcard-thai{font-size:20px}
-  .mtab{padding:6px 8px}
+  .pcard-fr{font-size:15px}
+  .pcard-rtgs{font-size:12px}
+  .pspk{padding:12px 13px;font-size:18px;min-height:48px;min-width:48px;border-radius:10px}
+  .pcbtn{padding:10px 14px;font-size:13px;min-height:44px}
+  .pg-title{font-size:18px}
+  .pg-desc{font-size:14px}
+  .pg-btns .btn-g,.pg-btns .btn-o{width:100%}
 }
 
 /* ─── AUTH MODAL ─────────────────────────────────────────────────────────── */
