@@ -317,7 +317,7 @@ footer{border-top:1px solid var(--border);padding:40px 24px;text-align:center;co
   .tones-grid{grid-template-columns:repeat(2,1fr)}
   .vow-grid{grid-template-columns:1fr}
   .class-compare{grid-template-columns:1fr}
-  .tone-row{grid-template-columns:repeat(3,1fr)}
+  .tone-row{grid-template-columns:repeat(2,1fr)}
   .num-grid{grid-template-columns:repeat(5,1fr)}
   .vpos-grid{grid-template-columns:1fr}
 
@@ -387,17 +387,35 @@ footer{border-top:1px solid var(--border);padding:40px 24px;text-align:center;co
   .qopt{padding:20px 10px;min-height:88px;font-size:20px;border-radius:12px}
   .qopt.qopt-thai{font-size:36px;padding:14px 8px}
   .qplay{padding:24px 36px}
-  .qmodes{gap:8px}
-  .qmode{padding:11px 14px}
+  .qmodes{gap:8px;flex-direction:column}
+  .qmode{padding:11px 14px;width:100%;text-align:center}
+
+  /* QUIZ TYPE SWITCHER — scroll horizontal */
+  .qtype-sw{overflow-x:auto;flex-wrap:nowrap;-webkit-overflow-scrolling:touch;padding:4px;scrollbar-width:none}
+  .qtype-sw::-webkit-scrollbar{display:none}
+  .qtype-btn{flex:0 0 auto;white-space:nowrap;font-size:12px;padding:9px 13px}
 
   /* LESSON */
   .lesson-wrap{padding:24px 14px 48px}
-  .lesson-hero{padding:32px 16px;border-radius:16px}
-  .lesson-card{padding:24px 16px;border-radius:16px}
-  .lcard-title{font-size:18px}
-  .lesson-text{font-size:16px;line-height:1.8}
-  .lesson-hl{font-size:14px}
-  .tip-text{font-size:14px}
+  .lesson-hero{padding:28px 14px;border-radius:16px}
+  .lesson-hero-thai{font-size:clamp(28px,8vw,48px)}
+  .lesson-hero-sub{font-size:14px}
+  .lesson-facts{gap:12px}
+  .lf-n{font-size:24px}
+  .lf-l{font-size:11px}
+  .lesson-card{padding:20px 14px;border-radius:16px}
+  .lcard-header{gap:10px;margin-bottom:14px}
+  .lcard-title{font-size:16px}
+  .lesson-text{font-size:15px;line-height:1.8}
+  .lesson-hl{font-size:13px;padding:12px 14px}
+  .tip-box{flex-direction:column;gap:6px;padding:12px 14px}
+  .tip-text{font-size:13px}
+  .ex-row{flex-wrap:wrap;gap:6px;padding:8px 12px}
+  .ex-thai{font-size:20px;min-width:auto}
+  .ex-rtgs{min-width:0;font-size:12px}
+  .ex-meaning{font-size:12px;width:100%}
+  .thai-sign-text{font-size:28px}
+  .vpos-ex{font-size:36px}
 
   /* SYLLAB */
   .syllab-demo{gap:10px}
@@ -434,6 +452,11 @@ footer{border-top:1px solid var(--border);padding:40px 24px;text-align:center;co
   .qrtgs{font-size:26px}
   .qopt{min-height:78px;font-size:18px}
   .qopt.qopt-thai{font-size:30px}
+  .qtype-btn{font-size:11px;padding:8px 10px}
+  .lesson-hero-thai{font-size:clamp(24px,7vw,40px)}
+  .lesson-facts{gap:8px}
+  .lf-n{font-size:20px}
+  .lcard-title{font-size:15px}
 }
 
 /* ─── LEÇON ─────────────────────────────────────────────────────────────── */
