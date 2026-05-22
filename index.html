@@ -1152,7 +1152,7 @@ footer{border-top:1px solid var(--border);padding:40px 24px;text-align:center;co
           <button class="qmode" id="cntBtnWrite" onclick="setCntMode('write',this)">✍️ Traduction</button>
         </div>
         <p class="cntq-mode-desc" id="cntModeDesc">Écoutez le nombre thaï et choisissez parmi 3 réponses.</p>
-        <button class="btn-g" style="display:block;margin:0 auto" onclick="startCntQuiz()">Commencer</button>
+        <button class="btn-g" id="cntStartBtn" style="display:block;margin:0 auto" onclick="startCntQuiz()">Commencer</button>
       </div>
 
       <div class="quiz-card" id="cntQGame" style="display:none">
@@ -1160,7 +1160,7 @@ footer{border-top:1px solid var(--border);padding:40px 24px;text-align:center;co
         <div id="cntQListen">
           <button class="qplay" style="margin:0 auto 24px" onclick="playCntAudio(cntQState.questions[cntQState.idx].thai)">
             <span class="qplay-icon">🔊</span>
-            <span class="qplay-label">Réécouter</span>
+            <span class="qplay-label" id="cntReplayLbl">Réécouter</span>
           </button>
           <div class="qopts" id="cntQOpts" style="grid-template-columns:repeat(3,1fr)"></div>
         </div>
@@ -1171,7 +1171,7 @@ footer{border-top:1px solid var(--border);padding:40px 24px;text-align:center;co
           </div>
           <div class="cntq-input-row">
             <input class="cntq-input" type="number" id="cntQInput" min="1" max="50" placeholder="?" onkeydown="if(event.key==='Enter')answerCntWrite()">
-            <button class="btn-g" onclick="answerCntWrite()">Valider</button>
+            <button class="btn-g" id="cntValidateBtn" onclick="answerCntWrite()">Valider</button>
           </div>
         </div>
         <div class="cntq-feedback" id="cntQFeedback"></div>
@@ -1184,20 +1184,20 @@ footer{border-top:1px solid var(--border);padding:40px 24px;text-align:center;co
           <div class="qsi ok"><div class="qsv" id="cntQScoreVal">0</div><div class="qsl">/ 10</div></div>
         </div>
         <div id="cntQScoreMsg" style="font-size:16px;font-weight:700;margin-bottom:28px;color:var(--text2)"></div>
-        <button class="btn-g" onclick="restartCntQuiz()">Rejouer</button>
+        <button class="btn-g" id="cntRestartBtn" onclick="restartCntQuiz()">Rejouer</button>
       </div>
     </div><!-- /cntQuizWrap -->
 
     <!-- QUIZ VOYELLES -->
     <div id="vowQuizWrap" style="display:none">
       <div class="quiz-card" id="vowQStart">
-        <h2 class="quiz-start" style="font-size:26px;font-weight:800;margin-bottom:10px">Quiz Voyelles</h2>
-        <p style="color:var(--text2);font-size:14px;margin-bottom:24px;text-align:center">10 questions sur les 18 voyelles thaïes.</p>
+        <h2 id="vowQTitle" style="font-size:26px;font-weight:800;margin-bottom:10px;text-align:center">Quiz Voyelles</h2>
+        <p id="vowQDesc" style="color:var(--text2);font-size:14px;margin-bottom:24px;text-align:center">10 questions sur les 18 voyelles thaïes.</p>
         <div class="qmodes">
           <button class="qmode active" id="vowBtnC2S" onclick="setVowMode('c2s',this)">เ → son &nbsp; Caractère → Son</button>
           <button class="qmode" id="vowBtnS2C" onclick="setVowMode('s2c',this)">son → เ &nbsp; Son → Caractère</button>
         </div>
-        <button class="btn-g" style="display:block;margin:16px auto 0" onclick="startVowQuiz()">Commencer</button>
+        <button class="btn-g" id="vowStartBtn" style="display:block;margin:16px auto 0" onclick="startVowQuiz()">Commencer</button>
       </div>
       <div class="quiz-card" id="vowQGame" style="display:none">
         <div class="qnum" id="vowQNum">Question 1 / 10</div>
@@ -1212,20 +1212,20 @@ footer{border-top:1px solid var(--border);padding:40px 24px;text-align:center;co
           <div class="qsi ok"><div class="qsv" id="vowQScoreVal">0</div><div class="qsl">/ 10</div></div>
         </div>
         <div id="vowQScoreMsg" style="font-size:16px;font-weight:700;margin-bottom:28px;color:var(--text2)"></div>
-        <button class="btn-g" onclick="restartVowQuiz()">Rejouer</button>
+        <button class="btn-g" id="vowRestartBtn" onclick="restartVowQuiz()">Rejouer</button>
       </div>
     </div><!-- /vowQuizWrap -->
 
     <!-- QUIZ TONS -->
     <div id="toneQuizWrap" style="display:none">
       <div class="quiz-card" id="toneQStart">
-        <h2 style="font-size:26px;font-weight:800;margin-bottom:10px;text-align:center">Quiz Tons</h2>
-        <p style="color:var(--text2);font-size:14px;margin-bottom:24px;text-align:center">10 questions sur les 5 tons thaïs.</p>
+        <h2 id="toneQTitle" style="font-size:26px;font-weight:800;margin-bottom:10px;text-align:center">Quiz Tons</h2>
+        <p id="toneQDesc" style="color:var(--text2);font-size:14px;margin-bottom:24px;text-align:center">10 questions sur les 5 tons thaïs.</p>
         <div class="qmodes">
           <button class="qmode active" id="toneBtnM2N" onclick="setToneMode('m2n',this)">ก่า → nom &nbsp; Marque → Ton</button>
           <button class="qmode" id="toneBtnN2M" onclick="setToneMode('n2m',this)">nom → ก่า &nbsp; Ton → Marque</button>
         </div>
-        <button class="btn-g" style="display:block;margin:16px auto 0" onclick="startToneQuiz()">Commencer</button>
+        <button class="btn-g" id="toneStartBtn" style="display:block;margin:16px auto 0" onclick="startToneQuiz()">Commencer</button>
       </div>
       <div class="quiz-card" id="toneQGame" style="display:none">
         <div class="qnum" id="toneQNum">Question 1 / 10</div>
@@ -1240,7 +1240,7 @@ footer{border-top:1px solid var(--border);padding:40px 24px;text-align:center;co
           <div class="qsi ok"><div class="qsv" id="toneQScoreVal">0</div><div class="qsl">/ 10</div></div>
         </div>
         <div id="toneQScoreMsg" style="font-size:16px;font-weight:700;margin-bottom:28px;color:var(--text2)"></div>
-        <button class="btn-g" onclick="restartToneQuiz()">Rejouer</button>
+        <button class="btn-g" id="toneRestartBtn" onclick="restartToneQuiz()">Rejouer</button>
       </div>
     </div><!-- /toneQuizWrap -->
 
@@ -1694,6 +1694,7 @@ footer{border-top:1px solid var(--border);padding:40px 24px;text-align:center;co
     <div class="ph-view-sw">
       <button class="ph-view-btn active" id="phViewPh" onclick="setPhView('phrases',this)">📋 Phrases de base</button>
       <button class="ph-view-btn" id="phViewSit" onclick="setPhView('situations',this)">🎭 Situations pratiques</button>
+
     </div>
 
     <!-- Phrases de base -->
@@ -1712,9 +1713,9 @@ footer{border-top:1px solid var(--border);padding:40px 24px;text-align:center;co
     <!-- Situations pratiques -->
     <div id="sitWrap" style="display:none">
       <div class="sec-hd">
-        <div class="sec-tag">Conversations</div>
-        <div class="sec-title">Situations pratiques</div>
-        <p class="sec-desc">Des dialogues complets pour les situations du quotidien en Thaïlande. Cliquez sur une situation pour dérouler le dialogue.</p>
+        <div class="sec-tag" id="sitSecTag">Conversations</div>
+        <div class="sec-title" id="sitSecTitle">Situations pratiques</div>
+        <p class="sec-desc" id="sitSecDesc">Des dialogues complets pour les situations du quotidien en Thaïlande. Cliquez sur une situation pour dérouler le dialogue.</p>
       </div>
       <div class="sit-grid" id="sitGrid"></div>
     </div>
@@ -1959,7 +1960,7 @@ const FREE_PH_QUIZ_LIMIT = 20;
 
 const T = {
   fr: {
-    navHome:'Accueil', navLesson:'Leçon', navPhrases:'Phrases', navConsonants:'Consonnes',
+    navHome:'Accueil', navLesson:'Leçon', navPhrases:'Phrases', navVocab:'Vocabulaire', navConsonants:'Consonnes',
     navVowels:'Voyelles', navTones:'Tons', navQuiz:'Quiz',
     navLogin:'Connexion', navLogout:'Déconnexion',
     fontModern:'Moderne', fontTrad:'Traditionnel',
@@ -2007,7 +2008,19 @@ const T = {
     phField:'fr',
     footerTxt:"Merci d'apprendre le thaï —", footerQ:'« Plus on apprend, plus on sait »',
     mobHome:'Accueil', mobLesson:'Leçon', mobPhrases:'Phrases',
-    mobAlpha:'Alphabet', mobVowels:'Voyelles', mobQuiz:'Quiz',
+    mobVocab:'Vocab', mobAlpha:'Alphabet', mobVowels:'Voyelles', mobQuiz:'Quiz',
+    quizTypeCnt:'🔢 Chiffres', quizTypeVow:'เ Voyelles', quizTypeTone:'ก่ Tons',
+    phViewPhrases:'📋 Phrases de base', phViewSit:'🎭 Situations pratiques',
+    sitTag:'Conversations', sitTitle:'Situations pratiques',
+    sitDesc:'Des dialogues complets pour les situations du quotidien en Thaïlande. Cliquez sur une situation pour dérouler le dialogue.',
+    cntBtnListenLbl:'🎧 Écoute', cntBtnWriteLbl:'✍️ Traduction',
+    cntModeDescListen:'Écoutez le nombre thaï et choisissez parmi 3 réponses.',
+    cntModeDescWrite:'Voyez le nombre en thaï et tapez le chiffre correspondant.',
+    qStart:'Commencer', qNext:'Question suivante →', qReplay:'Rejouer', qValidate:'Valider', qReplaySound:'Réécouter',
+    vowQTitleLbl:'Quiz Voyelles', vowQDescLbl:'10 questions sur les 18 voyelles thaïes.',
+    vowBtnC2SLbl:'เ → son   Caractère → Son', vowBtnS2CLbl:'son → เ   Son → Caractère',
+    toneQTitleLbl:'Quiz Tons', toneQDescLbl:'10 questions sur les 5 tons thaïs.',
+    toneBtnM2NLbl:'ก่า → nom   Marque → Ton', toneBtnN2MLbl:'nom → ก่า   Ton → Marque',
     authWelcome:'Bienvenue', authBack:'Bon retour !', authCreate:'Créer un compte',
     authTabLogin:'Connexion', authTabReg:'Inscription',
     authLblEmail:'Email', authLblPw:'Mot de passe', authLblConfirm:'Confirmer le mot de passe',
@@ -2050,7 +2063,7 @@ const T = {
     nlErrServer:'Erreur réseau. Réessayez.'
   },
   en: {
-    navHome:'Home', navLesson:'Lesson', navPhrases:'Phrases', navConsonants:'Consonants',
+    navHome:'Home', navLesson:'Lesson', navPhrases:'Phrases', navVocab:'Vocabulary', navConsonants:'Consonants',
     navVowels:'Vowels', navTones:'Tones', navQuiz:'Quiz',
     navLogin:'Log in', navLogout:'Log out',
     fontModern:'Modern', fontTrad:'Traditional',
@@ -2098,7 +2111,19 @@ const T = {
     phField:'en',
     footerTxt:'Thank you for learning Thai —', footerQ:'"The more you learn, the more you know"',
     mobHome:'Home', mobLesson:'Lesson', mobPhrases:'Phrases',
-    mobAlpha:'Alphabet', mobVowels:'Vowels', mobQuiz:'Quiz',
+    mobVocab:'Vocab', mobAlpha:'Alphabet', mobVowels:'Vowels', mobQuiz:'Quiz',
+    quizTypeCnt:'🔢 Numbers', quizTypeVow:'เ Vowels', quizTypeTone:'ก่ Tones',
+    phViewPhrases:'📋 Basic Phrases', phViewSit:'🎭 Real Situations',
+    sitTag:'Conversations', sitTitle:'Real-life situations',
+    sitDesc:'Complete dialogues for everyday situations in Thailand. Click a card to expand the dialogue.',
+    cntBtnListenLbl:'🎧 Listen', cntBtnWriteLbl:'✍️ Translation',
+    cntModeDescListen:'Listen to the Thai number and choose from 3 answers.',
+    cntModeDescWrite:'See the number in Thai and type the matching digit.',
+    qStart:'Start', qNext:'Next question →', qReplay:'Play again', qValidate:'Submit', qReplaySound:'Replay',
+    vowQTitleLbl:'Vowels Quiz', vowQDescLbl:'10 questions on the 18 Thai vowels.',
+    vowBtnC2SLbl:'เ → sound   Character → Sound', vowBtnS2CLbl:'sound → เ   Sound → Character',
+    toneQTitleLbl:'Tones Quiz', toneQDescLbl:'10 questions on the 5 Thai tones.',
+    toneBtnM2NLbl:'ก่า → name   Mark → Tone', toneBtnN2MLbl:'name → ก่า   Tone → Mark',
     authWelcome:'Welcome', authBack:'Welcome back!', authCreate:'Create an account',
     authTabLogin:'Log In', authTabReg:'Sign Up',
     authLblEmail:'Email', authLblPw:'Password', authLblConfirm:'Confirm password',
@@ -2154,7 +2179,9 @@ function setLang(lang) {
   renderVowels();
   renderTones();
   renderPhrases();
+  renderVocab();
   updateProgress();
+  if(document.getElementById('sitWrap').style.display !== 'none') renderSituations();
 }
 
 function applyLang() {
@@ -2164,7 +2191,7 @@ function applyLang() {
   const p = (id, ph) => { const el=document.getElementById(id); if(el) el.placeholder=ph; };
   // Nav
   s('ntab-home', t.navHome); s('ntab-lesson', t.navLesson); s('ntab-phrases', t.navPhrases);
-  s('ntab-consonnes', t.navConsonants); s('ntab-voyelles', t.navVowels);
+  s('ntab-vocab', t.navVocab); s('ntab-consonnes', t.navConsonants); s('ntab-voyelles', t.navVowels);
   s('ntab-tons', t.navTones); s('ntab-quiz', t.navQuiz);
   s('loginBtn', t.navLogin); s('logoutBtn', t.navLogout);
   // Font button
@@ -2203,7 +2230,7 @@ function applyLang() {
   s('footerTxt', t.footerTxt); s('footerQuote', t.footerQ);
   // Mobile nav
   s('mtab-home', t.mobHome); s('mtab-lesson', t.mobLesson); s('mtab-phrases', t.mobPhrases);
-  s('mtab-alpha', t.mobAlpha); s('mtab-vowels', t.mobVowels); s('mtab-quiz', t.mobQuiz);
+  s('mtab-vocab', t.mobVocab); s('mtab-alpha', t.mobAlpha); s('mtab-vowels', t.mobVowels); s('mtab-quiz', t.mobQuiz);
   // Auth modal
   s('authTabLogin', t.authTabLogin); s('authTabReg', t.authTabReg);
   s('authLblEmail1', t.authLblEmail); s('authLblEmail2', t.authLblEmail);
@@ -2219,6 +2246,22 @@ function applyLang() {
   p('nlEmail', currentLang==='en' ? 'your@email.com' : 'votre@email.com');
   // Phrases quiz
   s('qtype-cons', t.quizTypeCons); s('qtype-phrases', t.quizTypePhrases);
+  s('qtype-cnt', t.quizTypeCnt); s('qtype-vow', t.quizTypeVow); s('qtype-tone', t.quizTypeTone);
+  s('phViewPh', t.phViewPhrases); s('phViewSit', t.phViewSit);
+  s('sitSecTag', t.sitTag); s('sitSecTitle', t.sitTitle); s('sitSecDesc', t.sitDesc);
+  // Quiz Chiffres
+  s('cntBtnListen', t.cntBtnListenLbl); s('cntBtnWrite', t.cntBtnWriteLbl);
+  s('cntModeDesc', cntQState&&cntQState.mode==='write' ? t.cntModeDescWrite : t.cntModeDescListen);
+  s('cntStartBtn', t.qStart); s('cntReplayLbl', t.qReplaySound);
+  s('cntValidateBtn', t.qValidate); s('cntQNext', t.qNext); s('cntRestartBtn', t.qReplay);
+  // Quiz Voyelles
+  s('vowQTitle', t.vowQTitleLbl); s('vowQDesc', t.vowQDescLbl);
+  s('vowBtnC2S', t.vowBtnC2SLbl); s('vowBtnS2C', t.vowBtnS2CLbl);
+  s('vowStartBtn', t.qStart); s('vowQNext', t.qNext); s('vowRestartBtn', t.qReplay);
+  // Quiz Tons
+  s('toneQTitle', t.toneQTitleLbl); s('toneQDesc', t.toneQDescLbl);
+  s('toneBtnM2N', t.toneBtnM2NLbl); s('toneBtnN2M', t.toneBtnN2MLbl);
+  s('toneStartBtn', t.qStart); s('toneQNext', t.qNext); s('toneRestartBtn', t.qReplay);
   s('phQuizTitle', t.phQuizTitle); s('phQuizDesc', t.phQuizDesc);
   s('phmode1', t.phQuizM1); s('phmode2', t.phQuizM2);
   s('phCatLockText', t.phCatLockText);
@@ -3056,8 +3099,8 @@ function setCntMode(mode,btn){
   document.querySelectorAll('#cntQStart .qmode').forEach(b=>b.classList.remove('active'));
   if(btn) btn.classList.add('active');
   document.getElementById('cntModeDesc').textContent = mode==='listen'
-    ? 'Écoutez le nombre thaï et choisissez parmi 3 réponses.'
-    : 'Lisez le mot thaï avec sa prononciation en or et tapez le nombre correspondant.';
+    ? T[currentLang].cntModeDescListen
+    : T[currentLang].cntModeDescWrite;
 }
 
 function startCntQuiz(){
