@@ -46,6 +46,22 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-h
 .font-btn-tag{font-family:'Inter',sans-serif;font-size:10px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;padding:2px 6px;border-radius:4px;background:rgba(240,180,41,.15);color:var(--gold)}
 .nav-right{display:flex;align-items:center;gap:10px}
 
+/* ─── MON PROGRÈS ────────────────────────────────────────────────────────── */
+.myprog-wrap{max-width:1100px;margin:60px auto 0;padding:0 24px}
+.myprog-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-top:24px}
+.mpcard{background:var(--bg3);border:1px solid var(--border);border-radius:var(--r);padding:24px 20px;text-align:center;transition:all .3s}
+.mpcard:hover{border-color:var(--border-h);transform:translateY(-2px)}
+.mpcard-icon{font-size:28px;margin-bottom:8px}
+.mpcard-val{font-size:38px;font-weight:800;letter-spacing:-2px;margin-bottom:4px;line-height:1}
+.mpcard-lbl{font-size:12px;color:var(--text2);font-weight:500;margin-top:4px}
+.mpcard-bar{height:4px;background:rgba(255,255,255,.06);border-radius:2px;margin-top:12px;overflow:hidden}
+.mpcard-fill{height:100%;border-radius:2px;transition:width .7s ease}
+.mpcard.streak .mpcard-val{color:var(--gold)}
+.mpcard.cons   .mpcard-val{color:var(--teal)}
+.mpcard.quizc  .mpcard-val{color:var(--blue)}
+.mpcard.best   .mpcard-val{color:var(--rose)}
+@media(max-width:768px){.myprog-grid{grid-template-columns:repeat(2,1fr)}}
+
 /* NEWSLETTER */
 .newsletter-wrap{margin-top:40px;display:flex;flex-direction:column;align-items:center;gap:10px}
 .newsletter-label{font-size:12px;color:var(--text3);letter-spacing:.5px;text-transform:uppercase;font-weight:600}
@@ -524,6 +540,32 @@ footer{border-top:1px solid var(--border);padding:40px 24px;text-align:center;co
 .path-title{font-size:14px;font-weight:700;margin-bottom:3px}
 .path-desc{font-size:12px;color:var(--text2)}
 
+/* ─── VOCABULAIRE THÉMATIQUE ────────────────────────────────────────────────── */
+.vocab-wrap{max-width:1100px;margin:0 auto;padding:80px 24px 60px}
+.vcats{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;margin-bottom:20px}
+.vcbtn{padding:9px 16px;border-radius:8px;border:1px solid var(--border);background:transparent;color:var(--text2);font-family:'Inter',sans-serif;font-size:13px;font-weight:500;cursor:pointer;transition:all .2s;white-space:nowrap}
+.vcbtn:hover{border-color:var(--border-h);color:var(--text)}
+.vcbtn.active{border-color:var(--gold);color:var(--gold);background:rgba(240,180,41,.1)}
+.vsrch{width:100%;max-width:440px;display:block;margin:0 auto 12px;padding:10px 18px;background:var(--bg3);border:1px solid var(--border);border-radius:10px;color:var(--text);font-family:'Inter',sans-serif;font-size:16px;outline:none;transition:border-color .2s}
+.vsrch::placeholder{color:var(--text3)}
+.vsrch:focus{border-color:var(--gold)}
+.vcount{font-size:13px;color:var(--text3);text-align:center;margin-bottom:20px}
+.vocab-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.vcard{background:var(--bg3);border:1px solid var(--border);border-radius:14px;padding:16px 18px;display:flex;align-items:center;gap:14px;transition:all .2s}
+.vcard:hover{border-color:var(--border-h);transform:translateY(-1px)}
+.vcard-emoji{font-size:26px;flex-shrink:0;width:36px;text-align:center}
+.vcard-dot{display:inline-block;width:30px;height:30px;border-radius:50%;flex-shrink:0;border:2px solid rgba(255,255,255,.18);box-shadow:0 2px 8px rgba(0,0,0,.3)}
+.vcard-body{flex:1;min-width:0}
+.vcard-fr{font-size:13px;font-weight:600;color:var(--text2);display:block;margin-bottom:4px;text-transform:capitalize}
+.vcard-thai{font-family:var(--thai-font);font-size:26px;font-weight:600;display:block;color:var(--text);line-height:1.2;margin-bottom:2px}
+.vcard-rtgs{font-size:11px;color:var(--text3);font-style:italic}
+@media(max-width:768px){
+  .vocab-wrap{padding:24px 14px 60px}
+  .vocab-grid{grid-template-columns:1fr}
+  .vcard{padding:13px 14px}
+  .vcard-thai{font-size:22px}
+}
+
 /* ─── PHRASES DE BASE ──────────────────────────────────────────────────────── */
 .phrases-wrap{max-width:1100px;margin:0 auto;padding:80px 24px 60px}
 .pcats{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;margin-bottom:24px}
@@ -670,6 +712,7 @@ footer{border-top:1px solid var(--border);padding:40px 24px;text-align:center;co
     <button class="ntab active" id="ntab-home" onclick="goTab('home',this)">Accueil</button>
     <button class="ntab" id="ntab-lesson" onclick="goTab('lesson',this)">Leçon</button>
     <button class="ntab" id="ntab-phrases" onclick="goTab('phrases',this)">Phrases</button>
+    <button class="ntab" id="ntab-vocab" onclick="goTab('vocab',this)">Vocabulaire</button>
     <button class="ntab" id="ntab-consonnes" onclick="goTab('consonnes',this)">Consonnes</button>
     <button class="ntab" id="ntab-voyelles" onclick="goTab('voyelles',this)">Voyelles</button>
     <button class="ntab" id="ntab-tons" onclick="goTab('tons',this)">Tons</button>
@@ -735,6 +778,38 @@ footer{border-top:1px solid var(--border);padding:40px 24px;text-align:center;co
       <div class="scard"><div class="scard-icon">🎵</div><div class="scard-n">5</div><div class="scard-l" id="statL2">Tons</div></div>
       <div class="scard"><div class="scard-icon">🔡</div><div class="scard-n">28</div><div class="scard-l" id="statL3">Formes de voyelles</div></div>
       <div class="scard"><div class="scard-icon">📚</div><div class="scard-n">3</div><div class="scard-l" id="statL4">Classes de consonnes</div></div>
+    </div>
+  </div>
+
+  <!-- MON PROGRÈS -->
+  <div class="myprog-wrap">
+    <div class="sec-hd" style="margin-bottom:0">
+      <div class="sec-tag">Statistiques personnelles</div>
+      <div class="sec-title">Mon Progrès</div>
+      <p class="sec-desc">Vos statistiques mises à jour à chaque session.</p>
+    </div>
+    <div class="myprog-grid">
+      <div class="mpcard streak">
+        <div class="mpcard-icon">🔥</div>
+        <div class="mpcard-val" id="mpStreak">0</div>
+        <div class="mpcard-lbl">Jour(s) de suite</div>
+      </div>
+      <div class="mpcard cons">
+        <div class="mpcard-icon">ก</div>
+        <div class="mpcard-val" id="mpCons">0/44</div>
+        <div class="mpcard-lbl">Consonnes apprises</div>
+        <div class="mpcard-bar"><div class="mpcard-fill" id="mpConsBar" style="background:var(--teal);width:0%"></div></div>
+      </div>
+      <div class="mpcard quizc">
+        <div class="mpcard-icon">🎯</div>
+        <div class="mpcard-val" id="mpQuizC">0</div>
+        <div class="mpcard-lbl">Quiz complétés</div>
+      </div>
+      <div class="mpcard best">
+        <div class="mpcard-icon">⭐</div>
+        <div class="mpcard-val" id="mpBest">—</div>
+        <div class="mpcard-lbl">Meilleur score</div>
+      </div>
     </div>
   </div>
 
@@ -904,6 +979,8 @@ footer{border-top:1px solid var(--border);padding:40px 24px;text-align:center;co
       <button class="qtype-btn active" id="qtype-cons" onclick="setQuizType('cons',this)">ก Consonnes</button>
       <button class="qtype-btn" id="qtype-phrases" onclick="setQuizType('phrases',this)">💬 Phrases</button>
       <button class="qtype-btn" id="qtype-cnt" onclick="setQuizType('cnt',this)">🔢 Chiffres</button>
+      <button class="qtype-btn" id="qtype-vow" onclick="setQuizType('vow',this)">เ Voyelles</button>
+      <button class="qtype-btn" id="qtype-tone" onclick="setQuizType('tone',this)">ก่ Tons</button>
     </div>
 
     <!-- CONSONANTS QUIZ (existing) -->
@@ -1045,6 +1122,62 @@ footer{border-top:1px solid var(--border);padding:40px 24px;text-align:center;co
         <button class="btn-g" onclick="restartCntQuiz()">Rejouer</button>
       </div>
     </div><!-- /cntQuizWrap -->
+
+    <!-- QUIZ VOYELLES -->
+    <div id="vowQuizWrap" style="display:none">
+      <div class="quiz-card" id="vowQStart">
+        <h2 class="quiz-start" style="font-size:26px;font-weight:800;margin-bottom:10px">Quiz Voyelles</h2>
+        <p style="color:var(--text2);font-size:14px;margin-bottom:24px;text-align:center">10 questions sur les 18 voyelles thaïes.</p>
+        <div class="qmodes">
+          <button class="qmode active" id="vowBtnC2S" onclick="setVowMode('c2s',this)">เ → son &nbsp; Caractère → Son</button>
+          <button class="qmode" id="vowBtnS2C" onclick="setVowMode('s2c',this)">son → เ &nbsp; Son → Caractère</button>
+        </div>
+        <button class="btn-g" style="display:block;margin:16px auto 0" onclick="startVowQuiz()">Commencer</button>
+      </div>
+      <div class="quiz-card" id="vowQGame" style="display:none">
+        <div class="qnum" id="vowQNum">Question 1 / 10</div>
+        <div id="vowQQuestion" style="text-align:center;margin-bottom:24px"></div>
+        <div class="qopts" id="vowQOpts" style="grid-template-columns:repeat(3,1fr)"></div>
+        <div class="cntq-feedback" id="vowQFeedback"></div>
+        <button class="btn-g" id="vowQNext" style="display:none;margin:20px auto 0" onclick="nextVowQ()">Question suivante →</button>
+      </div>
+      <div class="quiz-card" id="vowQScore" style="display:none;text-align:center;padding:48px 32px">
+        <div style="font-size:52px;margin-bottom:16px">🏆</div>
+        <div class="qscore" style="margin-bottom:12px">
+          <div class="qsi ok"><div class="qsv" id="vowQScoreVal">0</div><div class="qsl">/ 10</div></div>
+        </div>
+        <div id="vowQScoreMsg" style="font-size:16px;font-weight:700;margin-bottom:28px;color:var(--text2)"></div>
+        <button class="btn-g" onclick="restartVowQuiz()">Rejouer</button>
+      </div>
+    </div><!-- /vowQuizWrap -->
+
+    <!-- QUIZ TONS -->
+    <div id="toneQuizWrap" style="display:none">
+      <div class="quiz-card" id="toneQStart">
+        <h2 style="font-size:26px;font-weight:800;margin-bottom:10px;text-align:center">Quiz Tons</h2>
+        <p style="color:var(--text2);font-size:14px;margin-bottom:24px;text-align:center">10 questions sur les 5 tons thaïs.</p>
+        <div class="qmodes">
+          <button class="qmode active" id="toneBtnM2N" onclick="setToneMode('m2n',this)">ก่า → nom &nbsp; Marque → Ton</button>
+          <button class="qmode" id="toneBtnN2M" onclick="setToneMode('n2m',this)">nom → ก่า &nbsp; Ton → Marque</button>
+        </div>
+        <button class="btn-g" style="display:block;margin:16px auto 0" onclick="startToneQuiz()">Commencer</button>
+      </div>
+      <div class="quiz-card" id="toneQGame" style="display:none">
+        <div class="qnum" id="toneQNum">Question 1 / 10</div>
+        <div id="toneQQuestion" style="text-align:center;margin-bottom:24px"></div>
+        <div class="qopts" id="toneQOpts" style="grid-template-columns:repeat(3,1fr)"></div>
+        <div class="cntq-feedback" id="toneQFeedback"></div>
+        <button class="btn-g" id="toneQNext" style="display:none;margin:20px auto 0" onclick="nextToneQ()">Question suivante →</button>
+      </div>
+      <div class="quiz-card" id="toneQScore" style="display:none;text-align:center;padding:48px 32px">
+        <div style="font-size:52px;margin-bottom:16px">🏆</div>
+        <div class="qscore" style="margin-bottom:12px">
+          <div class="qsi ok"><div class="qsv" id="toneQScoreVal">0</div><div class="qsl">/ 10</div></div>
+        </div>
+        <div id="toneQScoreMsg" style="font-size:16px;font-weight:700;margin-bottom:28px;color:var(--text2)"></div>
+        <button class="btn-g" onclick="restartToneQuiz()">Rejouer</button>
+      </div>
+    </div><!-- /toneQuizWrap -->
 
   </div>
 </div>
@@ -1473,6 +1606,21 @@ footer{border-top:1px solid var(--border);padding:40px 24px;text-align:center;co
   </div>
 </div></div>
 
+<!-- VOCABULAIRE TAB -->
+<div id="tab-vocab" class="tab-content">
+  <div class="vocab-wrap">
+    <div class="sec-hd">
+      <div class="sec-tag">Vocabulaire</div>
+      <div class="sec-title">Mots essentiels par thème</div>
+      <p class="sec-desc">Cliquez sur 🔊 pour écouter la prononciation. Apprenez les mots du quotidien !</p>
+    </div>
+    <div class="vcats" id="vcatBtns"></div>
+    <input class="vsrch" type="text" id="vsrchInput" placeholder="Chercher un mot…" oninput="renderVocab()">
+    <div class="vcount" id="vcount"></div>
+    <div class="vocab-grid" id="vocabGrid"></div>
+  </div>
+</div>
+
 <!-- PHRASES TAB -->
 <div id="tab-phrases" class="tab-content">
   <div class="phrases-wrap">
@@ -1498,6 +1646,7 @@ footer{border-top:1px solid var(--border);padding:40px 24px;text-align:center;co
   <button class="mtab active" onclick="goTab('home',this)"><span class="mtab-icon">🏠</span><span id="mtab-home">Accueil</span></button>
   <button class="mtab" onclick="goTab('lesson',this)"><span class="mtab-icon">📖</span><span id="mtab-lesson">Leçon</span></button>
   <button class="mtab" onclick="goTab('phrases',this)"><span class="mtab-icon">💬</span><span id="mtab-phrases">Phrases</span></button>
+  <button class="mtab" onclick="goTab('vocab',this)"><span class="mtab-icon">📚</span><span id="mtab-vocab">Vocab</span></button>
   <button class="mtab" onclick="goTab('consonnes',this)"><span class="mtab-icon">🔤</span><span id="mtab-alpha">Alphabet</span></button>
   <button class="mtab" onclick="goTab('voyelles',this)"><span class="mtab-icon">🔡</span><span id="mtab-vowels">Voyelles</span></button>
   <button class="mtab" onclick="goTab('quiz',this)"><span class="mtab-icon">🎯</span><span id="mtab-quiz">Quiz</span></button>
@@ -2022,14 +2171,167 @@ function goTab(tab, btnEl) {
   document.querySelectorAll('.mtab').forEach(b=>b.classList.remove('active'));
   if(btnEl) btnEl.classList.add('active');
   // sync both navs
-  const didx = {home:0,lesson:1,phrases:2,consonnes:3,voyelles:4,tons:5,quiz:6}[tab];
-  const midx = {home:0,lesson:1,phrases:2,consonnes:3,voyelles:4,quiz:5}[tab];
+  const didx = {home:0,lesson:1,phrases:2,vocab:3,consonnes:4,voyelles:5,tons:6,quiz:7}[tab];
+  const midx = {home:0,lesson:1,phrases:2,vocab:3,consonnes:4,voyelles:5,quiz:6}[tab];
   const ntabs = document.querySelectorAll('.ntab');
   const mtabs = document.querySelectorAll('.mtab');
   if(ntabs[didx]!=null) ntabs[didx].classList.add('active');
   if(mtabs[midx]!=null) mtabs[midx].classList.add('active');
   window.scrollTo(0,0);
   if(tab==='quiz' && !quizQ) resetQuizUI();
+}
+
+// ─── STATISTIQUES ───────────────────────────────────────────────────────────
+function initStats(){
+  // Streak
+  const today=new Date().toDateString();
+  const yesterday=new Date(Date.now()-86400000).toDateString();
+  const last=localStorage.getItem('thai-last-visit');
+  let streak=parseInt(localStorage.getItem('thai-streak')||'0');
+  let visits=parseInt(localStorage.getItem('thai-visits')||'0');
+  if(last===today){
+    // Même jour, rien ne change
+  } else {
+    visits++;
+    streak = last===yesterday ? streak+1 : 1;
+    localStorage.setItem('thai-streak', streak);
+    localStorage.setItem('thai-visits', visits);
+    localStorage.setItem('thai-last-visit', today);
+  }
+  // Consonnes
+  const learnedN=learned.size;
+  const pct=Math.round(learnedN/44*100);
+  document.getElementById('mpStreak').textContent=streak;
+  document.getElementById('mpCons').textContent=learnedN+'/44';
+  document.getElementById('mpConsBar').style.width=pct+'%';
+  // Quiz
+  const qTotal=parseInt(localStorage.getItem('thai-quiz-total')||'0');
+  const qBest=localStorage.getItem('thai-quiz-best');
+  document.getElementById('mpQuizC').textContent=qTotal;
+  document.getElementById('mpBest').textContent=qBest?qBest+'/10':'—';
+}
+
+function saveQuizResult(score){
+  const total=parseInt(localStorage.getItem('thai-quiz-total')||'0')+1;
+  const prev=parseInt(localStorage.getItem('thai-quiz-best')||'0');
+  localStorage.setItem('thai-quiz-total', total);
+  if(score>prev) localStorage.setItem('thai-quiz-best', score);
+  // Rafraîchir l'affichage
+  const mq=document.getElementById('mpQuizC');
+  const mb=document.getElementById('mpBest');
+  if(mq) mq.textContent=total;
+  if(mb) mb.textContent=Math.max(score,prev)+'/10';
+  // Sauvegarder dans le cloud si connecté
+  saveStatsToCloud();
+}
+
+// ─── VOCABULAIRE ────────────────────────────────────────────────────────────
+const vocabData = [
+  // Couleurs — pastille colorée
+  {cat:'Couleurs',color:'#e53e3e',fr:'Rouge',      thai:'แดง',           rtgs:'daeng'},
+  {cat:'Couleurs',color:'#3182ce',fr:'Bleu',        thai:'น้ำเงิน',       rtgs:'nám ngoen'},
+  {cat:'Couleurs',color:'#38a169',fr:'Vert',         thai:'เขียว',         rtgs:'khǐao'},
+  {cat:'Couleurs',color:'#d69e2e',fr:'Jaune',        thai:'เหลือง',        rtgs:'lǔeang'},
+  {cat:'Couleurs',color:'#f7f7f7',fr:'Blanc',        thai:'ขาว',           rtgs:'khǎo'},
+  {cat:'Couleurs',color:'#1a202c',fr:'Noir',         thai:'ดำ',            rtgs:'dam'},
+  {cat:'Couleurs',color:'#ed64a6',fr:'Rose',         thai:'ชมพู',          rtgs:'chom-phuu'},
+  {cat:'Couleurs',color:'#dd6b20',fr:'Orange',       thai:'ส้ม',           rtgs:'sôm'},
+  {cat:'Couleurs',color:'#805ad5',fr:'Violet',       thai:'ม่วง',          rtgs:'mûang'},
+  {cat:'Couleurs',color:'#718096',fr:'Gris',         thai:'เทา',           rtgs:'thao'},
+  // Famille
+  {cat:'Famille',emoji:'👨',  fr:'Père',        thai:'พ่อ',        rtgs:'phô'},
+  {cat:'Famille',emoji:'👩',  fr:'Mère',        thai:'แม่',        rtgs:'mâe'},
+  {cat:'Famille',emoji:'👴',  fr:'Grand-père',  thai:'ปู่',        rtgs:'pùu'},
+  {cat:'Famille',emoji:'👵',  fr:'Grand-mère',  thai:'ย่า',        rtgs:'yâa'},
+  {cat:'Famille',emoji:'👦',  fr:'Frère aîné',  thai:'พี่ชาย',    rtgs:'phîi chaai'},
+  {cat:'Famille',emoji:'👧',  fr:'Sœur aînée',  thai:'พี่สาว',    rtgs:'phîi sǎo'},
+  {cat:'Famille',emoji:'👦',  fr:'Petit frère', thai:'น้องชาย',   rtgs:'nóng chaai'},
+  {cat:'Famille',emoji:'👧',  fr:'Petite sœur', thai:'น้องสาว',   rtgs:'nóng sǎo'},
+  {cat:'Famille',emoji:'🧒',  fr:'Enfant',      thai:'เด็ก',       rtgs:'dèk'},
+  {cat:'Famille',emoji:'🤝',  fr:'Ami(e)',       thai:'เพื่อน',    rtgs:'phûean'},
+  // Nourriture
+  {cat:'Nourriture',emoji:'🍚', fr:'Riz',         thai:'ข้าว',      rtgs:'khâo'},
+  {cat:'Nourriture',emoji:'💧', fr:'Eau',          thai:'น้ำ',       rtgs:'nám'},
+  {cat:'Nourriture',emoji:'🍗', fr:'Poulet',       thai:'ไก่',       rtgs:'kài'},
+  {cat:'Nourriture',emoji:'🐟', fr:'Poisson',      thai:'ปลา',       rtgs:'plaa'},
+  {cat:'Nourriture',emoji:'🥦', fr:'Légumes',      thai:'ผัก',       rtgs:'phàk'},
+  {cat:'Nourriture',emoji:'🍎', fr:'Fruits',       thai:'ผลไม้',     rtgs:'phǒn-la-máai'},
+  {cat:'Nourriture',emoji:'🍜', fr:'Pad Thai',     thai:'ผัดไทย',    rtgs:'phàt thai'},
+  {cat:'Nourriture',emoji:'🍳', fr:'Riz sauté',    thai:'ข้าวผัด',   rtgs:'khâo phàt'},
+  {cat:'Nourriture',emoji:'🥭', fr:'Mangue',       thai:'มะม่วง',    rtgs:'má-mûang'},
+  {cat:'Nourriture',emoji:'🌶️', fr:'Épicé',       thai:'เผ็ด',      rtgs:'phèt'},
+  {cat:'Nourriture',emoji:'🍯', fr:'Sucré',        thai:'หวาน',      rtgs:'wǎan'},
+  {cat:'Nourriture',emoji:'😋', fr:'Délicieux',    thai:'อร่อย',     rtgs:'a-ròi'},
+  // Corps
+  {cat:'Corps',emoji:'🗣️', fr:'Tête',     thai:'หัว',    rtgs:'hǔa'},
+  {cat:'Corps',emoji:'👀',  fr:'Yeux',     thai:'ตา',     rtgs:'taa'},
+  {cat:'Corps',emoji:'👃',  fr:'Nez',      thai:'จมูก',   rtgs:'ja-mùuk'},
+  {cat:'Corps',emoji:'👄',  fr:'Bouche',   thai:'ปาก',    rtgs:'pàak'},
+  {cat:'Corps',emoji:'👂',  fr:'Oreille',  thai:'หู',     rtgs:'hǔu'},
+  {cat:'Corps',emoji:'🖐️', fr:'Main',     thai:'มือ',    rtgs:'mue'},
+  {cat:'Corps',emoji:'🦶',  fr:'Pied',     thai:'เท้า',   rtgs:'tháo'},
+  {cat:'Corps',emoji:'💪',  fr:'Bras',     thai:'แขน',    rtgs:'khǎen'},
+  {cat:'Corps',emoji:'🦵',  fr:'Jambe',    thai:'ขา',     rtgs:'khǎa'},
+  {cat:'Corps',emoji:'🔙',  fr:'Dos',      thai:'หลัง',   rtgs:'lǎng'},
+  // Transports
+  {cat:'Transports',emoji:'🚕', fr:'Taxi',        thai:'แท็กซี่',      rtgs:'tháek-sîi'},
+  {cat:'Transports',emoji:'🛺', fr:'Tuk-tuk',     thai:'ตุ๊กตุ๊ก',    rtgs:'túk-túk'},
+  {cat:'Transports',emoji:'🚌', fr:'Bus',          thai:'รถเมล์',      rtgs:'rót-mee'},
+  {cat:'Transports',emoji:'✈️', fr:'Avion',        thai:'เครื่องบิน',  rtgs:'khrûeang bin'},
+  {cat:'Transports',emoji:'🚆', fr:'Train',        thai:'รถไฟ',        rtgs:'rót fai'},
+  {cat:'Transports',emoji:'🏍️', fr:'Moto',        thai:'มอเตอร์ไซค์', rtgs:'moo-toe-sai'},
+  {cat:'Transports',emoji:'⛵', fr:'Bateau',       thai:'เรือ',        rtgs:'ruea'},
+  {cat:'Transports',emoji:'🚗', fr:'Voiture',      thai:'รถ',          rtgs:'rót'},
+  // Animaux
+  {cat:'Animaux',emoji:'🐘', fr:'Éléphant', thai:'ช้าง',  rtgs:'cháang'},
+  {cat:'Animaux',emoji:'🐯', fr:'Tigre',    thai:'เสือ',  rtgs:'sǔea'},
+  {cat:'Animaux',emoji:'🐒', fr:'Singe',    thai:'ลิง',   rtgs:'ling'},
+  {cat:'Animaux',emoji:'🐍', fr:'Serpent',  thai:'งู',    rtgs:'nguu'},
+  {cat:'Animaux',emoji:'🐕', fr:'Chien',    thai:'หมา',   rtgs:'mǎa'},
+  {cat:'Animaux',emoji:'🐱', fr:'Chat',     thai:'แมว',   rtgs:'maeo'},
+  {cat:'Animaux',emoji:'🐦', fr:'Oiseau',   thai:'นก',    rtgs:'nók'},
+  {cat:'Animaux',emoji:'🐷', fr:'Porc',     thai:'หมู',   rtgs:'mǔu'},
+];
+
+let vocabCatFilter='Tous';
+
+const catIcons={Couleurs:'🎨',Famille:'👨‍👩‍👧',Nourriture:'🍜',Corps:'🧍',Transports:'🚕',Animaux:'🐾'};
+
+function initVocab(){
+  const cats=['Tous',...new Set(vocabData.map(v=>v.cat))];
+  const wrap=document.getElementById('vcatBtns');
+  wrap.innerHTML='';
+  cats.forEach(c=>{
+    const b=document.createElement('button');
+    b.className='vcbtn'+(c==='Tous'?' active':'');
+    b.textContent=c==='Tous'?'🌐 Tous':(catIcons[c]||'📌')+' '+c;
+    b.onclick=()=>{ vocabCatFilter=c; wrap.querySelectorAll('.vcbtn').forEach(x=>x.classList.remove('active')); b.classList.add('active'); renderVocab(); };
+    wrap.appendChild(b);
+  });
+  renderVocab();
+}
+
+function renderVocab(){
+  const q=(document.getElementById('vsrchInput')?.value||'').toLowerCase();
+  const list=vocabData.filter(v=>{
+    const catOk=vocabCatFilter==='Tous'||v.cat===vocabCatFilter;
+    const srchOk=!q||v.fr.toLowerCase().includes(q)||v.thai.includes(q)||v.rtgs.toLowerCase().includes(q);
+    return catOk&&srchOk;
+  });
+  document.getElementById('vcount').textContent=`${list.length} mot${list.length>1?'s':''}`;
+  const grid=document.getElementById('vocabGrid');
+  grid.innerHTML=list.map(v=>`
+    <div class="vcard">
+      ${v.color
+        ? `<span class="vcard-dot" style="background:${v.color}"></span>`
+        : `<span class="vcard-emoji">${v.emoji}</span>`}
+      <div class="vcard-body">
+        <span class="vcard-fr">${v.fr}</span>
+        <span class="vcard-thai">${v.thai}</span>
+        <span class="vcard-rtgs">${v.rtgs}</span>
+      </div>
+      <button class="pspk" onclick="speakThai('${v.thai}',this)">🔊</button>
+    </div>`).join('');
 }
 
 // ─── CONSONANTS ────────────────────────────────────────────────────────────
@@ -2115,6 +2417,11 @@ function updateProgress() {
   if(pf) pf.style.width = pct+'%';
   if(pv) pv.textContent = n+' / 44';
   if(tb) tb.textContent = T[currentLang].learnedBadge(n);
+  // Sync stats dashboard
+  const mc = document.getElementById('mpCons');
+  const mb = document.getElementById('mpConsBar');
+  if(mc) mc.textContent = n+'/44';
+  if(mb) mb.style.width = pct+'%';
 }
 
 // ─── VOWELS ────────────────────────────────────────────────────────────────
@@ -2241,6 +2548,8 @@ function answerQuiz(btn, chosen, correct) {
   }
   if(isCorrect) { quizScore.ok++; document.getElementById('qCorrect').textContent=quizScore.ok; }
   else { quizScore.ko++; document.getElementById('qWrong').textContent=quizScore.ko; }
+  const total=quizScore.ok+quizScore.ko;
+  if(total>0 && total%10===0) saveQuizResult(Math.round(quizScore.ok/total*10));
   setTimeout(nextQuestion, 1400);
 }
 
@@ -2256,9 +2565,11 @@ let phQuizCount = parseInt(localStorage.getItem('ph-quiz-count')||'0');
 function setQuizType(type, btn) {
   document.querySelectorAll('.qtype-btn').forEach(b=>b.classList.remove('active'));
   if(btn) btn.classList.add('active');
-  document.getElementById('consQuizWrap').style.display = type==='cons'    ? '' : 'none';
-  document.getElementById('phQuizWrap').style.display   = type==='phrases' ? '' : 'none';
-  document.getElementById('cntQuizWrap').style.display  = type==='cnt'     ? '' : 'none';
+  document.getElementById('consQuizWrap').style.display  = type==='cons'    ? '' : 'none';
+  document.getElementById('phQuizWrap').style.display    = type==='phrases' ? '' : 'none';
+  document.getElementById('cntQuizWrap').style.display   = type==='cnt'     ? '' : 'none';
+  document.getElementById('vowQuizWrap').style.display   = type==='vow'     ? '' : 'none';
+  document.getElementById('toneQuizWrap').style.display  = type==='tone'    ? '' : 'none';
   if(type==='phrases') { renderPhCatBtns(); updatePhStartFreeBar(); }
 }
 
@@ -2642,12 +2953,203 @@ function nextCntQ(){
     const s=cntQState.score;
     document.getElementById('cntQScoreVal').textContent=s;
     document.getElementById('cntQScoreMsg').textContent=s>=9?'🌟 Parfait !':s>=7?'👍 Très bien !':s>=5?'🙂 Pas mal, continue !':'💪 Entraîne-toi encore !';
+    saveQuizResult(s);
   } else { showCntQ(); }
 }
 
 function restartCntQuiz(){
   document.getElementById('cntQScore').style.display='none';
   document.getElementById('cntQStart').style.display='block';
+}
+
+/* ── QUIZ VOYELLES ── */
+const vowelPool = [
+  ...vowels.short.map(v=>({...v,length:'court'})),
+  ...vowels.long.map(v=>({...v,length:'long'}))
+];
+let vowQState={mode:'c2s',questions:[],idx:0,score:0,answered:false};
+
+function setVowMode(mode,btn){
+  vowQState.mode=mode;
+  document.querySelectorAll('#vowQStart .qmode').forEach(b=>b.classList.remove('active'));
+  if(btn) btn.classList.add('active');
+}
+
+function startVowQuiz(){
+  vowQState.questions=[...vowelPool].sort(()=>Math.random()-.5).slice(0,10);
+  vowQState.idx=0; vowQState.score=0; vowQState.answered=false;
+  document.getElementById('vowQStart').style.display='none';
+  document.getElementById('vowQScore').style.display='none';
+  document.getElementById('vowQGame').style.display='block';
+  showVowQ();
+}
+
+function showVowQ(){
+  const s=vowQState, q=s.questions[s.idx];
+  s.answered=false;
+  document.getElementById('vowQNum').textContent=`Question ${s.idx+1} / 10`;
+  document.getElementById('vowQFeedback').textContent='';
+  document.getElementById('vowQFeedback').className='cntq-feedback';
+  document.getElementById('vowQNext').style.display='none';
+
+  const qEl=document.getElementById('vowQQuestion');
+  const optsEl=document.getElementById('vowQOpts');
+  optsEl.innerHTML='';
+
+  // 2 mauvaises réponses parmi les autres voyelles
+  const wrong=[...vowelPool].filter(v=>v.char!==q.char).sort(()=>Math.random()-.5).slice(0,2);
+  const choices=[q,...wrong].sort(()=>Math.random()-.5);
+
+  if(s.mode==='c2s'){
+    // Montre le caractère thaï → choisir le son (rtgs + court/long)
+    qEl.innerHTML=`<span style="font-family:var(--thai-font);font-size:72px;font-weight:500;line-height:1.2;display:block">${q.char}</span>`;
+    choices.forEach(c=>{
+      const b=document.createElement('button');
+      b.className='qopt'; b.style.fontSize='16px';
+      b.innerHTML=`<strong>${c.rtgs}</strong><span class="qopt-sub">${c.length}</span>`;
+      b.onclick=()=>answerVowQ(c.char===q.char,b,q,'c2s');
+      optsEl.appendChild(b);
+    });
+  } else {
+    // Montre le son + description → choisir le caractère
+    qEl.innerHTML=`<span style="font-size:28px;font-weight:800;color:var(--gold)">${q.rtgs}</span><br><span style="font-size:14px;color:var(--text2);font-style:italic">${q.desc} · ${q.length}</span>`;
+    choices.forEach(c=>{
+      const b=document.createElement('button');
+      b.className='qopt qopt-thai'; b.style.fontSize='36px';
+      b.textContent=c.char;
+      b.onclick=()=>answerVowQ(c.char===q.char,b,q,'s2c');
+      optsEl.appendChild(b);
+    });
+  }
+}
+
+function answerVowQ(correct,btn,q,mode){
+  if(vowQState.answered) return;
+  vowQState.answered=true;
+  if(correct){ btn.classList.add('correct'); vowQState.score++; }
+  else{
+    btn.classList.add('wrong');
+    document.querySelectorAll('#vowQOpts .qopt').forEach(b=>{
+      const match = mode==='c2s' ? b.querySelector('strong')?.textContent===q.rtgs && b.querySelector('.qopt-sub')?.textContent===vowQState.questions[vowQState.idx]?.length
+                                  : b.textContent===q.char;
+      if(match) b.classList.add('correct');
+    });
+  }
+  const fb=document.getElementById('vowQFeedback');
+  fb.className='cntq-feedback '+(correct?'ok':'ko');
+  fb.textContent=correct?'✓ Correct !':`✗ C'était : ${q.char} = ${q.rtgs} (${q.length})`;
+  document.querySelectorAll('#vowQOpts .qopt').forEach(b=>b.disabled=true);
+  document.getElementById('vowQNext').style.display='block';
+}
+
+function nextVowQ(){
+  vowQState.idx++;
+  if(vowQState.idx>=10){
+    document.getElementById('vowQGame').style.display='none';
+    document.getElementById('vowQScore').style.display='block';
+    const s=vowQState.score;
+    document.getElementById('vowQScoreVal').textContent=s;
+    document.getElementById('vowQScoreMsg').textContent=s>=9?'🌟 Parfait !':s>=7?'👍 Très bien !':s>=5?'🙂 Pas mal !':'💪 Continue à t\'entraîner !';
+    saveQuizResult(s);
+  } else { showVowQ(); }
+}
+
+function restartVowQuiz(){
+  document.getElementById('vowQScore').style.display='none';
+  document.getElementById('vowQStart').style.display='block';
+}
+
+/* ── QUIZ TONS ── */
+let toneQState={mode:'m2n',questions:[],idx:0,score:0,answered:false};
+
+function setToneMode(mode,btn){
+  toneQState.mode=mode;
+  document.querySelectorAll('#toneQStart .qmode').forEach(b=>b.classList.remove('active'));
+  if(btn) btn.classList.add('active');
+}
+
+function startToneQuiz(){
+  // 10 questions tirées des 5 tons (répétition possible)
+  const q=[];
+  for(let i=0;i<10;i++) q.push(tones[Math.floor(Math.random()*tones.length)]);
+  toneQState.questions=q; toneQState.idx=0; toneQState.score=0; toneQState.answered=false;
+  document.getElementById('toneQStart').style.display='none';
+  document.getElementById('toneQScore').style.display='none';
+  document.getElementById('toneQGame').style.display='block';
+  showToneQ();
+}
+
+function showToneQ(){
+  const s=toneQState, q=s.questions[s.idx];
+  s.answered=false;
+  document.getElementById('toneQNum').textContent=`Question ${s.idx+1} / 10`;
+  document.getElementById('toneQFeedback').textContent='';
+  document.getElementById('toneQFeedback').className='cntq-feedback';
+  document.getElementById('toneQNext').style.display='none';
+
+  const qEl=document.getElementById('toneQQuestion');
+  const optsEl=document.getElementById('toneQOpts');
+  optsEl.innerHTML='';
+
+  // 2 mauvaises réponses différentes de la bonne
+  const wrong=[...tones].filter(t=>t.name!==q.name).sort(()=>Math.random()-.5).slice(0,2);
+  const choices=[q,...wrong].sort(()=>Math.random()-.5);
+
+  if(s.mode==='m2n'){
+    // Montre la marque → choisir le nom du ton
+    qEl.innerHTML=`<span style="font-family:var(--thai-font);font-size:72px;font-weight:500;line-height:1.2;display:block;color:${q.color}">${q.mark}</span><span style="font-size:12px;color:var(--text3)">${q.num}</span>`;
+    choices.forEach(c=>{
+      const b=document.createElement('button');
+      b.className='qopt'; b.style.cssText='font-size:15px;flex-direction:column;gap:3px';
+      b.innerHTML=`<strong>${c.name}</strong><span class="qopt-sub">${c.fr}</span>`;
+      b.onclick=()=>answerToneQ(c.name===q.name,b,q);
+      optsEl.appendChild(b);
+    });
+  } else {
+    // Montre le nom → choisir la marque
+    qEl.innerHTML=`<span style="font-size:22px;font-weight:800;color:${q.color}">${q.name}</span><br><span style="font-size:14px;color:var(--text2)">${q.fr} · ${q.num}</span>`;
+    choices.forEach(c=>{
+      const b=document.createElement('button');
+      b.className='qopt qopt-thai'; b.style.cssText=`font-size:42px;color:${c.color}`;
+      b.textContent=c.mark;
+      b.onclick=()=>answerToneQ(c.name===q.name,b,q);
+      optsEl.appendChild(b);
+    });
+  }
+}
+
+function answerToneQ(correct,btn,q){
+  if(toneQState.answered) return;
+  toneQState.answered=true;
+  if(correct){ btn.classList.add('correct'); toneQState.score++; }
+  else{
+    btn.classList.add('wrong');
+    document.querySelectorAll('#toneQOpts .qopt').forEach(b=>{
+      if(b.querySelector('strong')?.textContent===q.name || b.textContent.trim()===q.mark) b.classList.add('correct');
+    });
+  }
+  const fb=document.getElementById('toneQFeedback');
+  fb.className='cntq-feedback '+(correct?'ok':'ko');
+  fb.textContent=correct?'✓ Correct !':`✗ C'était : ${q.name} (${q.mark})`;
+  document.querySelectorAll('#toneQOpts .qopt').forEach(b=>b.disabled=true);
+  document.getElementById('toneQNext').style.display='block';
+}
+
+function nextToneQ(){
+  toneQState.idx++;
+  if(toneQState.idx>=10){
+    document.getElementById('toneQGame').style.display='none';
+    document.getElementById('toneQScore').style.display='block';
+    const s=toneQState.score;
+    document.getElementById('toneQScoreVal').textContent=s;
+    document.getElementById('toneQScoreMsg').textContent=s>=9?'🌟 Parfait !':s>=7?'👍 Très bien !':s>=5?'🙂 Pas mal !':'💪 Continue à t\'entraîner !';
+    saveQuizResult(s);
+  } else { showToneQ(); }
+}
+
+function restartToneQuiz(){
+  document.getElementById('toneQScore').style.display='none';
+  document.getElementById('toneQStart').style.display='block';
 }
 
 function speakCnt(cell, text) {
@@ -2748,7 +3250,11 @@ async function doRegister() {
       email:     email,
       createdAt: firebase.firestore.FieldValue.serverTimestamp(),
       premium:   false,
-      learned:   [...learned]
+      learned:   [...learned],
+      streak:    1,
+      lastVisit: new Date().toDateString(),
+      quizTotal: 0,
+      quizBest:  0,
     });
     closeAuth();
   } catch(e) { errEl.textContent = authErr(e.code); }
@@ -2825,7 +3331,63 @@ async function doSubscribe() {
 async function saveProgressToCloud() {
   const user = auth.currentUser;
   if(!user) return;
-  try { await db.collection('users').doc(user.uid).update({ learned: [...learned] }); } catch(e) {}
+  try {
+    await db.collection('users').doc(user.uid).update({
+      learned:    [...learned],
+      streak:     parseInt(localStorage.getItem('thai-streak')||'0'),
+      lastVisit:  localStorage.getItem('thai-last-visit') || new Date().toDateString(),
+      quizTotal:  parseInt(localStorage.getItem('thai-quiz-total')||'0'),
+      quizBest:   parseInt(localStorage.getItem('thai-quiz-best')||'0'),
+    });
+  } catch(e) {}
+}
+
+async function saveStatsToCloud() {
+  const user = auth.currentUser;
+  if(!user) return;
+  try {
+    await db.collection('users').doc(user.uid).update({
+      streak:    parseInt(localStorage.getItem('thai-streak')||'0'),
+      lastVisit: localStorage.getItem('thai-last-visit') || new Date().toDateString(),
+      quizTotal: parseInt(localStorage.getItem('thai-quiz-total')||'0'),
+      quizBest:  parseInt(localStorage.getItem('thai-quiz-best')||'0'),
+    });
+  } catch(e) {}
+}
+
+async function loadStatsFromCloud(data, uid) {
+  const today     = new Date().toDateString();
+  const yesterday = new Date(Date.now()-86400000).toDateString();
+  const cloudLast = data.lastVisit || '';
+  let streak      = data.streak || 0;
+  let needSave    = false;
+
+  if(cloudLast !== today) {
+    streak   = cloudLast===yesterday ? streak+1 : 1;
+    needSave = true;
+  }
+
+  const quizTotal = data.quizTotal || 0;
+  const quizBest  = data.quizBest  || 0;
+
+  // Sync localStorage avec le cloud
+  localStorage.setItem('thai-streak',     streak);
+  localStorage.setItem('thai-last-visit', today);
+  localStorage.setItem('thai-quiz-total', quizTotal);
+  localStorage.setItem('thai-quiz-best',  quizBest);
+
+  // Mettre à jour le dashboard
+  const ms=document.getElementById('mpStreak');
+  const mq=document.getElementById('mpQuizC');
+  const mb=document.getElementById('mpBest');
+  if(ms) ms.textContent=streak;
+  if(mq) mq.textContent=quizTotal;
+  if(mb) mb.textContent=quizBest?quizBest+'/10':'—';
+
+  // Sauvegarder le nouveau streak si besoin
+  if(needSave) {
+    try { await db.collection('users').doc(uid).update({streak, lastVisit:today}); } catch(e) {}
+  }
 }
 
 auth.onAuthStateChanged(async (user) => {
@@ -2852,6 +3414,8 @@ auth.onAuthStateChanged(async (user) => {
           renderConsonants();
           updateProgress();
         }
+        // Charger et synchroniser les stats depuis le cloud
+        await loadStatsFromCloud(data, user.uid);
       }
     } catch(e) {}
   } else {
@@ -2872,7 +3436,9 @@ renderConsonants();
 renderVowels();
 renderTones();
 renderPhrases();
+initVocab();
 updateProgress();
+initStats();
 initVoices();
 </script>
 
