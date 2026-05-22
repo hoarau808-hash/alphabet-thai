@@ -1169,10 +1169,7 @@ footer{border-top:1px solid var(--border);padding:40px 24px;text-align:center;co
             <span class="cntq-thai" id="cntQThai"></span>
             <span class="cntq-rtgs" id="cntQRtgs"></span>
           </div>
-          <div class="cntq-input-row">
-            <input class="cntq-input" type="number" id="cntQInput" min="1" max="50" placeholder="?" onkeydown="if(event.key==='Enter')answerCntWrite()">
-            <button class="btn-g" id="cntValidateBtn" onclick="answerCntWrite()">Valider</button>
-          </div>
+          <div class="qopts" id="cntQWriteOpts" style="grid-template-columns:repeat(3,1fr)"></div>
         </div>
         <div class="cntq-feedback" id="cntQFeedback"></div>
         <button class="btn-g" id="cntQNext" style="display:none;margin:20px auto 0" onclick="nextCntQ()">Question suivante →</button>
@@ -1537,7 +1534,7 @@ footer{border-top:1px solid var(--border);padding:40px 24px;text-align:center;co
   </div>
 
 </div>
-</div></div>
+</div>
 
 <!-- ENGLISH LESSON -->
 <div id="lesson-en" style="display:none"><div class="lesson-wrap">
@@ -1669,15 +1666,15 @@ footer{border-top:1px solid var(--border);padding:40px 24px;text-align:center;co
     </div>
     <div class="lesson-hl" style="margin-top:20px"><strong>🎯 Realistic goal:</strong> In <strong>2 to 3 weeks</strong> at 15 minutes per day, you can memorize all 44 consonants and start reading simple words. Thai is more logical than it appears!</div>
   </div>
-</div></div>
+</div></div></div>
 
 <!-- VOCABULAIRE TAB -->
 <div id="tab-vocab" class="tab-content">
   <div class="vocab-wrap">
     <div class="sec-hd">
-      <div class="sec-tag">Vocabulaire</div>
-      <div class="sec-title">Mots essentiels par thème</div>
-      <p class="sec-desc">Cliquez sur 🔊 pour écouter la prononciation. Apprenez les mots du quotidien !</p>
+      <div class="sec-tag" id="vocSecTag">Vocabulaire</div>
+      <div class="sec-title" id="vocSecTitle">Mots essentiels par thème</div>
+      <p class="sec-desc" id="vocSecDesc">Cliquez sur 🔊 pour écouter la prononciation. Apprenez les mots du quotidien !</p>
     </div>
     <div class="vcats" id="vcatBtns"></div>
     <input class="vsrch" type="text" id="vsrchInput" placeholder="Chercher un mot…" oninput="renderVocab()">
@@ -1998,6 +1995,9 @@ const T = {
     quizPR2C:'Quel caractère thaï correspond à ce son ?',
     quizPS2C:'Quel caractère correspond au son entendu ?',
     quizReplay:'Rejouer le son', quizNew:'Nouvelle partie',
+    vocTag:'Vocabulaire', vocTitle:'Mots essentiels par thème',
+    vocDesc:'Cliquez sur 🔊 pour écouter la prononciation. Apprenez les mots du quotidien !',
+    vocSearch:'Chercher un mot…', vocCount:(n)=>`${n} mot${n>1?'s':''}`, vocAll:'🌐 Tous',
     phTag:'Communication', phTitle:'Phrases de base',
     phDesc:'Les phrases essentielles pour débuter en thaïlande. Cliquez sur 🔊 pour écouter la prononciation.',
     phSrchPh:'Rechercher une phrase ou un mot…',
@@ -2101,6 +2101,9 @@ const T = {
     quizPR2C:'Which Thai character matches this sound?',
     quizPS2C:'Which character matches the sound you heard?',
     quizReplay:'Replay sound', quizNew:'New game',
+    vocTag:'Vocabulary', vocTitle:'Essential words by theme',
+    vocDesc:'Click 🔊 to hear the pronunciation. Learn everyday words!',
+    vocSearch:'Search a word…', vocCount:(n)=>`${n} word${n>1?'s':''}`, vocAll:'🌐 All',
     phTag:'Communication', phTitle:'Basic Phrases',
     phDesc:'Essential phrases for your first time in Thailand. Click 🔊 to hear the pronunciation.',
     phSrchPh:'Search for a phrase or word…',
@@ -2179,7 +2182,7 @@ function setLang(lang) {
   renderVowels();
   renderTones();
   renderPhrases();
-  renderVocab();
+  initVocab();
   updateProgress();
   if(document.getElementById('sitWrap').style.display !== 'none') renderSituations();
 }
@@ -2244,6 +2247,9 @@ function applyLang() {
   // Newsletter
   s('nlLabel', t.nlLabel); s('nlBtn', t.nlBtn);
   p('nlEmail', currentLang==='en' ? 'your@email.com' : 'votre@email.com');
+  // Vocabulary
+  s('vocSecTag', t.vocTag); s('vocSecTitle', t.vocTitle); s('vocSecDesc', t.vocDesc);
+  const vsrch=document.getElementById('vsrchInput'); if(vsrch) vsrch.placeholder=t.vocSearch;
   // Phrases quiz
   s('qtype-cons', t.quizTypeCons); s('qtype-phrases', t.quizTypePhrases);
   s('qtype-cnt', t.quizTypeCnt); s('qtype-vow', t.quizTypeVow); s('qtype-tone', t.quizTypeTone);
@@ -2253,7 +2259,7 @@ function applyLang() {
   s('cntBtnListen', t.cntBtnListenLbl); s('cntBtnWrite', t.cntBtnWriteLbl);
   s('cntModeDesc', cntQState&&cntQState.mode==='write' ? t.cntModeDescWrite : t.cntModeDescListen);
   s('cntStartBtn', t.qStart); s('cntReplayLbl', t.qReplaySound);
-  s('cntValidateBtn', t.qValidate); s('cntQNext', t.qNext); s('cntRestartBtn', t.qReplay);
+  s('cntQNext', t.qNext); s('cntRestartBtn', t.qReplay);
   // Quiz Voyelles
   s('vowQTitle', t.vowQTitleLbl); s('vowQDesc', t.vowQDescLbl);
   s('vowBtnC2S', t.vowBtnC2SLbl); s('vowBtnS2C', t.vowBtnS2CLbl);
@@ -2356,84 +2362,84 @@ function saveQuizResult(score){
 
 // ─── VOCABULAIRE ────────────────────────────────────────────────────────────
 const vocabData = [
-  // Couleurs — pastille colorée
-  {cat:'Couleurs',color:'#e53e3e',fr:'Rouge',      thai:'แดง',           rtgs:'daeng'},
-  {cat:'Couleurs',color:'#3182ce',fr:'Bleu',        thai:'น้ำเงิน',       rtgs:'nám ngoen'},
-  {cat:'Couleurs',color:'#38a169',fr:'Vert',         thai:'เขียว',         rtgs:'khǐao'},
-  {cat:'Couleurs',color:'#d69e2e',fr:'Jaune',        thai:'เหลือง',        rtgs:'lǔeang'},
-  {cat:'Couleurs',color:'#f7f7f7',fr:'Blanc',        thai:'ขาว',           rtgs:'khǎo'},
-  {cat:'Couleurs',color:'#1a202c',fr:'Noir',         thai:'ดำ',            rtgs:'dam'},
-  {cat:'Couleurs',color:'#ed64a6',fr:'Rose',         thai:'ชมพู',          rtgs:'chom-phuu'},
-  {cat:'Couleurs',color:'#dd6b20',fr:'Orange',       thai:'ส้ม',           rtgs:'sôm'},
-  {cat:'Couleurs',color:'#805ad5',fr:'Violet',       thai:'ม่วง',          rtgs:'mûang'},
-  {cat:'Couleurs',color:'#718096',fr:'Gris',         thai:'เทา',           rtgs:'thao'},
+  // Couleurs
+  {cat:'Couleurs',color:'#e53e3e',fr:'Rouge',      en:'Red',         thai:'แดง',           rtgs:'daeng'},
+  {cat:'Couleurs',color:'#3182ce',fr:'Bleu',        en:'Blue',        thai:'น้ำเงิน',       rtgs:'nám ngoen'},
+  {cat:'Couleurs',color:'#38a169',fr:'Vert',         en:'Green',       thai:'เขียว',         rtgs:'khǐao'},
+  {cat:'Couleurs',color:'#d69e2e',fr:'Jaune',        en:'Yellow',      thai:'เหลือง',        rtgs:'lǔeang'},
+  {cat:'Couleurs',color:'#f7f7f7',fr:'Blanc',        en:'White',       thai:'ขาว',           rtgs:'khǎo'},
+  {cat:'Couleurs',color:'#1a202c',fr:'Noir',         en:'Black',       thai:'ดำ',            rtgs:'dam'},
+  {cat:'Couleurs',color:'#ed64a6',fr:'Rose',         en:'Pink',        thai:'ชมพู',          rtgs:'chom-phuu'},
+  {cat:'Couleurs',color:'#dd6b20',fr:'Orange',       en:'Orange',      thai:'ส้ม',           rtgs:'sôm'},
+  {cat:'Couleurs',color:'#805ad5',fr:'Violet',       en:'Purple',      thai:'ม่วง',          rtgs:'mûang'},
+  {cat:'Couleurs',color:'#718096',fr:'Gris',         en:'Grey',        thai:'เทา',           rtgs:'thao'},
   // Famille
-  {cat:'Famille',emoji:'👨',  fr:'Père',        thai:'พ่อ',        rtgs:'phô'},
-  {cat:'Famille',emoji:'👩',  fr:'Mère',        thai:'แม่',        rtgs:'mâe'},
-  {cat:'Famille',emoji:'👴',  fr:'Grand-père',  thai:'ปู่',        rtgs:'pùu'},
-  {cat:'Famille',emoji:'👵',  fr:'Grand-mère',  thai:'ย่า',        rtgs:'yâa'},
-  {cat:'Famille',emoji:'👦',  fr:'Frère aîné',  thai:'พี่ชาย',    rtgs:'phîi chaai'},
-  {cat:'Famille',emoji:'👧',  fr:'Sœur aînée',  thai:'พี่สาว',    rtgs:'phîi sǎo'},
-  {cat:'Famille',emoji:'👦',  fr:'Petit frère', thai:'น้องชาย',   rtgs:'nóng chaai'},
-  {cat:'Famille',emoji:'👧',  fr:'Petite sœur', thai:'น้องสาว',   rtgs:'nóng sǎo'},
-  {cat:'Famille',emoji:'🧒',  fr:'Enfant',      thai:'เด็ก',       rtgs:'dèk'},
-  {cat:'Famille',emoji:'🤝',  fr:'Ami(e)',       thai:'เพื่อน',    rtgs:'phûean'},
+  {cat:'Famille',emoji:'👨',  fr:'Père',        en:'Father',       thai:'พ่อ',        rtgs:'phô'},
+  {cat:'Famille',emoji:'👩',  fr:'Mère',        en:'Mother',       thai:'แม่',        rtgs:'mâe'},
+  {cat:'Famille',emoji:'👴',  fr:'Grand-père',  en:'Grandfather',  thai:'ปู่',        rtgs:'pùu'},
+  {cat:'Famille',emoji:'👵',  fr:'Grand-mère',  en:'Grandmother',  thai:'ย่า',        rtgs:'yâa'},
+  {cat:'Famille',emoji:'👦',  fr:'Frère aîné',  en:'Older brother',thai:'พี่ชาย',    rtgs:'phîi chaai'},
+  {cat:'Famille',emoji:'👧',  fr:'Sœur aînée',  en:'Older sister', thai:'พี่สาว',    rtgs:'phîi sǎo'},
+  {cat:'Famille',emoji:'👦',  fr:'Petit frère', en:'Younger brother',thai:'น้องชาย', rtgs:'nóng chaai'},
+  {cat:'Famille',emoji:'👧',  fr:'Petite sœur', en:'Younger sister',thai:'น้องสาว',  rtgs:'nóng sǎo'},
+  {cat:'Famille',emoji:'🧒',  fr:'Enfant',      en:'Child',        thai:'เด็ก',       rtgs:'dèk'},
+  {cat:'Famille',emoji:'🤝',  fr:'Ami(e)',       en:'Friend',       thai:'เพื่อน',    rtgs:'phûean'},
   // Nourriture
-  {cat:'Nourriture',emoji:'🍚', fr:'Riz',         thai:'ข้าว',      rtgs:'khâo'},
-  {cat:'Nourriture',emoji:'💧', fr:'Eau',          thai:'น้ำ',       rtgs:'nám'},
-  {cat:'Nourriture',emoji:'🍗', fr:'Poulet',       thai:'ไก่',       rtgs:'kài'},
-  {cat:'Nourriture',emoji:'🐟', fr:'Poisson',      thai:'ปลา',       rtgs:'plaa'},
-  {cat:'Nourriture',emoji:'🥦', fr:'Légumes',      thai:'ผัก',       rtgs:'phàk'},
-  {cat:'Nourriture',emoji:'🍎', fr:'Fruits',       thai:'ผลไม้',     rtgs:'phǒn-la-máai'},
-  {cat:'Nourriture',emoji:'🍜', fr:'Pad Thai',     thai:'ผัดไทย',    rtgs:'phàt thai'},
-  {cat:'Nourriture',emoji:'🍳', fr:'Riz sauté',    thai:'ข้าวผัด',   rtgs:'khâo phàt'},
-  {cat:'Nourriture',emoji:'🥭', fr:'Mangue',       thai:'มะม่วง',    rtgs:'má-mûang'},
-  {cat:'Nourriture',emoji:'🌶️', fr:'Épicé',       thai:'เผ็ด',      rtgs:'phèt'},
-  {cat:'Nourriture',emoji:'🍯', fr:'Sucré',        thai:'หวาน',      rtgs:'wǎan'},
-  {cat:'Nourriture',emoji:'😋', fr:'Délicieux',    thai:'อร่อย',     rtgs:'a-ròi'},
+  {cat:'Nourriture',emoji:'🍚', fr:'Riz',         en:'Rice',         thai:'ข้าว',      rtgs:'khâo'},
+  {cat:'Nourriture',emoji:'💧', fr:'Eau',          en:'Water',        thai:'น้ำ',       rtgs:'nám'},
+  {cat:'Nourriture',emoji:'🍗', fr:'Poulet',       en:'Chicken',      thai:'ไก่',       rtgs:'kài'},
+  {cat:'Nourriture',emoji:'🐟', fr:'Poisson',      en:'Fish',         thai:'ปลา',       rtgs:'plaa'},
+  {cat:'Nourriture',emoji:'🥦', fr:'Légumes',      en:'Vegetables',   thai:'ผัก',       rtgs:'phàk'},
+  {cat:'Nourriture',emoji:'🍎', fr:'Fruits',       en:'Fruits',       thai:'ผลไม้',     rtgs:'phǒn-la-máai'},
+  {cat:'Nourriture',emoji:'🍜', fr:'Pad Thai',     en:'Pad Thai',     thai:'ผัดไทย',    rtgs:'phàt thai'},
+  {cat:'Nourriture',emoji:'🍳', fr:'Riz sauté',    en:'Fried rice',   thai:'ข้าวผัด',   rtgs:'khâo phàt'},
+  {cat:'Nourriture',emoji:'🥭', fr:'Mangue',       en:'Mango',        thai:'มะม่วง',    rtgs:'má-mûang'},
+  {cat:'Nourriture',emoji:'🌶️', fr:'Épicé',       en:'Spicy',        thai:'เผ็ด',      rtgs:'phèt'},
+  {cat:'Nourriture',emoji:'🍯', fr:'Sucré',        en:'Sweet',        thai:'หวาน',      rtgs:'wǎan'},
+  {cat:'Nourriture',emoji:'😋', fr:'Délicieux',    en:'Delicious',    thai:'อร่อย',     rtgs:'a-ròi'},
   // Corps
-  {cat:'Corps',emoji:'🗣️', fr:'Tête',     thai:'หัว',    rtgs:'hǔa'},
-  {cat:'Corps',emoji:'👀',  fr:'Yeux',     thai:'ตา',     rtgs:'taa'},
-  {cat:'Corps',emoji:'👃',  fr:'Nez',      thai:'จมูก',   rtgs:'ja-mùuk'},
-  {cat:'Corps',emoji:'👄',  fr:'Bouche',   thai:'ปาก',    rtgs:'pàak'},
-  {cat:'Corps',emoji:'👂',  fr:'Oreille',  thai:'หู',     rtgs:'hǔu'},
-  {cat:'Corps',emoji:'🖐️', fr:'Main',     thai:'มือ',    rtgs:'mue'},
-  {cat:'Corps',emoji:'🦶',  fr:'Pied',     thai:'เท้า',   rtgs:'tháo'},
-  {cat:'Corps',emoji:'💪',  fr:'Bras',     thai:'แขน',    rtgs:'khǎen'},
-  {cat:'Corps',emoji:'🦵',  fr:'Jambe',    thai:'ขา',     rtgs:'khǎa'},
-  {cat:'Corps',emoji:'🔙',  fr:'Dos',      thai:'หลัง',   rtgs:'lǎng'},
+  {cat:'Corps',emoji:'🗣️', fr:'Tête',     en:'Head',     thai:'หัว',    rtgs:'hǔa'},
+  {cat:'Corps',emoji:'👀',  fr:'Yeux',     en:'Eyes',     thai:'ตา',     rtgs:'taa'},
+  {cat:'Corps',emoji:'👃',  fr:'Nez',      en:'Nose',     thai:'จมูก',   rtgs:'ja-mùuk'},
+  {cat:'Corps',emoji:'👄',  fr:'Bouche',   en:'Mouth',    thai:'ปาก',    rtgs:'pàak'},
+  {cat:'Corps',emoji:'👂',  fr:'Oreille',  en:'Ear',      thai:'หู',     rtgs:'hǔu'},
+  {cat:'Corps',emoji:'🖐️', fr:'Main',     en:'Hand',     thai:'มือ',    rtgs:'mue'},
+  {cat:'Corps',emoji:'🦶',  fr:'Pied',     en:'Foot',     thai:'เท้า',   rtgs:'tháo'},
+  {cat:'Corps',emoji:'💪',  fr:'Bras',     en:'Arm',      thai:'แขน',    rtgs:'khǎen'},
+  {cat:'Corps',emoji:'🦵',  fr:'Jambe',    en:'Leg',      thai:'ขา',     rtgs:'khǎa'},
+  {cat:'Corps',emoji:'🔙',  fr:'Dos',      en:'Back',     thai:'หลัง',   rtgs:'lǎng'},
   // Transports
-  {cat:'Transports',emoji:'🚕', fr:'Taxi',        thai:'แท็กซี่',      rtgs:'tháek-sîi'},
-  {cat:'Transports',emoji:'🛺', fr:'Tuk-tuk',     thai:'ตุ๊กตุ๊ก',    rtgs:'túk-túk'},
-  {cat:'Transports',emoji:'🚌', fr:'Bus',          thai:'รถเมล์',      rtgs:'rót-mee'},
-  {cat:'Transports',emoji:'✈️', fr:'Avion',        thai:'เครื่องบิน',  rtgs:'khrûeang bin'},
-  {cat:'Transports',emoji:'🚆', fr:'Train',        thai:'รถไฟ',        rtgs:'rót fai'},
-  {cat:'Transports',emoji:'🏍️', fr:'Moto',        thai:'มอเตอร์ไซค์', rtgs:'moo-toe-sai'},
-  {cat:'Transports',emoji:'⛵', fr:'Bateau',       thai:'เรือ',        rtgs:'ruea'},
-  {cat:'Transports',emoji:'🚗', fr:'Voiture',      thai:'รถ',          rtgs:'rót'},
+  {cat:'Transports',emoji:'🚕', fr:'Taxi',        en:'Taxi',         thai:'แท็กซี่',      rtgs:'tháek-sîi'},
+  {cat:'Transports',emoji:'🛺', fr:'Tuk-tuk',     en:'Tuk-tuk',      thai:'ตุ๊กตุ๊ก',    rtgs:'túk-túk'},
+  {cat:'Transports',emoji:'🚌', fr:'Bus',          en:'Bus',          thai:'รถเมล์',      rtgs:'rót-mee'},
+  {cat:'Transports',emoji:'✈️', fr:'Avion',        en:'Plane',        thai:'เครื่องบิน',  rtgs:'khrûeang bin'},
+  {cat:'Transports',emoji:'🚆', fr:'Train',        en:'Train',        thai:'รถไฟ',        rtgs:'rót fai'},
+  {cat:'Transports',emoji:'🏍️', fr:'Moto',        en:'Motorbike',    thai:'มอเตอร์ไซค์', rtgs:'moo-toe-sai'},
+  {cat:'Transports',emoji:'⛵', fr:'Bateau',       en:'Boat',         thai:'เรือ',        rtgs:'ruea'},
+  {cat:'Transports',emoji:'🚗', fr:'Voiture',      en:'Car',          thai:'รถ',          rtgs:'rót'},
   // Animaux
-  {cat:'Animaux',emoji:'🐘', fr:'Éléphant', thai:'ช้าง',  rtgs:'cháang'},
-  {cat:'Animaux',emoji:'🐯', fr:'Tigre',    thai:'เสือ',  rtgs:'sǔea'},
-  {cat:'Animaux',emoji:'🐒', fr:'Singe',    thai:'ลิง',   rtgs:'ling'},
-  {cat:'Animaux',emoji:'🐍', fr:'Serpent',  thai:'งู',    rtgs:'nguu'},
-  {cat:'Animaux',emoji:'🐕', fr:'Chien',    thai:'หมา',   rtgs:'mǎa'},
-  {cat:'Animaux',emoji:'🐱', fr:'Chat',     thai:'แมว',   rtgs:'maeo'},
-  {cat:'Animaux',emoji:'🐦', fr:'Oiseau',   thai:'นก',    rtgs:'nók'},
-  {cat:'Animaux',emoji:'🐷', fr:'Porc',     thai:'หมู',   rtgs:'mǔu'},
+  {cat:'Animaux',emoji:'🐘', fr:'Éléphant', en:'Elephant', thai:'ช้าง',  rtgs:'cháang'},
+  {cat:'Animaux',emoji:'🐯', fr:'Tigre',    en:'Tiger',    thai:'เสือ',  rtgs:'sǔea'},
+  {cat:'Animaux',emoji:'🐒', fr:'Singe',    en:'Monkey',   thai:'ลิง',   rtgs:'ling'},
+  {cat:'Animaux',emoji:'🐍', fr:'Serpent',  en:'Snake',    thai:'งู',    rtgs:'nguu'},
+  {cat:'Animaux',emoji:'🐕', fr:'Chien',    en:'Dog',      thai:'หมา',   rtgs:'mǎa'},
+  {cat:'Animaux',emoji:'🐱', fr:'Chat',     en:'Cat',      thai:'แมว',   rtgs:'maeo'},
+  {cat:'Animaux',emoji:'🐦', fr:'Oiseau',   en:'Bird',     thai:'นก',    rtgs:'nók'},
+  {cat:'Animaux',emoji:'🐷', fr:'Porc',     en:'Pig',      thai:'หมู',   rtgs:'mǔu'},
 ];
 
-let vocabCatFilter='Tous';
+let vocabCatFilter='__ALL__';
 
 const catIcons={Couleurs:'🎨',Famille:'👨‍👩‍👧',Nourriture:'🍜',Corps:'🧍',Transports:'🚕',Animaux:'🐾'};
 
 function initVocab(){
-  const cats=['Tous',...new Set(vocabData.map(v=>v.cat))];
+  const cats=['__ALL__',...new Set(vocabData.map(v=>v.cat))];
   const wrap=document.getElementById('vcatBtns');
   wrap.innerHTML='';
   cats.forEach(c=>{
     const b=document.createElement('button');
-    b.className='vcbtn'+(c==='Tous'?' active':'');
-    b.textContent=c==='Tous'?'🌐 Tous':(catIcons[c]||'📌')+' '+c;
+    b.className='vcbtn'+(c==='__ALL__'?' active':'');
+    b.textContent=c==='__ALL__'?T[currentLang].vocAll:(catIcons[c]||'📌')+' '+c;
     b.onclick=()=>{ vocabCatFilter=c; wrap.querySelectorAll('.vcbtn').forEach(x=>x.classList.remove('active')); b.classList.add('active'); renderVocab(); };
     wrap.appendChild(b);
   });
@@ -2442,12 +2448,13 @@ function initVocab(){
 
 function renderVocab(){
   const q=(document.getElementById('vsrchInput')?.value||'').toLowerCase();
+  const lang=currentLang;
   const list=vocabData.filter(v=>{
-    const catOk=vocabCatFilter==='Tous'||v.cat===vocabCatFilter;
-    const srchOk=!q||v.fr.toLowerCase().includes(q)||v.thai.includes(q)||v.rtgs.toLowerCase().includes(q);
+    const catOk=vocabCatFilter==='__ALL__'||v.cat===vocabCatFilter;
+    const srchOk=!q||v.fr.toLowerCase().includes(q)||v.en.toLowerCase().includes(q)||v.thai.includes(q)||v.rtgs.toLowerCase().includes(q);
     return catOk&&srchOk;
   });
-  document.getElementById('vcount').textContent=`${list.length} mot${list.length>1?'s':''}`;
+  document.getElementById('vcount').textContent=T[lang].vocCount(list.length);
   const grid=document.getElementById('vocabGrid');
   grid.innerHTML=list.map(v=>`
     <div class="vcard">
@@ -2455,7 +2462,7 @@ function renderVocab(){
         ? `<span class="vcard-dot" style="background:${v.color}"></span>`
         : `<span class="vcard-emoji">${v.emoji}</span>`}
       <div class="vcard-body">
-        <span class="vcard-fr">${v.fr}</span>
+        <span class="vcard-fr">${lang==='en'?v.en:v.fr}</span>
         <span class="vcard-thai">${v.thai}</span>
         <span class="vcard-rtgs">${v.rtgs}</span>
       </div>
@@ -2700,6 +2707,27 @@ function setQuizType(type, btn) {
   document.getElementById('vowQuizWrap').style.display   = type==='vow'     ? '' : 'none';
   document.getElementById('toneQuizWrap').style.display  = type==='tone'    ? '' : 'none';
   if(type==='phrases') { renderPhCatBtns(); updatePhStartFreeBar(); }
+  // Toujours revenir à l'écran de départ pour pouvoir changer de mode
+  if(type==='cons') {
+    document.getElementById('quizStart').style.display='';
+    document.getElementById('quizPlay').style.display='none';
+  } else if(type==='phrases') {
+    document.getElementById('phQuizStart').style.display='';
+    document.getElementById('phQuizPlay').style.display='none';
+    document.getElementById('phPremiumGate').style.display='none';
+  } else if(type==='cnt') {
+    document.getElementById('cntQStart').style.display='';
+    document.getElementById('cntQGame').style.display='none';
+    document.getElementById('cntQScore').style.display='none';
+  } else if(type==='vow') {
+    document.getElementById('vowQStart').style.display='';
+    document.getElementById('vowQGame').style.display='none';
+    document.getElementById('vowQScore').style.display='none';
+  } else if(type==='tone') {
+    document.getElementById('toneQStart').style.display='';
+    document.getElementById('toneQGame').style.display='none';
+    document.getElementById('toneQScore').style.display='none';
+  }
 }
 
 function setPhMode(m, btn) {
@@ -3139,9 +3167,16 @@ function showCntQ(){
     document.getElementById('cntQWrite').style.display='block';
     document.getElementById('cntQThai').textContent=q.thai;
     document.getElementById('cntQRtgs').textContent=q.rtgs;
-    const inp=document.getElementById('cntQInput');
-    inp.value=''; inp.disabled=false;
-    setTimeout(()=>{ inp.focus(); playCntAudio(q.thai); },350);
+    const wrong=[...cntData].filter(x=>x.n!==q.n).sort(()=>Math.random()-.5).slice(0,2);
+    const choices=[q,...wrong].sort(()=>Math.random()-.5);
+    const el=document.getElementById('cntQWriteOpts'); el.innerHTML='';
+    choices.forEach(c=>{
+      const b=document.createElement('button');
+      b.className='qopt'; b.textContent=c.n;
+      b.onclick=()=>answerCntWrite(c.n===q.n,b,q);
+      el.appendChild(b);
+    });
+    setTimeout(()=>playCntAudio(q.thai),350);
   }
 }
 
@@ -3167,16 +3202,16 @@ function answerCntListen(correct,btn,q){
   document.getElementById('cntQNext').style.display='block';
 }
 
-function answerCntWrite(){
+function answerCntWrite(correct,btn,q){
   if(cntQState.answered) return;
-  const q=cntQState.questions[cntQState.idx];
-  const val=parseInt(document.getElementById('cntQInput').value);
-  if(isNaN(val)||val<1||val>50) return;
   cntQState.answered=true;
-  document.getElementById('cntQInput').disabled=true;
-  const correct=val===q.n;
-  if(correct) cntQState.score++;
-  showCntFeedback(correct,q);
+  if(correct){ btn.classList.add('correct'); cntQState.score++; showCntFeedback(true,q); }
+  else {
+    btn.classList.add('wrong');
+    document.querySelectorAll('#cntQWriteOpts .qopt').forEach(b=>{ if(+b.textContent===q.n) b.classList.add('correct'); });
+    showCntFeedback(false,q);
+  }
+  document.querySelectorAll('#cntQWriteOpts .qopt').forEach(b=>b.disabled=true);
   document.getElementById('cntQNext').style.display='block';
 }
 
