@@ -624,6 +624,44 @@ footer{border-top:1px solid var(--border);padding:40px 24px;text-align:center;co
   .pg-btns .btn-g,.pg-btns .btn-o{width:100%}
 }
 
+/* ─── SITUATIONS PRATIQUES ──────────────────────────────────────────────── */
+.ph-view-sw{display:flex;gap:4px;background:rgba(255,255,255,.04);border:1px solid var(--border);border-radius:12px;padding:4px;margin-bottom:28px}
+.ph-view-btn{flex:1;padding:10px 16px;border-radius:8px;border:none;background:transparent;color:var(--text2);font-family:'Inter',sans-serif;font-size:14px;font-weight:600;cursor:pointer;transition:all .2s}
+.ph-view-btn.active{background:var(--gold);color:#000;font-weight:700}
+.ph-view-btn:hover:not(.active){color:var(--text);background:rgba(255,255,255,.05)}
+.sit-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:16px}
+.sit-card{background:var(--bg3);border:1px solid var(--border);border-radius:18px;overflow:hidden;transition:border-color .25s;cursor:pointer}
+.sit-card:hover{border-color:var(--border-h)}
+.sit-card.open{border-color:var(--gold)}
+.sit-header{display:flex;align-items:center;gap:12px;padding:18px 20px;user-select:none}
+.sit-icon{font-size:28px;flex-shrink:0}
+.sit-meta{flex:1;min-width:0}
+.sit-title{font-size:15px;font-weight:700;color:var(--text);display:block}
+.sit-count{font-size:11px;color:var(--text3);margin-top:2px;display:block}
+.sit-arrow{font-size:11px;color:var(--text3);transition:transform .3s;flex-shrink:0}
+.sit-card.open .sit-arrow{transform:rotate(180deg)}
+.sit-body{display:none;padding:0 20px 20px;border-top:1px solid var(--border)}
+.sit-card.open .sit-body{display:block}
+.sit-line{display:flex;align-items:flex-start;gap:10px;padding:10px 0;border-bottom:1px solid rgba(255,255,255,.04)}
+.sit-line:last-child{border-bottom:none}
+.sit-speaker{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.6px;padding-top:5px;flex-shrink:0;width:44px;text-align:right}
+.sit-speaker.vous{color:var(--gold)}
+.sit-speaker.autre{color:var(--teal)}
+.sit-content{flex:1;min-width:0}
+.sit-thai{font-family:var(--thai-font);font-size:19px;font-weight:500;color:var(--text);display:block;line-height:1.35;margin-bottom:2px}
+.sit-rtgs{font-size:11px;color:var(--text3);font-style:italic;display:block;margin-bottom:2px}
+.sit-tr{font-size:13px;color:var(--text2);display:block}
+.sit-spk{flex-shrink:0;background:none;border:1px solid var(--border);border-radius:7px;padding:5px 9px;cursor:pointer;font-size:14px;color:var(--text3);transition:all .2s;align-self:center;line-height:1}
+.sit-spk:hover{color:var(--gold);border-color:rgba(240,180,41,.4);background:rgba(240,180,41,.07)}
+.sit-spk.playing{color:var(--gold);border-color:var(--gold)}
+@media(max-width:768px){
+  .sit-grid{grid-template-columns:1fr}
+  .ph-view-btn{font-size:13px;padding:9px 10px}
+  .sit-thai{font-size:17px}
+  .sit-header{padding:14px 16px}
+  .sit-body{padding:0 14px 16px}
+}
+
 /* ─── AUTH MODAL ─────────────────────────────────────────────────────────── */
 .auth-overlay{position:fixed;inset:0;background:rgba(0,0,0,.75);backdrop-filter:blur(10px);z-index:300;display:none;align-items:center;justify-content:center}
 .auth-overlay.open{display:flex}
@@ -1647,15 +1685,36 @@ footer{border-top:1px solid var(--border);padding:40px 24px;text-align:center;co
 <!-- PHRASES TAB -->
 <div id="tab-phrases" class="tab-content">
   <div class="phrases-wrap">
-    <div class="sec-hd">
-      <div class="sec-tag" id="phTag">Communication</div>
-      <div class="sec-title" id="phTitle">Phrases de base</div>
-      <p class="sec-desc" id="phDesc">Les phrases essentielles pour débuter en thaïlande. Cliquez sur 🔊 pour écouter la prononciation.</p>
+
+    <!-- Switcher Phrases / Situations -->
+    <div class="ph-view-sw">
+      <button class="ph-view-btn active" id="phViewPh" onclick="setPhView('phrases',this)">📋 Phrases de base</button>
+      <button class="ph-view-btn" id="phViewSit" onclick="setPhView('situations',this)">🎭 Situations pratiques</button>
     </div>
-    <div class="pcats" id="pcats"></div>
-    <input class="psrch" type="text" id="psrch" placeholder="Rechercher une phrase ou un mot…" oninput="renderPhrases()">
-    <div class="pcount" id="phraseCount"></div>
-    <div class="phrase-grid" id="phraseGrid"></div>
+
+    <!-- Phrases de base -->
+    <div id="phrasesSection">
+      <div class="sec-hd">
+        <div class="sec-tag" id="phTag">Communication</div>
+        <div class="sec-title" id="phTitle">Phrases de base</div>
+        <p class="sec-desc" id="phDesc">Les phrases essentielles pour débuter en thaïlande. Cliquez sur 🔊 pour écouter la prononciation.</p>
+      </div>
+      <div class="pcats" id="pcats"></div>
+      <input class="psrch" type="text" id="psrch" placeholder="Rechercher une phrase ou un mot…" oninput="renderPhrases()">
+      <div class="pcount" id="phraseCount"></div>
+      <div class="phrase-grid" id="phraseGrid"></div>
+    </div>
+
+    <!-- Situations pratiques -->
+    <div id="sitWrap" style="display:none">
+      <div class="sec-hd">
+        <div class="sec-tag">Conversations</div>
+        <div class="sec-title">Situations pratiques</div>
+        <p class="sec-desc">Des dialogues complets pour les situations du quotidien en Thaïlande. Cliquez sur une situation pour dérouler le dialogue.</p>
+      </div>
+      <div class="sit-grid" id="sitGrid"></div>
+    </div>
+
   </div>
 </div>
 
@@ -2768,6 +2827,106 @@ function resetPhQuizCount() {
 
 // ─── PHRASES ───────────────────────────────────────────────────────────────
 let phraseFilter = 'all';
+
+// ─── SITUATIONS PRATIQUES ─────────────────────────────────────────────────
+const situations = [
+  { id:'restaurant', icon:'🍜', title:'Au restaurant', titleEn:'At the restaurant', lines:[
+    {who:'vous',  whoFr:'Vous',      whoEn:'You',      thai:'สวัสดีครับ มีโต๊ะว่างไหมครับ',   rtgs:'sa-wat-dee khrap, mee dtoh waang mai khrap',    fr:'Bonjour, avez-vous une table libre ?',        en:'Hello, do you have a free table?'},
+    {who:'autre', whoFr:'Serveur',   whoEn:'Waiter',   thai:'มีครับ กี่คนครับ',                rtgs:'mee khrap, gee khon khrap',                     fr:'Oui, pour combien de personnes ?',            en:'Yes, for how many people?'},
+    {who:'vous',  whoFr:'Vous',      whoEn:'You',      thai:'สองคนครับ',                       rtgs:'song khon khrap',                               fr:'Deux personnes.',                             en:'Two people.'},
+    {who:'autre', whoFr:'Serveur',   whoEn:'Waiter',   thai:'นี่คือเมนูครับ',                  rtgs:'nee kue me-nu khrap',                           fr:'Voici le menu.',                              en:'Here is the menu.'},
+    {who:'vous',  whoFr:'Vous',      whoEn:'You',      thai:'ขอผัดไทยหนึ่งจานครับ',           rtgs:'kor phat thai nueng jaan khrap',                fr:'Je voudrais un pad thaï s\'il vous plaît.',   en:'I would like a pad thai please.'},
+    {who:'autre', whoFr:'Serveur',   whoEn:'Waiter',   thai:'เผ็ดไหมครับ',                     rtgs:'phet mai khrap',                                fr:'Épicé ?',                                     en:'Spicy?'},
+    {who:'vous',  whoFr:'Vous',      whoEn:'You',      thai:'ไม่เผ็ดครับ ขอบคุณครับ',          rtgs:'mai phet khrap, khop-khun khrap',               fr:'Pas épicé, merci.',                           en:'Not spicy, thank you.'},
+    {who:'vous',  whoFr:'Vous',      whoEn:'You',      thai:'เก็บเงินด้วยครับ',                rtgs:'gep ngern duay khrap',                          fr:'L\'addition s\'il vous plaît.',               en:'The bill please.'},
+    {who:'autre', whoFr:'Serveur',   whoEn:'Waiter',   thai:'สองร้อยบาทครับ',                  rtgs:'song roi baht khrap',                           fr:'200 baht.',                                   en:'200 baht.'},
+  ]},
+  { id:'hotel', icon:'🏨', title:'À l\'hôtel', titleEn:'At the hotel', lines:[
+    {who:'vous',  whoFr:'Vous',      whoEn:'You',      thai:'สวัสดีครับ ผมจองห้องไว้ครับ',     rtgs:'sa-wat-dee khrap, phom jong hong wai khrap',    fr:'Bonjour, j\'ai une réservation.',             en:'Hello, I have a reservation.'},
+    {who:'autre', whoFr:'Réception', whoEn:'Reception',thai:'ชื่ออะไรครับ',                    rtgs:'chue a-rai khrap',                              fr:'Votre nom ?',                                 en:'Your name?'},
+    {who:'vous',  whoFr:'Vous',      whoEn:'You',      thai:'ผมจองสามคืนครับ',                 rtgs:'phom jong saam kuen khrap',                     fr:'J\'ai réservé pour trois nuits.',             en:'I reserved for three nights.'},
+    {who:'autre', whoFr:'Réception', whoEn:'Reception',thai:'นี่คือกุญแจห้อง 205 ครับ',        rtgs:'nee kue gun-jae hong song-song-ha khrap',       fr:'Voici la clé, chambre 205.',                  en:'Here is the key, room 205.'},
+    {who:'vous',  whoFr:'Vous',      whoEn:'You',      thai:'มีไวไฟไหมครับ',                   rtgs:'mee wai-fai mai khrap',                         fr:'Avez-vous le wifi ?',                         en:'Do you have wifi?'},
+    {who:'autre', whoFr:'Réception', whoEn:'Reception',thai:'มีครับ รหัสคือ TH-HOTEL',         rtgs:'mee khrap, ra-hat kue TH-HOTEL',                fr:'Oui, le mot de passe est TH-HOTEL.',          en:'Yes, the password is TH-HOTEL.'},
+    {who:'vous',  whoFr:'Vous',      whoEn:'You',      thai:'อาหารเช้าอยู่ที่ไหนครับ',         rtgs:'a-haan chao yoo tee nai khrap',                 fr:'Où se trouve le petit-déjeuner ?',            en:'Where is breakfast?'},
+    {who:'autre', whoFr:'Réception', whoEn:'Reception',thai:'ชั้นหนึ่งครับ เปิดเจ็ดโมงครับ',   rtgs:'chan nueng khrap, bpert jet mong khrap',        fr:'Au premier étage, ouvert à 7h.',              en:'First floor, open at 7am.'},
+  ]},
+  { id:'taxi', icon:'🛺', title:'En tuk-tuk / taxi', titleEn:'Tuk-tuk / taxi', lines:[
+    {who:'vous',  whoFr:'Vous',      whoEn:'You',      thai:'ว่างไหมครับ',                     rtgs:'waang mai khrap',                               fr:'Vous êtes libre ?',                           en:'Are you free?'},
+    {who:'autre', whoFr:'Chauffeur', whoEn:'Driver',   thai:'ว่างครับ ไปไหนครับ',              rtgs:'waang khrap, bpai nai khrap',                   fr:'Oui, où allez-vous ?',                        en:'Yes, where are you going?'},
+    {who:'vous',  whoFr:'Vous',      whoEn:'You',      thai:'ไปวัดโพธิ์ครับ',                  rtgs:'bpai Wat Pho khrap',                            fr:'Je vais au Wat Pho.',                         en:'I\'m going to Wat Pho.'},
+    {who:'autre', whoFr:'Chauffeur', whoEn:'Driver',   thai:'หนึ่งร้อยห้าสิบบาทครับ',         rtgs:'nueng roi ha-sip baht khrap',                   fr:'150 baht.',                                   en:'150 baht.'},
+    {who:'vous',  whoFr:'Vous',      whoEn:'You',      thai:'แพงไปครับ หนึ่งร้อยบาทได้ไหม',   rtgs:'phaeng bpai khrap, nueng roi baht dai mai',     fr:'C\'est trop cher, 100 baht ?',                en:'Too expensive, 100 baht?'},
+    {who:'autre', whoFr:'Chauffeur', whoEn:'Driver',   thai:'ตกลงครับ ขึ้นมาได้เลย',          rtgs:'dtok-long khrap, kuen maa dai loei',            fr:'D\'accord, montez !',                         en:'OK, get in!'},
+    {who:'vous',  whoFr:'Vous',      whoEn:'You',      thai:'จอดตรงนี้ครับ ขอบคุณครับ',       rtgs:'jot dtrong nee khrap, khop-khun khrap',         fr:'Arrêtez-vous ici, merci.',                    en:'Stop here please, thank you.'},
+  ]},
+  { id:'marche', icon:'🛒', title:'Au marché', titleEn:'At the market', lines:[
+    {who:'vous',  whoFr:'Vous',      whoEn:'You',      thai:'อันนี้เท่าไรครับ',               rtgs:'an-nee tao-rai khrap',                          fr:'Combien ça coûte ?',                          en:'How much is this?'},
+    {who:'autre', whoFr:'Vendeur',   whoEn:'Vendor',   thai:'สองร้อยบาทครับ',                 rtgs:'song roi baht khrap',                           fr:'200 baht.',                                   en:'200 baht.'},
+    {who:'vous',  whoFr:'Vous',      whoEn:'You',      thai:'แพงไปครับ ลดได้ไหม',            rtgs:'phaeng bpai khrap, lot dai mai',                fr:'C\'est trop cher, vous pouvez réduire ?',     en:'Too expensive, can you lower the price?'},
+    {who:'autre', whoFr:'Vendeur',   whoEn:'Vendor',   thai:'ลดให้หนึ่งร้อยห้าสิบบาทครับ',  rtgs:'lot hai nueng roi ha-sip baht khrap',           fr:'Je vous fais 150 baht.',                      en:'I\'ll give it to you for 150 baht.'},
+    {who:'vous',  whoFr:'Vous',      whoEn:'You',      thai:'โอเค เอาสองอันครับ',             rtgs:'o-kay, ao song an khrap',                       fr:'D\'accord, j\'en prends deux.',               en:'OK, I\'ll take two.'},
+    {who:'vous',  whoFr:'Vous',      whoEn:'You',      thai:'มีสีแดงไหมครับ',                 rtgs:'mee see daeng mai khrap',                       fr:'Vous avez en rouge ?',                        en:'Do you have it in red?'},
+    {who:'autre', whoFr:'Vendeur',   whoEn:'Vendor',   thai:'มีครับ นี่เลยครับ ขอบคุณครับ',  rtgs:'mee khrap, nee loei khrap, khop-khun khrap',    fr:'Oui, voilà ! Merci.',                         en:'Yes, here you go! Thank you.'},
+  ]},
+  { id:'medecin', icon:'🏥', title:'Chez le médecin', titleEn:'At the doctor', lines:[
+    {who:'vous',  whoFr:'Vous',      whoEn:'You',      thai:'ปวดท้องครับ',                    rtgs:'bpuat tong khrap',                              fr:'J\'ai mal au ventre.',                        en:'I have a stomachache.'},
+    {who:'autre', whoFr:'Médecin',   whoEn:'Doctor',   thai:'เป็นมานานแค่ไหนครับ',           rtgs:'bpen maa naan kae nai khrap',                   fr:'Depuis combien de temps ?',                   en:'How long have you had this?'},
+    {who:'vous',  whoFr:'Vous',      whoEn:'You',      thai:'ตั้งแต่เมื่อคืนครับ',            rtgs:'dtang-dtae mua kuen khrap',                     fr:'Depuis hier soir.',                           en:'Since last night.'},
+    {who:'autre', whoFr:'Médecin',   whoEn:'Doctor',   thai:'มีไข้ไหมครับ',                  rtgs:'mee khai mai khrap',                            fr:'Vous avez de la fièvre ?',                    en:'Do you have a fever?'},
+    {who:'vous',  whoFr:'Vous',      whoEn:'You',      thai:'มีครับ สามสิบแปดองศาครับ',       rtgs:'mee khrap, saam-sip-paet ong-sa khrap',         fr:'Oui, 38 degrés.',                             en:'Yes, 38 degrees.'},
+    {who:'autre', whoFr:'Médecin',   whoEn:'Doctor',   thai:'จะให้ยาครับ',                   rtgs:'ja hai yaa khrap',                              fr:'Je vais vous donner des médicaments.',        en:'I\'ll give you some medicine.'},
+    {who:'autre', whoFr:'Médecin',   whoEn:'Doctor',   thai:'กินวันละสองครั้งครับ',          rtgs:'gin wan la song khrang khrap',                  fr:'Prenez-en deux fois par jour.',               en:'Take it twice a day.'},
+  ]},
+  { id:'spa', icon:'💆', title:'Au spa / massage', titleEn:'At the spa', lines:[
+    {who:'vous',  whoFr:'Vous',      whoEn:'You',      thai:'ขอนวดหนึ่งชั่วโมงครับ',         rtgs:'kor nuat nueng chua-mong khrap',                fr:'Je voudrais un massage d\'une heure.',        en:'I\'d like a one-hour massage.'},
+    {who:'autre', whoFr:'Hôtesse',   whoEn:'Staff',    thai:'นวดแบบไหนครับ',                 rtgs:'nuat baep nai khrap',                           fr:'Quel type de massage ?',                      en:'What type of massage?'},
+    {who:'vous',  whoFr:'Vous',      whoEn:'You',      thai:'นวดแผนไทยครับ',                 rtgs:'nuat phaen Thai khrap',                         fr:'Massage thaï.',                               en:'Thai massage.'},
+    {who:'autre', whoFr:'Hôtesse',   whoEn:'Staff',    thai:'สามร้อยบาทครับ',                rtgs:'saam roi baht khrap',                           fr:'300 baht.',                                   en:'300 baht.'},
+    {who:'vous',  whoFr:'Vous',      whoEn:'You',      thai:'โอเค ครับ',                     rtgs:'o-kay khrap',                                   fr:'D\'accord.',                                  en:'OK.'},
+    {who:'autre', whoFr:'Hôtesse',   whoEn:'Staff',    thai:'แรงไปไหมครับ',                 rtgs:'raeng bpai mai khrap',                          fr:'Trop fort ?',                                 en:'Too hard?'},
+    {who:'vous',  whoFr:'Vous',      whoEn:'You',      thai:'ดีครับ ขอบคุณครับ',             rtgs:'dee khrap, khop-khun khrap',                    fr:'Parfait, merci.',                             en:'Perfect, thank you.'},
+  ]},
+];
+
+function setPhView(view, btn) {
+  document.querySelectorAll('.ph-view-btn').forEach(b=>b.classList.remove('active'));
+  if(btn) btn.classList.add('active');
+  document.getElementById('phrasesSection').style.display = view==='phrases' ? '' : 'none';
+  document.getElementById('sitWrap').style.display = view==='situations' ? '' : 'none';
+  if(view==='situations') renderSituations();
+}
+
+function toggleSituation(id) {
+  document.getElementById('sit-'+id).classList.toggle('open');
+}
+
+function renderSituations() {
+  const lang = currentLang;
+  document.getElementById('sitGrid').innerHTML = situations.map(s=>`
+    <div class="sit-card" id="sit-${s.id}" onclick="toggleSituation('${s.id}')">
+      <div class="sit-header">
+        <span class="sit-icon">${s.icon}</span>
+        <span class="sit-meta">
+          <span class="sit-title">${lang==='fr'?s.title:s.titleEn}</span>
+          <span class="sit-count">${s.lines.length} répliques</span>
+        </span>
+        <span class="sit-arrow">▼</span>
+      </div>
+      <div class="sit-body">
+        ${s.lines.map(l=>`
+          <div class="sit-line">
+            <span class="sit-speaker ${l.who}">${lang==='fr'?l.whoFr:l.whoEn}</span>
+            <div class="sit-content">
+              <span class="sit-thai">${l.thai}</span>
+              <span class="sit-rtgs">${l.rtgs}</span>
+              <span class="sit-tr">${lang==='fr'?l.fr:l.en}</span>
+            </div>
+            <button class="sit-spk" data-phrase="${l.thai}" onclick="event.stopPropagation();speakThai(this.dataset.phrase,this)">🔊</button>
+          </div>`).join('')}
+      </div>
+    </div>`).join('');
+}
 
 function setPhraseFilter(cat) {
   phraseFilter = cat;
