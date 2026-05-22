@@ -637,6 +637,28 @@ footer{border-top:1px solid var(--border);padding:40px 24px;text-align:center;co
   .cnt-n{font-size:17px}
   .cnt-thai{font-size:19px}
 }
+
+/* ─── QUIZ CHIFFRES ──────────────────────────────────────────────────────── */
+.cnt-quiz-wrap{max-width:600px;margin:0 auto;padding:0 24px 80px}
+.cnt-quiz-wrap .sec-hd{margin-bottom:28px}
+.cntq-feedback{min-height:26px;font-size:15px;font-weight:700;margin-top:16px;text-align:center;transition:all .2s}
+.cntq-feedback.ok{color:var(--teal)}
+.cntq-feedback.ko{color:var(--rose)}
+.cntq-thai-box{text-align:center;padding:32px 16px;background:rgba(255,255,255,.03);border:1px solid var(--border);border-radius:16px;margin-bottom:24px}
+.cntq-thai{font-family:var(--thai-font);font-size:68px;font-weight:500;line-height:1.2;display:block;margin-bottom:10px}
+.cntq-rtgs{font-size:20px;color:var(--gold);font-style:italic;display:block;font-weight:600}
+.cntq-input-row{display:flex;gap:12px;align-items:center;justify-content:center}
+.cntq-input{width:160px;padding:14px 18px;background:var(--bg3);border:1px solid var(--border-h);border-radius:12px;color:var(--text);font-family:'Inter',sans-serif;font-size:22px;font-weight:700;text-align:center;outline:none;transition:border-color .2s;-moz-appearance:textfield}
+.cntq-input::-webkit-outer-spin-button,.cntq-input::-webkit-inner-spin-button{-webkit-appearance:none}
+.cntq-input:focus{border-color:var(--gold)}
+.cntq-input:disabled{opacity:.6}
+.cntq-mode-desc{font-size:14px;color:var(--text2);margin-bottom:28px;line-height:1.6;text-align:center}
+@media(max-width:768px){
+  .cnt-quiz-wrap{padding:0 14px 60px}
+  .cntq-thai{font-size:52px}
+  .cntq-rtgs{font-size:17px}
+  .cntq-input{width:130px;font-size:18px;padding:12px 14px}
+}
 </style>
 </head>
 <body>
@@ -844,6 +866,64 @@ footer{border-top:1px solid var(--border);padding:40px 24px;text-align:center;co
       <div class="cnt-cell" onclick="speakCnt(this,'สี่สิบแปด')"><span class="cnt-n">48</span><span class="cnt-thai">สี่สิบแปด</span><span class="cnt-rtgs">si sip paet</span><span class="cnt-spk">🔊</span></div>
       <div class="cnt-cell" onclick="speakCnt(this,'สี่สิบเก้า')"><span class="cnt-n">49</span><span class="cnt-thai">สี่สิบเก้า</span><span class="cnt-rtgs">si sip kao</span><span class="cnt-spk">🔊</span></div>
       <div class="cnt-cell" onclick="speakCnt(this,'ห้าสิบ')"><span class="cnt-n">50</span><span class="cnt-thai">ห้าสิบ</span><span class="cnt-rtgs">ha sip</span><span class="cnt-spk">🔊</span></div>
+    </div>
+  </div>
+
+  <!-- QUIZ CHIFFRES -->
+  <div class="cnt-quiz-wrap">
+    <div class="sec-hd">
+      <div class="sec-tag">Quiz</div>
+      <div class="sec-title">Quiz — Les nombres</div>
+      <p class="sec-desc">10 questions pour tester votre mémoire des chiffres thaïs.</p>
+    </div>
+
+    <!-- Écran de départ -->
+    <div class="quiz-card" id="cntQStart">
+      <div class="qmodes">
+        <button class="qmode active" id="cntBtnListen" onclick="setCntMode('listen',this)">🎧 Écoute</button>
+        <button class="qmode" id="cntBtnWrite" onclick="setCntMode('write',this)">✍️ Traduction</button>
+      </div>
+      <p class="cntq-mode-desc" id="cntModeDesc">Écoutez le nombre et choisissez parmi 3 réponses.</p>
+      <button class="btn-g" style="display:block;margin:0 auto" onclick="startCntQuiz()">Commencer</button>
+    </div>
+
+    <!-- Jeu -->
+    <div class="quiz-card" id="cntQGame" style="display:none">
+      <div class="qnum" id="cntQNum">Question 1 / 10</div>
+
+      <!-- Mode écoute -->
+      <div id="cntQListen">
+        <button class="qplay" style="margin:0 auto 24px" onclick="playCntAudio(cntQState.questions[cntQState.idx].thai)">
+          <span class="qplay-icon">🔊</span>
+          <span class="qplay-label">Réécouter</span>
+        </button>
+        <div class="qopts" id="cntQOpts" style="grid-template-columns:repeat(3,1fr)"></div>
+      </div>
+
+      <!-- Mode traduction -->
+      <div id="cntQWrite" style="display:none">
+        <div class="cntq-thai-box">
+          <span class="cntq-thai" id="cntQThai"></span>
+          <span class="cntq-rtgs" id="cntQRtgs"></span>
+        </div>
+        <div class="cntq-input-row">
+          <input class="cntq-input" type="number" id="cntQInput" min="1" max="50" placeholder="?" onkeydown="if(event.key==='Enter')answerCntWrite()">
+          <button class="btn-g" onclick="answerCntWrite()">Valider</button>
+        </div>
+      </div>
+
+      <div class="cntq-feedback" id="cntQFeedback"></div>
+      <button class="btn-g" id="cntQNext" style="display:none;margin:20px auto 0" onclick="nextCntQ()">Question suivante →</button>
+    </div>
+
+    <!-- Score final -->
+    <div class="quiz-card" id="cntQScore" style="display:none;text-align:center;padding:48px 32px">
+      <div style="font-size:52px;margin-bottom:16px">🏆</div>
+      <div class="qscore" style="margin-bottom:12px">
+        <div class="qsi ok"><div class="qsv" id="cntQScoreVal">0</div><div class="qsl">/ 10</div></div>
+      </div>
+      <div id="cntQScoreMsg" style="font-size:16px;font-weight:700;margin-bottom:28px;color:var(--text2)"></div>
+      <button class="btn-g" onclick="restartCntQuiz()">Rejouer</button>
     </div>
   </div>
 </div>
@@ -2448,6 +2528,137 @@ function speakThai(text, triggerBtn) {
     u.onend = () => { btn.classList.remove('playing'); activeSpeakBtn = null; };
   }
   window.speechSynthesis.speak(u);
+}
+
+/* ── DATA CHIFFRES ── */
+const cntData=[
+  {n:1,thai:'หนึ่ง',rtgs:'nueng'},{n:2,thai:'สอง',rtgs:'song'},{n:3,thai:'สาม',rtgs:'sam'},
+  {n:4,thai:'สี่',rtgs:'si'},{n:5,thai:'ห้า',rtgs:'ha'},{n:6,thai:'หก',rtgs:'hok'},
+  {n:7,thai:'เจ็ด',rtgs:'jet'},{n:8,thai:'แปด',rtgs:'paet'},{n:9,thai:'เก้า',rtgs:'kao'},
+  {n:10,thai:'สิบ',rtgs:'sip'},{n:11,thai:'สิบเอ็ด',rtgs:'sip et'},{n:12,thai:'สิบสอง',rtgs:'sip song'},
+  {n:13,thai:'สิบสาม',rtgs:'sip sam'},{n:14,thai:'สิบสี่',rtgs:'sip si'},{n:15,thai:'สิบห้า',rtgs:'sip ha'},
+  {n:16,thai:'สิบหก',rtgs:'sip hok'},{n:17,thai:'สิบเจ็ด',rtgs:'sip jet'},{n:18,thai:'สิบแปด',rtgs:'sip paet'},
+  {n:19,thai:'สิบเก้า',rtgs:'sip kao'},{n:20,thai:'ยี่สิบ',rtgs:'yi sip'},{n:21,thai:'ยี่สิบเอ็ด',rtgs:'yi sip et'},
+  {n:22,thai:'ยี่สิบสอง',rtgs:'yi sip song'},{n:23,thai:'ยี่สิบสาม',rtgs:'yi sip sam'},{n:24,thai:'ยี่สิบสี่',rtgs:'yi sip si'},
+  {n:25,thai:'ยี่สิบห้า',rtgs:'yi sip ha'},{n:26,thai:'ยี่สิบหก',rtgs:'yi sip hok'},{n:27,thai:'ยี่สิบเจ็ด',rtgs:'yi sip jet'},
+  {n:28,thai:'ยี่สิบแปด',rtgs:'yi sip paet'},{n:29,thai:'ยี่สิบเก้า',rtgs:'yi sip kao'},{n:30,thai:'สามสิบ',rtgs:'sam sip'},
+  {n:31,thai:'สามสิบเอ็ด',rtgs:'sam sip et'},{n:32,thai:'สามสิบสอง',rtgs:'sam sip song'},{n:33,thai:'สามสิบสาม',rtgs:'sam sip sam'},
+  {n:34,thai:'สามสิบสี่',rtgs:'sam sip si'},{n:35,thai:'สามสิบห้า',rtgs:'sam sip ha'},{n:36,thai:'สามสิบหก',rtgs:'sam sip hok'},
+  {n:37,thai:'สามสิบเจ็ด',rtgs:'sam sip jet'},{n:38,thai:'สามสิบแปด',rtgs:'sam sip paet'},{n:39,thai:'สามสิบเก้า',rtgs:'sam sip kao'},
+  {n:40,thai:'สี่สิบ',rtgs:'si sip'},{n:41,thai:'สี่สิบเอ็ด',rtgs:'si sip et'},{n:42,thai:'สี่สิบสอง',rtgs:'si sip song'},
+  {n:43,thai:'สี่สิบสาม',rtgs:'si sip sam'},{n:44,thai:'สี่สิบสี่',rtgs:'si sip si'},{n:45,thai:'สี่สิบห้า',rtgs:'si sip ha'},
+  {n:46,thai:'สี่สิบหก',rtgs:'si sip hok'},{n:47,thai:'สี่สิบเจ็ด',rtgs:'si sip jet'},{n:48,thai:'สี่สิบแปด',rtgs:'si sip paet'},
+  {n:49,thai:'สี่สิบเก้า',rtgs:'si sip kao'},{n:50,thai:'ห้าสิบ',rtgs:'ha sip'}
+];
+
+let cntQState={mode:'listen',questions:[],idx:0,score:0,answered:false};
+
+function setCntMode(mode,btn){
+  cntQState.mode=mode;
+  document.querySelectorAll('#cntQStart .qmode').forEach(b=>b.classList.remove('active'));
+  if(btn) btn.classList.add('active');
+  document.getElementById('cntModeDesc').textContent = mode==='listen'
+    ? 'Écoutez le nombre thaï et choisissez parmi 3 réponses.'
+    : 'Lisez le mot thaï avec sa prononciation en or et tapez le nombre correspondant.';
+}
+
+function startCntQuiz(){
+  const s=cntQState;
+  s.questions=[...cntData].sort(()=>Math.random()-.5).slice(0,10);
+  s.idx=0; s.score=0; s.answered=false;
+  document.getElementById('cntQStart').style.display='none';
+  document.getElementById('cntQScore').style.display='none';
+  document.getElementById('cntQGame').style.display='block';
+  showCntQ();
+}
+
+function showCntQ(){
+  const s=cntQState, q=s.questions[s.idx];
+  s.answered=false;
+  document.getElementById('cntQNum').textContent=`Question ${s.idx+1} / 10`;
+  document.getElementById('cntQFeedback').textContent='';
+  document.getElementById('cntQFeedback').className='cntq-feedback';
+  document.getElementById('cntQNext').style.display='none';
+  if(s.mode==='listen'){
+    document.getElementById('cntQListen').style.display='block';
+    document.getElementById('cntQWrite').style.display='none';
+    // 3 choix : bonne réponse + 2 mauvaises
+    const wrong=[...cntData].filter(x=>x.n!==q.n).sort(()=>Math.random()-.5).slice(0,2);
+    const choices=[q,...wrong].sort(()=>Math.random()-.5);
+    const el=document.getElementById('cntQOpts'); el.innerHTML='';
+    choices.forEach(c=>{
+      const b=document.createElement('button');
+      b.className='qopt'; b.textContent=c.n;
+      b.onclick=()=>answerCntListen(c.n===q.n,b,q);
+      el.appendChild(b);
+    });
+    setTimeout(()=>playCntAudio(q.thai),350);
+  } else {
+    document.getElementById('cntQListen').style.display='none';
+    document.getElementById('cntQWrite').style.display='block';
+    document.getElementById('cntQThai').textContent=q.thai;
+    document.getElementById('cntQRtgs').textContent=q.rtgs;
+    const inp=document.getElementById('cntQInput');
+    inp.value=''; inp.disabled=false;
+    setTimeout(()=>{ inp.focus(); playCntAudio(q.thai); },350);
+  }
+}
+
+function playCntAudio(text){
+  if(!window.speechSynthesis) return;
+  window.speechSynthesis.cancel();
+  const u=new SpeechSynthesisUtterance(text);
+  u.lang='th-TH'; u.rate=0.8; u.pitch=1;
+  if(thaiVoice) u.voice=thaiVoice;
+  window.speechSynthesis.speak(u);
+}
+
+function answerCntListen(correct,btn,q){
+  if(cntQState.answered) return;
+  cntQState.answered=true;
+  if(correct){ btn.classList.add('correct'); cntQState.score++; showCntFeedback(true,q); }
+  else {
+    btn.classList.add('wrong');
+    document.querySelectorAll('#cntQOpts .qopt').forEach(b=>{ if(+b.textContent===q.n) b.classList.add('correct'); });
+    showCntFeedback(false,q);
+  }
+  document.querySelectorAll('#cntQOpts .qopt').forEach(b=>b.disabled=true);
+  document.getElementById('cntQNext').style.display='block';
+}
+
+function answerCntWrite(){
+  if(cntQState.answered) return;
+  const q=cntQState.questions[cntQState.idx];
+  const val=parseInt(document.getElementById('cntQInput').value);
+  if(isNaN(val)||val<1||val>50) return;
+  cntQState.answered=true;
+  document.getElementById('cntQInput').disabled=true;
+  const correct=val===q.n;
+  if(correct) cntQState.score++;
+  showCntFeedback(correct,q);
+  document.getElementById('cntQNext').style.display='block';
+}
+
+function showCntFeedback(correct,q){
+  const el=document.getElementById('cntQFeedback');
+  if(correct){ el.className='cntq-feedback ok'; el.textContent='✓ Correct !'; }
+  else { el.className='cntq-feedback ko'; el.innerHTML=`✗ C'était <strong>${q.n}</strong> — ${q.thai} (${q.rtgs})`; }
+}
+
+function nextCntQ(){
+  cntQState.idx++;
+  if(cntQState.idx>=10){
+    document.getElementById('cntQGame').style.display='none';
+    document.getElementById('cntQScore').style.display='block';
+    const s=cntQState.score;
+    document.getElementById('cntQScoreVal').textContent=s;
+    document.getElementById('cntQScoreMsg').textContent=s>=9?'🌟 Parfait !':s>=7?'👍 Très bien !':s>=5?'🙂 Pas mal, continue !':'💪 Entraîne-toi encore !';
+  } else { showCntQ(); }
+}
+
+function restartCntQuiz(){
+  document.getElementById('cntQScore').style.display='none';
+  document.getElementById('cntQStart').style.display='block';
 }
 
 function speakCnt(cell, text) {
