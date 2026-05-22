@@ -2366,6 +2366,7 @@ let filter = 'all';
 let quizMode = 'c2r';
 let quizScore = {ok:0, ko:0};
 let quizQ = null;
+let lastConsId = null;
 
 // ─── NAVIGATION ────────────────────────────────────────────────────────────
 function goTab(tab, btnEl) {
@@ -2502,6 +2503,12 @@ const vocabData = [
 let vocabCatFilter='__ALL__';
 
 const catIcons={Couleurs:'🎨',Famille:'👨‍👩‍👧',Nourriture:'🍜',Corps:'🧍',Transports:'🚕',Animaux:'🐾'};
+
+function shuffle(arr){
+  const a=[...arr];
+  for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}
+  return a;
+}
 
 function initVocab(){
   const cats=['__ALL__',...new Set(vocabData.map(v=>v.cat))];
@@ -2695,8 +2702,10 @@ function startQuiz() {
 }
 
 function nextQuestion() {
-  const idx = Math.floor(Math.random()*consonants.length);
-  const correct = consonants[idx];
+  let correct;
+  do { correct = consonants[Math.floor(Math.random()*consonants.length)]; }
+  while(correct.id === lastConsId && consonants.length > 1);
+  lastConsId = correct.id;
   quizQ = correct;
 
   // build 4 options
@@ -2766,6 +2775,7 @@ let phQuizMode = 't2f';
 let selectedPhCats = [...new Set(phrases.map(p=>p.cat))];
 let phQuizScore = {ok:0, ko:0};
 let phQuizQ = null;
+let lastPhraseThai = null;
 let phQuizOpts = [];
 let phQuizCount = parseInt(localStorage.getItem('ph-quiz-count')||'0');
 
@@ -2886,7 +2896,10 @@ function nextPhraseQuestion() {
   }
   const pool = phrases.filter(p => selectedPhCats.includes(p.cat));
   if(pool.length < 4) return;
-  const correct = pool[Math.floor(Math.random()*pool.length)];
+  let correct;
+  do { correct = pool[Math.floor(Math.random()*pool.length)]; }
+  while(correct.thai === lastPhraseThai && pool.length > 1);
+  lastPhraseThai = correct.thai;
   phQuizQ = correct;
   let opts = [correct];
   let tries = 0;
@@ -3204,7 +3217,7 @@ function setCntMode(mode,btn){
 
 function startCntQuiz(){
   const s=cntQState;
-  s.questions=[...cntData].sort(()=>Math.random()-.5).slice(0,10);
+  s.questions=shuffle(cntData).slice(0,10);
   s.idx=0; s.score=0; s.answered=false;
   document.getElementById('cntQStart').style.display='none';
   document.getElementById('cntQScore').style.display='none';
@@ -3323,7 +3336,7 @@ function setVowMode(mode,btn){
 }
 
 function startVowQuiz(){
-  vowQState.questions=[...vowelPool].sort(()=>Math.random()-.5).slice(0,10);
+  vowQState.questions=shuffle(vowelPool).slice(0,10);
   vowQState.idx=0; vowQState.score=0; vowQState.answered=false;
   document.getElementById('vowQStart').style.display='none';
   document.getElementById('vowQScore').style.display='none';
@@ -3416,10 +3429,9 @@ function setToneMode(mode,btn){
 }
 
 function startToneQuiz(){
-  // 10 questions tirées des 5 tons (répétition possible)
-  const q=[];
-  for(let i=0;i<10;i++) q.push(tones[Math.floor(Math.random()*tones.length)]);
-  toneQState.questions=q; toneQState.idx=0; toneQState.score=0; toneQState.answered=false;
+  // 10 questions : chaque ton apparaît exactement 2 fois, ordre mélangé
+  toneQState.questions=shuffle([...tones,...tones]);
+  toneQState.idx=0; toneQState.score=0; toneQState.answered=false;
   document.getElementById('toneQStart').style.display='none';
   document.getElementById('toneQScore').style.display='none';
   document.getElementById('toneQGame').style.display='block';
