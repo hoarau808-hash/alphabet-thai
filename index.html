@@ -297,9 +297,17 @@ nav.topnav{
 .qmode{padding:10px 18px;border-radius:10px;border:1px solid var(--border);background:transparent;color:var(--text2);font-family:'Inter',sans-serif;font-size:13px;font-weight:500;cursor:pointer;transition:all .2s}
 .qmode.active{border-color:var(--gold);color:var(--gold);background:rgba(240,180,41,.1)}
 .qmode.active{border-color:var(--gold);color:var(--gold);background:rgba(240,180,41,.1)}
-.quiz-start{text-align:center;padding:60px 24px}
+.quiz-start{text-align:center;padding:40px 24px}
 .quiz-start h2{font-size:32px;font-weight:800;margin-bottom:12px}
-.quiz-start p{color:var(--text2);margin-bottom:32px}
+.quiz-start p{color:var(--text2);margin-bottom:28px}
+.qmode-cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(155px,1fr));gap:14px;margin-bottom:28px;text-align:left}
+.qmode-card{display:flex;flex-direction:column;gap:6px;padding:20px 16px;border-radius:14px;border:2px solid var(--border);background:var(--bg3);cursor:pointer;transition:all .2s;font-family:'Inter',sans-serif}
+.qmode-card:hover{border-color:var(--text3);background:var(--bg2)}
+.qmode-card.active{border-color:var(--gold);background:rgba(240,180,41,.07)}
+.qmc-icon{font-size:34px;line-height:1;margin-bottom:4px}
+.qmc-title{font-size:14px;font-weight:700;color:var(--text)}
+.qmode-card.active .qmc-title{color:var(--gold)}
+.qmc-desc{font-size:12px;color:var(--text3);line-height:1.5}
 
 /* FOOTER */
 footer{border-top:1px solid var(--border);padding:40px 24px;text-align:center;color:var(--text3);font-size:13px}
@@ -383,6 +391,7 @@ footer{border-top:1px solid var(--border);padding:40px 24px;text-align:center;co
   .qchar{font-size:80px}
   .qrtgs{font-size:30px}
   .qprompt{font-size:16px}
+  .qmode-cards{grid-template-columns:1fr;gap:10px}
   .qopts{gap:10px}
   .qopt{padding:20px 10px;min-height:88px;font-size:20px;border-radius:12px}
   .qopt.qopt-thai{font-size:36px;padding:14px 8px}
@@ -951,9 +960,9 @@ footer{border-top:1px solid var(--border);padding:40px 24px;text-align:center;co
   <!-- CHIFFRES 1-50 -->
   <div class="cnt-section">
     <div class="sec-hd">
-      <div class="sec-tag">Compter en thaï</div>
-      <div class="sec-title">Les nombres de 1 à 50</div>
-      <p class="sec-desc">Cliquez sur un nombre pour l'entendre. Apprenez à compter en thaï !</p>
+      <div class="sec-tag" id="cntSecTag">Compter en thaï</div>
+      <div class="sec-title" id="cntSecTitle">Les nombres de 1 à 50</div>
+      <p class="sec-desc" id="cntSecDesc">Cliquez sur un nombre pour l'entendre. Apprenez à compter en thaï !</p>
     </div>
     <div class="cnt-grid">
       <div class="cnt-cell" onclick="speakCnt(this,'หนึ่ง')"><span class="cnt-n">1</span><span class="cnt-thai">หนึ่ง</span><span class="cnt-rtgs">nueng</span><span class="cnt-spk">🔊</span></div>
@@ -1053,10 +1062,22 @@ footer{border-top:1px solid var(--border);padding:40px 24px;text-align:center;co
       <div id="quizStart" class="quiz-start">
         <h2 id="quizTitle">Quiz Interactif</h2>
         <p id="quizDesc">Testez vos connaissances sur les consonnes thaïes. Choisissez votre mode d'apprentissage !</p>
-        <div class="qmodes">
-          <button class="qmode active" id="mode1" onclick="setMode('c2r',this)">ก → k &nbsp; Caractère → Son</button>
-          <button class="qmode" id="mode2" onclick="setMode('r2c',this)">k → ก &nbsp; Son → Caractère</button>
-          <button class="qmode" id="mode3" onclick="setMode('s2c',this)">🔊 → ก &nbsp; Écouter → Caractère</button>
+        <div class="qmode-cards">
+          <button class="qmode-card active" id="mode1" onclick="setMode('c2r',this)">
+            <span class="qmc-icon">👁️</span>
+            <span class="qmc-title" id="consM1Title">Voir → Deviner</span>
+            <span class="qmc-desc" id="consM1Desc">On te montre le caractère thaï, trouve le son romanisé</span>
+          </button>
+          <button class="qmode-card" id="mode2" onclick="setMode('r2c',this)">
+            <span class="qmc-icon">🔤</span>
+            <span class="qmc-title" id="consM2Title">Son → Trouver</span>
+            <span class="qmc-desc" id="consM2Desc">On te donne le son romanisé, trouve le caractère thaï</span>
+          </button>
+          <button class="qmode-card" id="mode3" onclick="setMode('s2c',this)">
+            <span class="qmc-icon">🔊</span>
+            <span class="qmc-title" id="consM3Title">Écouter → Trouver</span>
+            <span class="qmc-desc" id="consM3Desc">On joue le son thaï, trouve le bon caractère</span>
+          </button>
         </div>
         <button class="btn-g" id="quizStartBtn" onclick="startQuiz()">Démarrer le Quiz</button>
       </div>
@@ -1089,9 +1110,17 @@ footer{border-top:1px solid var(--border);padding:40px 24px;text-align:center;co
       <div id="phQuizStart" class="quiz-start">
         <h2 id="phQuizTitle">Quiz Phrases</h2>
         <p id="phQuizDesc">Testez votre compréhension des phrases de base.</p>
-        <div class="qmodes">
-          <button class="qmode phmode active" id="phmode1" onclick="setPhMode('t2f',this)">ไทย → FR</button>
-          <button class="qmode phmode" id="phmode2" onclick="setPhMode('f2t',this)">FR → ไทย</button>
+        <div class="qmode-cards">
+          <button class="qmode-card phmode active" id="phmode1" onclick="setPhMode('t2f',this)">
+            <span class="qmc-icon">🇹🇭</span>
+            <span class="qmc-title" id="phM1Title">Thaï → Traduction</span>
+            <span class="qmc-desc" id="phM1Desc">Lis la phrase thaïe, trouve sa traduction</span>
+          </button>
+          <button class="qmode-card phmode" id="phmode2" onclick="setPhMode('f2t',this)">
+            <span class="qmc-icon">💬</span>
+            <span class="qmc-title" id="phM2Title">Traduction → Thaï</span>
+            <span class="qmc-desc" id="phM2Desc">Lis la traduction, retrouve la phrase en thaï</span>
+          </button>
         </div>
         <div class="ph-cats-wrap">
           <div class="ph-cats-title" id="phCatTitle">Catégories</div>
@@ -1190,9 +1219,17 @@ footer{border-top:1px solid var(--border);padding:40px 24px;text-align:center;co
       <div class="quiz-card" id="vowQStart">
         <h2 id="vowQTitle" style="font-size:26px;font-weight:800;margin-bottom:10px;text-align:center">Quiz Voyelles</h2>
         <p id="vowQDesc" style="color:var(--text2);font-size:14px;margin-bottom:24px;text-align:center">10 questions sur les 18 voyelles thaïes.</p>
-        <div class="qmodes">
-          <button class="qmode active" id="vowBtnC2S" onclick="setVowMode('c2s',this)">เ → son &nbsp; Caractère → Son</button>
-          <button class="qmode" id="vowBtnS2C" onclick="setVowMode('s2c',this)">son → เ &nbsp; Son → Caractère</button>
+        <div class="qmode-cards">
+          <button class="qmode-card active" id="vowBtnC2S" onclick="setVowMode('c2s',this)">
+            <span class="qmc-icon">👁️</span>
+            <span class="qmc-title" id="vowM1Title">Voyelle → Son</span>
+            <span class="qmc-desc" id="vowM1Desc">On te montre la voyelle thaïe, trouve son son</span>
+          </button>
+          <button class="qmode-card" id="vowBtnS2C" onclick="setVowMode('s2c',this)">
+            <span class="qmc-icon">🔤</span>
+            <span class="qmc-title" id="vowM2Title">Son → Voyelle</span>
+            <span class="qmc-desc" id="vowM2Desc">On te donne le son, trouve la voyelle correspondante</span>
+          </button>
         </div>
         <button class="btn-g" id="vowStartBtn" style="display:block;margin:16px auto 0" onclick="startVowQuiz()">Commencer</button>
       </div>
@@ -1218,9 +1255,17 @@ footer{border-top:1px solid var(--border);padding:40px 24px;text-align:center;co
       <div class="quiz-card" id="toneQStart">
         <h2 id="toneQTitle" style="font-size:26px;font-weight:800;margin-bottom:10px;text-align:center">Quiz Tons</h2>
         <p id="toneQDesc" style="color:var(--text2);font-size:14px;margin-bottom:24px;text-align:center">10 questions sur les 5 tons thaïs.</p>
-        <div class="qmodes">
-          <button class="qmode active" id="toneBtnM2N" onclick="setToneMode('m2n',this)">ก่า → nom &nbsp; Marque → Ton</button>
-          <button class="qmode" id="toneBtnN2M" onclick="setToneMode('n2m',this)">nom → ก่า &nbsp; Ton → Marque</button>
+        <div class="qmode-cards">
+          <button class="qmode-card active" id="toneBtnM2N" onclick="setToneMode('m2n',this)">
+            <span class="qmc-icon">🎵</span>
+            <span class="qmc-title" id="toneM1Title">Signe → Ton</span>
+            <span class="qmc-desc" id="toneM1Desc">On te montre le signe de ton, trouve le nom du ton</span>
+          </button>
+          <button class="qmode-card" id="toneBtnN2M" onclick="setToneMode('n2m',this)">
+            <span class="qmc-icon">🔤</span>
+            <span class="qmc-title" id="toneM2Title">Ton → Signe</span>
+            <span class="qmc-desc" id="toneM2Desc">On te donne le nom du ton, trouve son signe</span>
+          </button>
         </div>
         <button class="btn-g" id="toneStartBtn" style="display:block;margin:16px auto 0" onclick="startToneQuiz()">Commencer</button>
       </div>
@@ -1979,6 +2024,7 @@ const T = {
     srchPh:'Chercher : ก, k, poulet…',
     voiceWarnTxt:'⚠️ Aucune voix thaïe détectée. Pour activer les sons, allez dans <strong>Préférences Système → Accessibilité → Contenu vocal</strong> et téléchargez une voix thaïe (ex. : <strong>Kanya</strong>), puis rechargez la page.',
     cardIni:'Début', cardFin:'Fin', cardMark:'Marquer appris', cardDone:'✓ Maîtrisé',
+    cntSecTag:'Compter en thaï', cntSecTitle:'Les nombres de 1 à 50', cntSecDesc:'Cliquez sur un nombre pour l\'entendre. Apprenez à compter en thaï !',
     vowTag:'Voyelles', vowTitle:'Les voyelles thaïes',
     vowDesc:'En thaï, les voyelles se placent avant, après, au-dessus ou en dessous de la consonne. Chaque voyelle a une forme courte et une forme longue.',
     vowShortGroup:'Voyelles courtes', vowLongGroup:'Voyelles longues',
@@ -1989,6 +2035,15 @@ const T = {
     toneNames:['Ton moyen','Ton bas','Ton descendant','Ton haut','Ton montant'],
     quizTitle:'Quiz Interactif', quizDesc:"Testez vos connaissances sur les consonnes thaïes. Choisissez votre mode d'apprentissage !",
     quizM1:'ก → k   Caractère → Son', quizM2:'k → ก   Son → Caractère', quizM3:'🔊 → ก   Écouter → Caractère',
+    consM1Title:'Voir → Deviner', consM1Desc:'On te montre le caractère thaï, trouve le son romanisé',
+    consM2Title:'Son → Trouver', consM2Desc:'On te donne le son romanisé, trouve le caractère thaï',
+    consM3Title:'Écouter → Trouver', consM3Desc:'On joue le son thaï, trouve le bon caractère',
+    phM1Title:'Thaï → Traduction', phM1Desc:'Lis la phrase thaïe, trouve sa traduction',
+    phM2Title:'Traduction → Thaï', phM2Desc:'Lis la traduction, retrouve la phrase en thaï',
+    vowM1Title:'Voyelle → Son', vowM1Desc:'On te montre la voyelle thaïe, trouve son son',
+    vowM2Title:'Son → Voyelle', vowM2Desc:'On te donne le son, trouve la voyelle correspondante',
+    toneM1Title:'Signe → Ton', toneM1Desc:'On te montre le signe de ton, trouve le nom du ton',
+    toneM2Title:'Ton → Signe', toneM2Desc:'On te donne le nom du ton, trouve son signe',
     quizStart:'Démarrer le Quiz', quizOk:'Correct', quizKo:'Erreur',
     quizQ:(n)=>`Question ${n}`,
     quizPC2R:'Quelle est la romanisation de ce caractère ?',
@@ -2085,6 +2140,7 @@ const T = {
     srchPh:'Search: ก, k, chicken…',
     voiceWarnTxt:'⚠️ No Thai voice detected. To enable audio, go to <strong>System Preferences → Accessibility → Spoken Content</strong> and download a Thai voice (e.g. <strong>Kanya</strong>), then reload the page.',
     cardIni:'Initial', cardFin:'Final', cardMark:'Mark as learned', cardDone:'✓ Mastered',
+    cntSecTag:'Count in Thai', cntSecTitle:'Numbers from 1 to 50', cntSecDesc:'Click on a number to hear it. Learn to count in Thai!',
     vowTag:'Vowels', vowTitle:'Thai Vowels',
     vowDesc:'In Thai, vowels are placed before, after, above, or below the consonant. Each vowel has a short and a long form.',
     vowShortGroup:'Short Vowels', vowLongGroup:'Long Vowels',
@@ -2095,6 +2151,15 @@ const T = {
     toneNames:['Mid tone','Low tone','Falling tone','High tone','Rising tone'],
     quizTitle:'Interactive Quiz', quizDesc:'Test your knowledge of Thai consonants. Choose your learning mode!',
     quizM1:'ก → k   Character → Sound', quizM2:'k → ก   Sound → Character', quizM3:'🔊 → ก   Listen → Character',
+    consM1Title:'See → Guess', consM1Desc:'You see the Thai character, find its romanized sound',
+    consM2Title:'Sound → Find', consM2Desc:'You get the romanized sound, find the Thai character',
+    consM3Title:'Listen → Find', consM3Desc:'You hear the Thai sound, find the matching character',
+    phM1Title:'Thai → Translation', phM1Desc:'Read the Thai phrase, find its translation',
+    phM2Title:'Translation → Thai', phM2Desc:'Read the translation, find the Thai phrase',
+    vowM1Title:'Vowel → Sound', vowM1Desc:'You see the Thai vowel, find its sound',
+    vowM2Title:'Sound → Vowel', vowM2Desc:'You get the sound, find the matching vowel',
+    toneM1Title:'Mark → Tone', toneM1Desc:'You see the tone mark, find the tone name',
+    toneM2Title:'Tone → Mark', toneM2Desc:'You know the tone name, find its mark',
     quizStart:'Start Quiz', quizOk:'Correct', quizKo:'Wrong',
     quizQ:(n)=>`Question ${n}`,
     quizPC2R:'What is the romanization of this character?',
@@ -2218,12 +2283,15 @@ function applyLang() {
   p('srchInput', t.srchPh);
   h('voiceWarn', t.voiceWarnTxt);
   // Vowels tab
+  s('cntSecTag', t.cntSecTag); s('cntSecTitle', t.cntSecTitle); s('cntSecDesc', t.cntSecDesc);
   s('vowTag', t.vowTag); s('vowTitle', t.vowTitle); s('vowDesc', t.vowDesc);
   // Tones tab
   s('tonTag', t.tonTag); s('tonTitle', t.tonTitle); s('tonDesc', t.tonDesc);
   // Quiz
   s('quizTitle', t.quizTitle); s('quizDesc', t.quizDesc);
-  s('mode1', t.quizM1); s('mode2', t.quizM2); s('mode3', t.quizM3);
+  s('consM1Title', t.consM1Title); s('consM1Desc', t.consM1Desc);
+  s('consM2Title', t.consM2Title); s('consM2Desc', t.consM2Desc);
+  s('consM3Title', t.consM3Title); s('consM3Desc', t.consM3Desc);
   s('quizStartBtn', t.quizStart); s('qLblOk', t.quizOk); s('qLblKo', t.quizKo);
   s('qReplayLbl', t.quizReplay); s('quizNewBtn', t.quizNew);
   // Phrases tab
@@ -2262,14 +2330,17 @@ function applyLang() {
   s('cntQNext', t.qNext); s('cntRestartBtn', t.qReplay);
   // Quiz Voyelles
   s('vowQTitle', t.vowQTitleLbl); s('vowQDesc', t.vowQDescLbl);
-  s('vowBtnC2S', t.vowBtnC2SLbl); s('vowBtnS2C', t.vowBtnS2CLbl);
+  s('vowM1Title', t.vowM1Title); s('vowM1Desc', t.vowM1Desc);
+  s('vowM2Title', t.vowM2Title); s('vowM2Desc', t.vowM2Desc);
   s('vowStartBtn', t.qStart); s('vowQNext', t.qNext); s('vowRestartBtn', t.qReplay);
   // Quiz Tons
   s('toneQTitle', t.toneQTitleLbl); s('toneQDesc', t.toneQDescLbl);
-  s('toneBtnM2N', t.toneBtnM2NLbl); s('toneBtnN2M', t.toneBtnN2MLbl);
+  s('toneM1Title', t.toneM1Title); s('toneM1Desc', t.toneM1Desc);
+  s('toneM2Title', t.toneM2Title); s('toneM2Desc', t.toneM2Desc);
   s('toneStartBtn', t.qStart); s('toneQNext', t.qNext); s('toneRestartBtn', t.qReplay);
   s('phQuizTitle', t.phQuizTitle); s('phQuizDesc', t.phQuizDesc);
-  s('phmode1', t.phQuizM1); s('phmode2', t.phQuizM2);
+  s('phM1Title', t.phM1Title); s('phM1Desc', t.phM1Desc);
+  s('phM2Title', t.phM2Title); s('phM2Desc', t.phM2Desc);
   s('phCatLockText', t.phCatLockText);
   s('phStartFreeLabel', t.phFreeLabel); s('phPlayFreeLabel', t.phFreeLabel);
   s('phGateTitle', t.phGateTitle);
@@ -2605,7 +2676,7 @@ function renderTones() {
 // ─── QUIZ ──────────────────────────────────────────────────────────────────
 function setMode(m, btn) {
   quizMode = m;
-  document.querySelectorAll('.qmode').forEach(b=>b.classList.remove('active'));
+  document.querySelectorAll('#quizStart .qmode-card').forEach(b=>b.classList.remove('active'));
   btn.classList.add('active');
 }
 
@@ -2732,7 +2803,7 @@ function setQuizType(type, btn) {
 
 function setPhMode(m, btn) {
   phQuizMode = m;
-  document.querySelectorAll('.phmode').forEach(b=>b.classList.remove('active'));
+  document.querySelectorAll('#phQuizStart .qmode-card').forEach(b=>b.classList.remove('active'));
   if(btn) btn.classList.add('active');
 }
 
@@ -3247,7 +3318,7 @@ let vowQState={mode:'c2s',questions:[],idx:0,score:0,answered:false};
 
 function setVowMode(mode,btn){
   vowQState.mode=mode;
-  document.querySelectorAll('#vowQStart .qmode').forEach(b=>b.classList.remove('active'));
+  document.querySelectorAll('#vowQStart .qmode-card').forEach(b=>b.classList.remove('active'));
   if(btn) btn.classList.add('active');
 }
 
@@ -3340,7 +3411,7 @@ let toneQState={mode:'m2n',questions:[],idx:0,score:0,answered:false};
 
 function setToneMode(mode,btn){
   toneQState.mode=mode;
-  document.querySelectorAll('#toneQStart .qmode').forEach(b=>b.classList.remove('active'));
+  document.querySelectorAll('#toneQStart .qmode-card').forEach(b=>b.classList.remove('active'));
   if(btn) btn.classList.add('active');
 }
 
