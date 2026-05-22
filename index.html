@@ -869,63 +869,6 @@ footer{border-top:1px solid var(--border);padding:40px 24px;text-align:center;co
     </div>
   </div>
 
-  <!-- QUIZ CHIFFRES -->
-  <div class="cnt-quiz-wrap">
-    <div class="sec-hd">
-      <div class="sec-tag">Quiz</div>
-      <div class="sec-title">Quiz — Les nombres</div>
-      <p class="sec-desc">10 questions pour tester votre mémoire des chiffres thaïs.</p>
-    </div>
-
-    <!-- Écran de départ -->
-    <div class="quiz-card" id="cntQStart">
-      <div class="qmodes">
-        <button class="qmode active" id="cntBtnListen" onclick="setCntMode('listen',this)">🎧 Écoute</button>
-        <button class="qmode" id="cntBtnWrite" onclick="setCntMode('write',this)">✍️ Traduction</button>
-      </div>
-      <p class="cntq-mode-desc" id="cntModeDesc">Écoutez le nombre et choisissez parmi 3 réponses.</p>
-      <button class="btn-g" style="display:block;margin:0 auto" onclick="startCntQuiz()">Commencer</button>
-    </div>
-
-    <!-- Jeu -->
-    <div class="quiz-card" id="cntQGame" style="display:none">
-      <div class="qnum" id="cntQNum">Question 1 / 10</div>
-
-      <!-- Mode écoute -->
-      <div id="cntQListen">
-        <button class="qplay" style="margin:0 auto 24px" onclick="playCntAudio(cntQState.questions[cntQState.idx].thai)">
-          <span class="qplay-icon">🔊</span>
-          <span class="qplay-label">Réécouter</span>
-        </button>
-        <div class="qopts" id="cntQOpts" style="grid-template-columns:repeat(3,1fr)"></div>
-      </div>
-
-      <!-- Mode traduction -->
-      <div id="cntQWrite" style="display:none">
-        <div class="cntq-thai-box">
-          <span class="cntq-thai" id="cntQThai"></span>
-          <span class="cntq-rtgs" id="cntQRtgs"></span>
-        </div>
-        <div class="cntq-input-row">
-          <input class="cntq-input" type="number" id="cntQInput" min="1" max="50" placeholder="?" onkeydown="if(event.key==='Enter')answerCntWrite()">
-          <button class="btn-g" onclick="answerCntWrite()">Valider</button>
-        </div>
-      </div>
-
-      <div class="cntq-feedback" id="cntQFeedback"></div>
-      <button class="btn-g" id="cntQNext" style="display:none;margin:20px auto 0" onclick="nextCntQ()">Question suivante →</button>
-    </div>
-
-    <!-- Score final -->
-    <div class="quiz-card" id="cntQScore" style="display:none;text-align:center;padding:48px 32px">
-      <div style="font-size:52px;margin-bottom:16px">🏆</div>
-      <div class="qscore" style="margin-bottom:12px">
-        <div class="qsi ok"><div class="qsv" id="cntQScoreVal">0</div><div class="qsl">/ 10</div></div>
-      </div>
-      <div id="cntQScoreMsg" style="font-size:16px;font-weight:700;margin-bottom:28px;color:var(--text2)"></div>
-      <button class="btn-g" onclick="restartCntQuiz()">Rejouer</button>
-    </div>
-  </div>
 </div>
 
 <!-- VOYELLES TAB -->
@@ -960,6 +903,7 @@ footer{border-top:1px solid var(--border);padding:40px 24px;text-align:center;co
     <div class="qtype-sw">
       <button class="qtype-btn active" id="qtype-cons" onclick="setQuizType('cons',this)">ก Consonnes</button>
       <button class="qtype-btn" id="qtype-phrases" onclick="setQuizType('phrases',this)">💬 Phrases</button>
+      <button class="qtype-btn" id="qtype-cnt" onclick="setQuizType('cnt',this)">🔢 Chiffres</button>
     </div>
 
     <!-- CONSONANTS QUIZ (existing) -->
@@ -1057,6 +1001,50 @@ footer{border-top:1px solid var(--border);padding:40px 24px;text-align:center;co
       </div>
 
     </div><!-- /phQuizWrap -->
+
+    <!-- QUIZ CHIFFRES -->
+    <div id="cntQuizWrap" style="display:none">
+      <div class="quiz-card" id="cntQStart">
+        <div class="qmodes">
+          <button class="qmode active" id="cntBtnListen" onclick="setCntMode('listen',this)">🎧 Écoute</button>
+          <button class="qmode" id="cntBtnWrite" onclick="setCntMode('write',this)">✍️ Traduction</button>
+        </div>
+        <p class="cntq-mode-desc" id="cntModeDesc">Écoutez le nombre thaï et choisissez parmi 3 réponses.</p>
+        <button class="btn-g" style="display:block;margin:0 auto" onclick="startCntQuiz()">Commencer</button>
+      </div>
+
+      <div class="quiz-card" id="cntQGame" style="display:none">
+        <div class="qnum" id="cntQNum">Question 1 / 10</div>
+        <div id="cntQListen">
+          <button class="qplay" style="margin:0 auto 24px" onclick="playCntAudio(cntQState.questions[cntQState.idx].thai)">
+            <span class="qplay-icon">🔊</span>
+            <span class="qplay-label">Réécouter</span>
+          </button>
+          <div class="qopts" id="cntQOpts" style="grid-template-columns:repeat(3,1fr)"></div>
+        </div>
+        <div id="cntQWrite" style="display:none">
+          <div class="cntq-thai-box">
+            <span class="cntq-thai" id="cntQThai"></span>
+            <span class="cntq-rtgs" id="cntQRtgs"></span>
+          </div>
+          <div class="cntq-input-row">
+            <input class="cntq-input" type="number" id="cntQInput" min="1" max="50" placeholder="?" onkeydown="if(event.key==='Enter')answerCntWrite()">
+            <button class="btn-g" onclick="answerCntWrite()">Valider</button>
+          </div>
+        </div>
+        <div class="cntq-feedback" id="cntQFeedback"></div>
+        <button class="btn-g" id="cntQNext" style="display:none;margin:20px auto 0" onclick="nextCntQ()">Question suivante →</button>
+      </div>
+
+      <div class="quiz-card" id="cntQScore" style="display:none;text-align:center;padding:48px 32px">
+        <div style="font-size:52px;margin-bottom:16px">🏆</div>
+        <div class="qscore" style="margin-bottom:12px">
+          <div class="qsi ok"><div class="qsv" id="cntQScoreVal">0</div><div class="qsl">/ 10</div></div>
+        </div>
+        <div id="cntQScoreMsg" style="font-size:16px;font-weight:700;margin-bottom:28px;color:var(--text2)"></div>
+        <button class="btn-g" onclick="restartCntQuiz()">Rejouer</button>
+      </div>
+    </div><!-- /cntQuizWrap -->
 
   </div>
 </div>
@@ -2268,8 +2256,9 @@ let phQuizCount = parseInt(localStorage.getItem('ph-quiz-count')||'0');
 function setQuizType(type, btn) {
   document.querySelectorAll('.qtype-btn').forEach(b=>b.classList.remove('active'));
   if(btn) btn.classList.add('active');
-  document.getElementById('consQuizWrap').style.display = type==='cons' ? '' : 'none';
+  document.getElementById('consQuizWrap').style.display = type==='cons'    ? '' : 'none';
   document.getElementById('phQuizWrap').style.display   = type==='phrases' ? '' : 'none';
+  document.getElementById('cntQuizWrap').style.display  = type==='cnt'     ? '' : 'none';
   if(type==='phrases') { renderPhCatBtns(); updatePhStartFreeBar(); }
 }
 
