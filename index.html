@@ -4,6 +4,12 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>อักษรไทย — Apprendre l'Alphabet Thaï</title>
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#ffc300">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Thai ABC">
+<link rel="apple-touch-icon" href="icon-192.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Thai:wght@300;400;500;600;700&family=Sarabun:wght@300;400;500;600;700;800&family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
@@ -787,6 +793,14 @@ footer{border-top:1px solid var(--border);padding:40px 24px;text-align:center;co
   .cntq-rtgs{font-size:17px}
   .cntq-input{width:130px;font-size:18px;padding:12px 14px}
 }
+/* ── PWA BANNIÈRE ────────────────────────────────────────────────── */
+#pwaBanner{display:none;position:fixed;bottom:70px;left:50%;transform:translateX(-50%);background:var(--bg2);border:1px solid var(--gold);border-radius:14px;padding:12px 18px;gap:12px;align-items:center;z-index:200;box-shadow:0 8px 32px rgba(0,0,0,.5);white-space:nowrap;max-width:calc(100vw - 32px)}
+#pwaBanner span{font-size:13px;color:var(--text)}
+#pwaBanner strong{color:var(--gold)}
+.pwa-install-btn{background:var(--gold);color:#000;border:none;border-radius:8px;padding:7px 16px;font-size:13px;font-weight:700;cursor:pointer;font-family:'Inter',sans-serif}
+.pwa-install-btn:hover{background:#e6af00}
+.pwa-close-btn{background:none;border:none;color:var(--text3);font-size:18px;cursor:pointer;padding:0 4px;line-height:1}
+@media(max-width:768px){#pwaBanner{bottom:80px;font-size:12px}}
 /* ── MINI-DICTIONNAIRE ───────────────────────────────────────────── */
 .dict-btn{background:rgba(255,255,255,.07);border:1px solid var(--border);color:var(--text2);padding:7px 12px;border-radius:8px;font-size:16px;cursor:pointer;transition:all .2s;line-height:1}
 .dict-btn:hover{background:rgba(255,255,255,.14);color:var(--text)}
@@ -4159,6 +4173,30 @@ updateProgress();
 initStats();
 initVoices();
 
+// ─── PWA ────────────────────────────────────────────────────────────────────
+if('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('sw.js').catch(() => {});
+  });
+}
+let _pwaPrompt = null;
+window.addEventListener('beforeinstallprompt', e => {
+  e.preventDefault();
+  _pwaPrompt = e;
+  document.getElementById('pwaBanner').style.display = 'flex';
+});
+function installPwa() {
+  if(!_pwaPrompt) return;
+  _pwaPrompt.prompt();
+  _pwaPrompt.userChoice.then(() => {
+    _pwaPrompt = null;
+    document.getElementById('pwaBanner').style.display = 'none';
+  });
+}
+function closePwaBanner() {
+  document.getElementById('pwaBanner').style.display = 'none';
+}
+
 // ─── MINI-DICTIONNAIRE ──────────────────────────────────────────────────────
 function openDict() {
   document.getElementById('dictOverlay').classList.add('open');
@@ -4799,6 +4837,13 @@ function clearTraceCanvas() {
       <div class="auth-sep" id="authSaveNote">Votre progression sera sauvegardée en ligne</div>
     </div>
   </div>
+</div>
+
+<!-- PWA INSTALL BANNER -->
+<div id="pwaBanner">
+  <span>📱 <strong>Thai ABC</strong> — Installer l'appli ?</span>
+  <button class="pwa-install-btn" onclick="installPwa()">Installer</button>
+  <button class="pwa-close-btn" onclick="closePwaBanner()">✕</button>
 </div>
 
 <!-- MINI-DICTIONNAIRE -->
