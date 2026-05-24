@@ -802,6 +802,16 @@ footer{border-top:1px solid var(--border);padding:40px 24px;text-align:center;co
 .cntq-feedback{min-height:26px;font-size:15px;font-weight:700;margin-top:16px;text-align:center;transition:all .2s}
 .cntq-feedback.ok{color:var(--teal)}
 .cntq-feedback.ko{color:var(--rose)}
+/* ── QUIZ VOCABULAIRE ──────────────────────────────────────── */
+.vocabq-levels{display:flex;gap:8px;justify-content:center;margin:0 0 22px;flex-wrap:wrap}
+.vocabq-lvl{padding:7px 20px;border-radius:20px;border:1px solid var(--border);background:transparent;color:var(--text2);font-family:'Inter',sans-serif;font-size:13px;font-weight:600;cursor:pointer;transition:all .2s}
+.vocabq-lvl:hover{border-color:var(--border-h);color:var(--text)}
+.vocabq-lvl.active{background:var(--gold);color:#000;border-color:var(--gold)}
+.vocabq-word{font-family:var(--thai-font);font-size:72px;font-weight:700;text-align:center;margin:16px 0 6px;line-height:1.2;color:var(--text)}
+.vocabq-rtgs{font-size:19px;color:var(--text2);text-align:center;margin-bottom:6px}
+.vocabq-cat{display:inline-block;font-size:11px;font-weight:700;padding:3px 12px;border-radius:20px;background:rgba(240,180,41,.12);color:var(--gold);margin-bottom:20px;letter-spacing:.3px}
+.vocabq-transl{font-size:36px;font-weight:800;text-align:center;margin:20px 0 8px;color:var(--text);letter-spacing:-.5px}
+@media(max-width:768px){.vocabq-word{font-size:54px}.vocabq-transl{font-size:28px}.vocabq-rtgs{font-size:16px}}
 .cntq-thai-box{text-align:center;padding:32px 16px;background:rgba(255,255,255,.03);border:1px solid var(--border);border-radius:16px;margin-bottom:24px}
 .cntq-thai{font-family:var(--thai-font);font-size:68px;font-weight:500;line-height:1.2;display:block;margin-bottom:10px}
 .cntq-rtgs{font-size:20px;color:var(--gold);font-style:italic;display:block;font-weight:600}
@@ -1245,6 +1255,7 @@ footer{border-top:1px solid var(--border);padding:40px 24px;text-align:center;co
       <button class="qtype-btn" id="qtype-vow" onclick="setQuizType('vow',this)">เ Voyelles</button>
       <button class="qtype-btn" id="qtype-tone" onclick="setQuizType('tone',this)">ก่ Tons</button>
       <button class="qtype-btn" id="qtype-vocal" onclick="setQuizType('vocal',this)">🎤 <span id="qtypeVocalLbl">Vocal</span></button>
+      <button class="qtype-btn" id="qtype-vocab" onclick="setQuizType('vocab',this)">📚 <span id="qtypeVocabLbl">Vocab</span></button>
     </div>
 
     <!-- CONSONANTS QUIZ (existing) -->
@@ -1511,6 +1522,52 @@ footer{border-top:1px solid var(--border);padding:40px 24px;text-align:center;co
         <button class="btn-g" onclick="startVocalQuiz()">Rejouer</button>
       </div>
     </div><!-- /vocalQuizWrap -->
+
+    <!-- QUIZ VOCABULAIRE -->
+    <div id="vocabQuizWrap" style="display:none">
+      <!-- Écran départ -->
+      <div class="quiz-card" id="vocabQStart">
+        <h2 style="font-size:26px;font-weight:800;margin-bottom:8px;text-align:center" id="vocabQTitle">📚 Quiz Vocabulaire</h2>
+        <p style="color:var(--text2);font-size:14px;margin-bottom:22px;text-align:center" id="vocabQDesc">10 questions sur le vocabulaire thaï.</p>
+        <div class="qmode-cards">
+          <button class="qmode-card active" id="vocabBtnTh2Fr" onclick="setVocabQMode('th2fr',this)">
+            <span class="qmc-icon">🇹🇭</span>
+            <span class="qmc-title" id="vocabM1Title">Thaï → Traduction</span>
+            <span class="qmc-desc" id="vocabM1Desc">Voir le mot thaï, trouver sa traduction</span>
+          </button>
+          <button class="qmode-card" id="vocabBtnFr2Th" onclick="setVocabQMode('fr2th',this)">
+            <span class="qmc-icon">💬</span>
+            <span class="qmc-title" id="vocabM2Title">Traduction → Thaï</span>
+            <span class="qmc-desc" id="vocabM2Desc">Voir la traduction, trouver le mot thaï</span>
+          </button>
+        </div>
+        <p style="font-size:12px;font-weight:600;color:var(--text3);text-align:center;margin-bottom:10px;text-transform:uppercase;letter-spacing:.5px" id="vocabQLvlLbl">Niveau</p>
+        <div class="vocabq-levels">
+          <button class="vocabq-lvl active" onclick="setVocabQLevel('__ALL__',this)" id="vocabLvlAll">Tous</button>
+          <button class="vocabq-lvl" onclick="setVocabQLevel('A1',this)">A1</button>
+          <button class="vocabq-lvl" onclick="setVocabQLevel('A2',this)">A2</button>
+          <button class="vocabq-lvl" onclick="setVocabQLevel('B1',this)">B1</button>
+        </div>
+        <button class="btn-g" id="vocabStartBtn" style="display:block;margin:4px auto 0" onclick="startVocabQuiz()">Commencer</button>
+      </div>
+      <!-- Écran jeu -->
+      <div class="quiz-card" id="vocabQGame" style="display:none">
+        <div class="qnum" id="vocabQNum">Question 1 / 10</div>
+        <div id="vocabQQuestion" style="text-align:center"></div>
+        <div class="qopts" id="vocabQOpts" style="grid-template-columns:repeat(2,1fr)"></div>
+        <div class="cntq-feedback" id="vocabQFeedback"></div>
+        <button class="btn-g" id="vocabQNext" style="display:none;margin:20px auto 0" onclick="nextVocabQ()">Question suivante →</button>
+      </div>
+      <!-- Écran score -->
+      <div class="quiz-card" id="vocabQScore" style="display:none;text-align:center;padding:48px 32px">
+        <div style="font-size:52px;margin-bottom:16px">🏆</div>
+        <div class="qscore" style="margin-bottom:12px">
+          <div class="qsi ok"><div class="qsv" id="vocabQScoreVal">0</div><div class="qsl">/ 10</div></div>
+        </div>
+        <div id="vocabQScoreMsg" style="font-size:16px;font-weight:700;margin-bottom:28px;color:var(--text2)"></div>
+        <button class="btn-g" onclick="restartVocabQuiz()">Rejouer</button>
+      </div>
+    </div><!-- /vocabQuizWrap -->
 
   </div>
 </div>
@@ -2271,7 +2328,7 @@ const T = {
     fAll:'Tous', fMid:'Moyenne (9)', fHigh:'Haute (11)', fLow:'Basse (24)',
     srchPh:'Chercher : ก, k, poulet…',
     voiceWarnTxt:'⚠️ Aucune voix thaïe détectée. Pour activer les sons, allez dans <strong>Préférences Système → Accessibilité → Contenu vocal</strong> et téléchargez une voix thaïe (ex. : <strong>Kanya</strong>), puis rechargez la page.',
-    cardIni:'Début', cardFin:'Fin', cardMark:'Marquer appris', cardDone:'✓ Maîtrisé', cardTrace:'✏️ Tracé', vocalQuizTitle:'Quiz Vocal', vocalQuizDesc:'Prononcez le nom de la consonne affichée. 10 questions.', shareBtn:'📤 Partager ma progression', shareTitle:'Partager ma progression', shareDl:'⬇ Télécharger', shareCopy:'📋 Copier le texte', shareNative:'📤 Partager',
+    cardIni:'Début', cardFin:'Fin', cardMark:'Marquer appris', cardDone:'✓ Maîtrisé', cardTrace:'✏️ Tracé', vocalQuizTitle:'Quiz Vocal', vocalQuizDesc:'Prononcez le nom de la consonne affichée. 10 questions.', shareBtn:'📤 Partager ma progression', shareTitle:'Partager ma progression', shareDl:'⬇ Télécharger', shareCopy:'📋 Copier le texte', shareNative:'📤 Partager', vocabQTitleTxt:'📚 Quiz Vocabulaire', vocabQDescTxt:'10 questions sur le vocabulaire thaï.', vocabM1T:'Thaï → Traduction', vocabM1D:'Voir le mot thaï, trouver sa traduction', vocabM2T:'Traduction → Thaï', vocabM2D:'Voir la traduction, trouver le mot thaï', vocabQLvl:'Niveau', vocabLvlAll:'Tous', vocabQStart:'Commencer', vocabQNext:'Question suivante →', vocabQReplay:'Rejouer',
     cntSecTag:'Compter en thaï', cntSecTitle:'Les nombres de 1 à 50', cntSecDesc:'Cliquez sur un nombre pour l\'entendre. Apprenez à compter en thaï !',
     vowTag:'Voyelles', vowTitle:'Les voyelles thaïes',
     vowDesc:'En thaï, les voyelles se placent avant, après, au-dessus ou en dessous de la consonne. Chaque voyelle a une forme courte et une forme longue.',
@@ -2387,7 +2444,7 @@ const T = {
     fAll:'All', fMid:'Middle (9)', fHigh:'High (11)', fLow:'Low (24)',
     srchPh:'Search: ก, k, chicken…',
     voiceWarnTxt:'⚠️ No Thai voice detected. To enable audio, go to <strong>System Preferences → Accessibility → Spoken Content</strong> and download a Thai voice (e.g. <strong>Kanya</strong>), then reload the page.',
-    cardIni:'Initial', cardFin:'Final', cardMark:'Mark as learned', cardDone:'✓ Mastered', cardTrace:'✏️ Trace', vocalQuizTitle:'Vocal Quiz', vocalQuizDesc:'Pronounce the name of the consonant shown. 10 questions.', shareBtn:'📤 Share my progress', shareTitle:'Share my progress', shareDl:'⬇ Download', shareCopy:'📋 Copy text', shareNative:'📤 Share',
+    cardIni:'Initial', cardFin:'Final', cardMark:'Mark as learned', cardDone:'✓ Mastered', cardTrace:'✏️ Trace', vocalQuizTitle:'Vocal Quiz', vocalQuizDesc:'Pronounce the name of the consonant shown. 10 questions.', shareBtn:'📤 Share my progress', shareTitle:'Share my progress', shareDl:'⬇ Download', shareCopy:'📋 Copy text', shareNative:'📤 Share', vocabQTitleTxt:'📚 Vocabulary Quiz', vocabQDescTxt:'10 questions on Thai vocabulary.', vocabM1T:'Thai → Translation', vocabM1D:'See the Thai word, find its translation', vocabM2T:'Translation → Thai', vocabM2D:'See the translation, find the Thai word', vocabQLvl:'Level', vocabLvlAll:'All', vocabQStart:'Start', vocabQNext:'Next question →', vocabQReplay:'Play again',
     cntSecTag:'Count in Thai', cntSecTitle:'Numbers from 1 to 50', cntSecDesc:'Click on a number to hear it. Learn to count in Thai!',
     vowTag:'Vowels', vowTitle:'Thai Vowels',
     vowDesc:'In Thai, vowels are placed before, after, above, or below the consonant. Each vowel has a short and a long form.',
@@ -2605,6 +2662,11 @@ function applyLang() {
   if(dh) dh.textContent = currentLang==='en' ? 'Type at least 2 characters to search' : 'Tapez au moins 2 caractères pour rechercher';
   s('shareProgBtn', t.shareBtn); s('shareModalTitle', t.shareTitle);
   s('shareDlBtn', t.shareDl); s('shareCopyBtn', t.shareCopy); s('shareNativeBtn', t.shareNative);
+  s('vocabQTitle', t.vocabQTitleTxt); s('vocabQDesc', t.vocabQDescTxt);
+  s('vocabM1Title', t.vocabM1T); s('vocabM1Desc', t.vocabM1D);
+  s('vocabM2Title', t.vocabM2T); s('vocabM2Desc', t.vocabM2D);
+  s('vocabQLvlLbl', t.vocabQLvl); s('vocabLvlAll', t.vocabLvlAll);
+  s('vocabStartBtn', t.vocabQStart); s('vocabQNext', t.vocabQNext);
   s('qtypeVocalLbl', currentLang==='en' ? 'Vocal' : 'Vocal');
   // Title tag
   document.title = currentLang==='en' ? 'อักษรไทย — Learn the Thai Alphabet' : 'อักษรไทย — Apprendre l\'Alphabet Thaï';
@@ -3231,6 +3293,7 @@ function setQuizType(type, btn) {
   document.getElementById('vowQuizWrap').style.display   = type==='vow'     ? '' : 'none';
   document.getElementById('toneQuizWrap').style.display  = type==='tone'    ? '' : 'none';
   document.getElementById('vocalQuizWrap').style.display = type==='vocal'   ? '' : 'none';
+  document.getElementById('vocabQuizWrap').style.display = type==='vocab'   ? '' : 'none';
   if(type==='phrases') { renderPhCatBtns(); updatePhStartFreeBar(); }
   // Toujours revenir à l'écran de départ pour pouvoir changer de mode
   if(type==='cons') {
@@ -3256,6 +3319,10 @@ function setQuizType(type, btn) {
     document.getElementById('vocalQStart').style.display='';
     document.getElementById('vocalQGame').style.display='none';
     document.getElementById('vocalQScore').style.display='none';
+  } else if(type==='vocab') {
+    document.getElementById('vocabQStart').style.display='';
+    document.getElementById('vocabQGame').style.display='none';
+    document.getElementById('vocabQScore').style.display='none';
     _vocalCheckSupport();
   }
 }
@@ -4956,6 +5023,134 @@ function _showVocalScore() {
   else if(pct>=40) msg = fr ? 'Bon début, continuez !' : 'Good start, keep going!';
   else msg = fr ? 'Continuez à vous entraîner !' : 'Keep practising!';
   document.getElementById('vocalQScoreMsg').textContent = msg;
+}
+
+// ─── QUIZ VOCABULAIRE ──────────────────────────────────────────────────────
+let vocabQState = { mode:'th2fr', level:'__ALL__', pool:[], questions:[], idx:0, score:0, answered:false };
+
+function setVocabQMode(mode, btn) {
+  vocabQState.mode = mode;
+  document.querySelectorAll('#vocabQStart .qmode-card').forEach(b => b.classList.remove('active'));
+  if(btn) btn.classList.add('active');
+}
+
+function setVocabQLevel(level, btn) {
+  vocabQState.level = level;
+  document.querySelectorAll('.vocabq-lvl').forEach(b => b.classList.remove('active'));
+  if(btn) btn.classList.add('active');
+}
+
+function startVocabQuiz() {
+  const pool = vocabQState.level === '__ALL__'
+    ? [...vocabData]
+    : vocabData.filter(v => v.level === vocabQState.level);
+  if(pool.length < 4) {
+    alert(currentLang === 'en' ? 'Not enough words in this level!' : 'Pas assez de mots dans ce niveau !');
+    return;
+  }
+  vocabQState.pool = pool;
+  vocabQState.questions = shuffle([...pool]).slice(0, 10);
+  vocabQState.idx = 0;
+  vocabQState.score = 0;
+  vocabQState.answered = false;
+  document.getElementById('vocabQStart').style.display = 'none';
+  document.getElementById('vocabQGame').style.display  = '';
+  document.getElementById('vocabQScore').style.display = 'none';
+  _showVocabQ();
+}
+
+function _showVocabQ() {
+  const q = vocabQState.questions[vocabQState.idx];
+  vocabQState.answered = false;
+  document.getElementById('vocabQNum').textContent = `${vocabQState.idx + 1} / ${vocabQState.questions.length}`;
+  document.getElementById('vocabQNext').style.display = 'none';
+  const fb = document.getElementById('vocabQFeedback');
+  fb.textContent = ''; fb.className = 'cntq-feedback';
+
+  const isTh2Fr = vocabQState.mode === 'th2fr';
+  if(isTh2Fr) {
+    document.getElementById('vocabQQuestion').innerHTML =
+      `<div class="vocabq-word">${q.thai}</div>
+       <div class="vocabq-rtgs">${q.rtgs}</div>
+       <span class="vocabq-cat">${q.cat}</span>`;
+  } else {
+    const label = currentLang === 'en' ? q.en : q.fr;
+    document.getElementById('vocabQQuestion').innerHTML =
+      `<div class="vocabq-transl">${label}</div>
+       <span class="vocabq-cat">${q.cat}</span>`;
+  }
+
+  // 1 bonne + 3 mauvaises réponses
+  const wrongs = shuffle(vocabQState.pool.filter(v => v !== q)).slice(0, 3);
+  const options = shuffle([q, ...wrongs]);
+  const opts = document.getElementById('vocabQOpts');
+  opts.innerHTML = '';
+  options.forEach(opt => {
+    const correct = opt === q;
+    const btn = document.createElement('button');
+    if(isTh2Fr) {
+      btn.className = 'qopt';
+      btn.style.fontSize = '16px';
+      btn.style.minHeight = '70px';
+      btn.textContent = currentLang === 'en' ? opt.en : opt.fr;
+    } else {
+      btn.className = 'qopt qopt-thai';
+      btn.innerHTML = `${opt.thai}<span class="qopt-sub">${opt.rtgs}</span>`;
+    }
+    btn.onclick = () => _answerVocabQ(correct, btn, q);
+    opts.appendChild(btn);
+  });
+}
+
+function _answerVocabQ(correct, btn, q) {
+  if(vocabQState.answered) return;
+  vocabQState.answered = true;
+  if(correct) vocabQState.score++;
+  btn.classList.add(correct ? 'correct' : 'wrong');
+  if(!correct) {
+    // Révéler la bonne réponse
+    const isTh2Fr = vocabQState.mode === 'th2fr';
+    document.querySelectorAll('#vocabQOpts .qopt').forEach(b => {
+      const label = isTh2Fr ? (currentLang === 'en' ? q.en : q.fr) : q.thai;
+      if(b.textContent.startsWith(label) || b.textContent === label) b.classList.add('correct');
+    });
+  }
+  const fb = document.getElementById('vocabQFeedback');
+  if(correct) {
+    fb.textContent = currentLang === 'en' ? '✓ Correct!' : '✓ Correct !';
+    fb.className = 'cntq-feedback ok';
+  } else {
+    fb.textContent = currentLang === 'en'
+      ? `✗  ${q.thai} = ${q.en}`
+      : `✗  ${q.thai} = ${q.fr}`;
+    fb.className = 'cntq-feedback ko';
+  }
+  document.getElementById('vocabQNext').style.display = '';
+}
+
+function nextVocabQ() {
+  vocabQState.idx++;
+  if(vocabQState.idx >= vocabQState.questions.length) _showVocabScore();
+  else _showVocabQ();
+}
+
+function _showVocabScore() {
+  document.getElementById('vocabQGame').style.display  = 'none';
+  document.getElementById('vocabQScore').style.display = '';
+  const s = vocabQState.score;
+  document.getElementById('vocabQScoreVal').textContent = s;
+  const en = currentLang === 'en';
+  let msg;
+  if(s === 10)    msg = en ? '🎉 Perfect! Vocabulary master!'         : '🎉 Parfait ! Maître du vocabulaire !';
+  else if(s >= 8) msg = en ? '⭐ Excellent work!'                      : '⭐ Excellent !';
+  else if(s >= 5) msg = en ? '👍 Good job, keep practising!'           : '👍 Bien joué, continue !';
+  else            msg = en ? '📚 Keep studying, you\'ll get there!'    : '📚 Continue à étudier, tu progresses !';
+  document.getElementById('vocabQScoreMsg').textContent = msg;
+}
+
+function restartVocabQuiz() {
+  document.getElementById('vocabQScore').style.display = 'none';
+  document.getElementById('vocabQStart').style.display = '';
 }
 
 // ─── TRACÉ DES LETTRES ──────────────────────────────────────────────────────
