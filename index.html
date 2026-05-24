@@ -775,6 +775,58 @@ footer{border-top:1px solid var(--border);padding:40px 24px;text-align:center;co
   .cntq-rtgs{font-size:17px}
   .cntq-input{width:130px;font-size:18px;padding:12px 14px}
 }
+/* ── RECONNAISSANCE VOCALE ───────────────────────────────────────── */
+.mic-btn{width:88px;height:88px;border-radius:50%;border:none;background:var(--gold);color:#000;font-size:36px;cursor:pointer;transition:all .25s;display:flex;align-items:center;justify-content:center;box-shadow:0 0 0 0 rgba(255,195,0,.4)}
+.mic-btn:hover{transform:scale(1.05)}
+.mic-btn.listening{background:var(--rose);color:#fff;animation:micPulse 1.2s infinite}
+.mic-btn:disabled{opacity:.45;cursor:not-allowed;animation:none}
+@keyframes micPulse{0%,100%{box-shadow:0 0 0 0 rgba(255,92,141,.5)}50%{box-shadow:0 0 0 18px rgba(255,92,141,0)}}
+.vocal-char{font-family:'Noto Sans Thai',sans-serif;font-size:110px;line-height:1;color:var(--gold);text-align:center;margin:8px 0}
+.vocal-hint{font-size:15px;color:var(--text2);margin-bottom:6px;text-align:center}
+.vocal-meaning{font-size:13px;color:var(--text2);text-align:center;margin-bottom:18px}
+.vocal-status{font-size:14px;min-height:22px;text-align:center;margin-bottom:16px;font-weight:600;transition:color .2s}
+.vocal-status.ok{color:var(--teal)}
+.vocal-status.ko{color:var(--rose)}
+.vocal-status.listening{color:var(--gold)}
+.vocal-result-wrap{display:flex;flex-direction:column;align-items:center;gap:6px;margin-bottom:14px;min-height:54px}
+.vocal-recognized{font-family:'Noto Sans Thai',sans-serif;font-size:22px;color:var(--text);background:rgba(255,255,255,.06);padding:6px 18px;border-radius:8px}
+/* ── TRACÉ DES LETTRES ───────────────────────────────────────────── */
+.trace-overlay{position:fixed;inset:0;background:rgba(0,0,0,.82);backdrop-filter:blur(12px);z-index:400;display:none;align-items:center;justify-content:center}
+.trace-overlay.open{display:flex}
+.trace-modal{background:var(--bg2);border:1px solid var(--border-h);border-radius:24px;padding:28px 24px 24px;width:100%;max-width:600px;margin:16px;box-shadow:0 24px 80px rgba(0,0,0,.7);position:relative;max-height:90vh;overflow-y:auto}
+.trace-close{position:absolute;top:14px;right:16px;background:none;border:none;color:var(--text2);font-size:20px;cursor:pointer;line-height:1}
+.trace-close:hover{color:var(--text)}
+.trace-topbar{display:flex;align-items:center;justify-content:space-between;margin-bottom:18px}
+.trace-navbtn{background:rgba(255,255,255,.06);border:1px solid var(--border);color:var(--text);padding:6px 14px;border-radius:8px;cursor:pointer;font-size:16px;transition:background .2s}
+.trace-navbtn:hover{background:rgba(255,255,255,.12)}
+.trace-title{font-size:17px;font-weight:700;color:var(--gold);text-align:center;flex:1;padding:0 10px}
+.trace-body{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-bottom:16px}
+.trace-panel{display:flex;flex-direction:column;align-items:center;gap:10px}
+.trace-panel-label{font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.08em;color:var(--text2)}
+.trace-svg-wrap,.trace-canvas-wrap{position:relative;width:200px;height:200px;border-radius:14px;background:rgba(255,255,255,.04);border:1px solid var(--border);overflow:hidden}
+#traceSVG,#traceGhostSVG{width:200px;height:200px;display:block}
+#traceCanvas{position:absolute;inset:0;cursor:crosshair;touch-action:none}
+#traceGhostSVG{position:absolute;inset:0;pointer-events:none}
+.trace-char-anim{font-family:'Noto Sans Thai',sans-serif;font-size:140px;dominant-baseline:central;fill:rgba(255,195,0,.12);stroke:var(--gold);stroke-width:2.5;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:3000;stroke-dashoffset:3000}
+.trace-char-anim.go{animation:traceDrawAnim 2.5s ease-in-out forwards}
+.trace-char-ghost{font-family:'Noto Sans Thai',sans-serif;font-size:140px;dominant-baseline:central;fill:rgba(255,255,255,.06);stroke:none}
+@keyframes traceDrawAnim{to{stroke-dashoffset:0}}
+.trace-btn{border:none;border-radius:8px;padding:7px 16px;font-size:12px;font-weight:600;cursor:pointer;transition:all .2s}
+.trace-replay{background:rgba(255,195,0,.12);color:var(--gold)}
+.trace-replay:hover{background:rgba(255,195,0,.22)}
+.trace-clear{background:rgba(255,92,141,.1);color:var(--rose)}
+.trace-clear:hover{background:rgba(255,92,141,.22)}
+.trace-info{display:flex;align-items:center;gap:12px;justify-content:center;background:rgba(255,255,255,.04);border-radius:12px;padding:12px 16px;flex-wrap:wrap}
+.trace-info-char{font-family:'Noto Sans Thai',sans-serif;font-size:36px;line-height:1;color:var(--gold)}
+.trace-info-name{font-size:14px;font-weight:600;color:var(--text)}
+.trace-info-meaning{font-size:13px;color:var(--text2)}
+.tbtn{background:rgba(255,195,0,.1);color:var(--gold);border:1px solid rgba(255,195,0,.25);border-radius:6px;padding:5px 10px;font-size:11px;font-weight:600;cursor:pointer;margin-top:4px;transition:all .2s}
+.tbtn:hover{background:rgba(255,195,0,.22)}
+@media(max-width:768px){
+  .trace-body{grid-template-columns:1fr}
+  .trace-svg-wrap,.trace-canvas-wrap{width:180px;height:180px}
+  #traceSVG,#traceGhostSVG{width:180px;height:180px}
+}
 </style>
 </head>
 <body>
@@ -1055,6 +1107,7 @@ footer{border-top:1px solid var(--border);padding:40px 24px;text-align:center;co
       <button class="qtype-btn" id="qtype-cnt" onclick="setQuizType('cnt',this)">🔢 Chiffres</button>
       <button class="qtype-btn" id="qtype-vow" onclick="setQuizType('vow',this)">เ Voyelles</button>
       <button class="qtype-btn" id="qtype-tone" onclick="setQuizType('tone',this)">ก่ Tons</button>
+      <button class="qtype-btn" id="qtype-vocal" onclick="setQuizType('vocal',this)">🎤 <span id="qtypeVocalLbl">Vocal</span></button>
     </div>
 
     <!-- CONSONANTS QUIZ (existing) -->
@@ -1285,6 +1338,42 @@ footer{border-top:1px solid var(--border);padding:40px 24px;text-align:center;co
         <button class="btn-g" id="toneRestartBtn" onclick="restartToneQuiz()">Rejouer</button>
       </div>
     </div><!-- /toneQuizWrap -->
+
+    <div id="vocalQuizWrap" style="display:none">
+      <!-- Écran départ -->
+      <div class="quiz-card" id="vocalQStart">
+        <h2 style="font-size:26px;font-weight:800;margin-bottom:10px;text-align:center" id="vocalQTitle">Quiz Vocal</h2>
+        <p style="color:var(--text2);font-size:14px;margin-bottom:24px;text-align:center" id="vocalQDesc">Prononcez le nom de la consonne affichée. 10 questions.</p>
+        <div id="vocalNoSR" style="display:none;background:rgba(255,92,141,.1);border:1px solid rgba(255,92,141,.3);border-radius:10px;padding:12px 16px;font-size:13px;color:var(--rose);margin-bottom:20px;text-align:center">⚠️ Votre navigateur ne supporte pas la reconnaissance vocale. Utilisez Chrome.</div>
+        <button class="btn-g" id="vocalStartBtn" onclick="startVocalQuiz()">Commencer</button>
+      </div>
+      <!-- Écran jeu -->
+      <div class="quiz-card" id="vocalQGame" style="display:none">
+        <div class="qprog" id="vocalQProg" style="margin-bottom:14px;text-align:center;font-size:13px;color:var(--text2)">1 / 10</div>
+        <div class="vocal-char" id="vocalQChar">ก</div>
+        <div class="vocal-hint" id="vocalQHint"></div>
+        <div class="vocal-meaning" id="vocalQMeaning"></div>
+        <div class="vocal-result-wrap">
+          <div class="vocal-status" id="vocalQStatus"></div>
+          <div class="vocal-recognized" id="vocalQRecognized" style="display:none"></div>
+        </div>
+        <div style="display:flex;flex-direction:column;align-items:center;gap:14px">
+          <button class="mic-btn" id="vocalMicBtn" onclick="startVocalListen()">🎤</button>
+          <div style="display:flex;gap:10px">
+            <button class="btn-g" id="vocalNextBtn" style="display:none;min-width:120px" onclick="nextVocalQ()">Suivant →</button>
+            <button class="btn-o" id="vocalSkipBtn" style="min-width:100px;font-size:13px" onclick="skipVocalQ()">Passer</button>
+          </div>
+        </div>
+      </div>
+      <!-- Écran score -->
+      <div class="quiz-card" id="vocalQScore" style="display:none">
+        <div class="qscore" style="margin-bottom:12px">
+          <div class="qsi ok"><div class="qsv" id="vocalQScoreVal">0</div><div class="qsl">/ 10</div></div>
+        </div>
+        <div id="vocalQScoreMsg" style="font-size:16px;font-weight:700;margin-bottom:28px;color:var(--text2)"></div>
+        <button class="btn-g" onclick="startVocalQuiz()">Rejouer</button>
+      </div>
+    </div><!-- /vocalQuizWrap -->
 
   </div>
 </div>
@@ -2023,7 +2112,7 @@ const T = {
     fAll:'Tous', fMid:'Moyenne (9)', fHigh:'Haute (11)', fLow:'Basse (24)',
     srchPh:'Chercher : ก, k, poulet…',
     voiceWarnTxt:'⚠️ Aucune voix thaïe détectée. Pour activer les sons, allez dans <strong>Préférences Système → Accessibilité → Contenu vocal</strong> et téléchargez une voix thaïe (ex. : <strong>Kanya</strong>), puis rechargez la page.',
-    cardIni:'Début', cardFin:'Fin', cardMark:'Marquer appris', cardDone:'✓ Maîtrisé',
+    cardIni:'Début', cardFin:'Fin', cardMark:'Marquer appris', cardDone:'✓ Maîtrisé', cardTrace:'✏️ Tracé', vocalQuizTitle:'Quiz Vocal', vocalQuizDesc:'Prononcez le nom de la consonne affichée. 10 questions.',
     cntSecTag:'Compter en thaï', cntSecTitle:'Les nombres de 1 à 50', cntSecDesc:'Cliquez sur un nombre pour l\'entendre. Apprenez à compter en thaï !',
     vowTag:'Voyelles', vowTitle:'Les voyelles thaïes',
     vowDesc:'En thaï, les voyelles se placent avant, après, au-dessus ou en dessous de la consonne. Chaque voyelle a une forme courte et une forme longue.',
@@ -2139,7 +2228,7 @@ const T = {
     fAll:'All', fMid:'Middle (9)', fHigh:'High (11)', fLow:'Low (24)',
     srchPh:'Search: ก, k, chicken…',
     voiceWarnTxt:'⚠️ No Thai voice detected. To enable audio, go to <strong>System Preferences → Accessibility → Spoken Content</strong> and download a Thai voice (e.g. <strong>Kanya</strong>), then reload the page.',
-    cardIni:'Initial', cardFin:'Final', cardMark:'Mark as learned', cardDone:'✓ Mastered',
+    cardIni:'Initial', cardFin:'Final', cardMark:'Mark as learned', cardDone:'✓ Mastered', cardTrace:'✏️ Trace', vocalQuizTitle:'Vocal Quiz', vocalQuizDesc:'Pronounce the name of the consonant shown. 10 questions.',
     cntSecTag:'Count in Thai', cntSecTitle:'Numbers from 1 to 50', cntSecDesc:'Click on a number to hear it. Learn to count in Thai!',
     vowTag:'Vowels', vowTitle:'Thai Vowels',
     vowDesc:'In Thai, vowels are placed before, after, above, or below the consonant. Each vowel has a short and a long form.',
@@ -2349,6 +2438,8 @@ function applyLang() {
   s('phQLblOk', t.quizOk); s('phQLblKo', t.quizKo);
   const gd=document.getElementById('phGateDesc'); if(gd) gd.textContent=t.phGateDesc(FREE_PH_QUIZ_LIMIT);
   renderPhCatBtns(); updatePhStartFreeBar();
+  s('vocalQTitle', t.vocalQuizTitle); s('vocalQDesc', t.vocalQuizDesc);
+  s('qtypeVocalLbl', currentLang==='en' ? 'Vocal' : 'Vocal');
   // Title tag
   document.title = currentLang==='en' ? 'อักษรไทย — Learn the Thai Alphabet' : 'อักษรไทย — Apprendre l\'Alphabet Thaï';
   document.querySelector('html').lang = currentLang;
@@ -2604,6 +2695,7 @@ function cardHTML(c, i) {
           <span class="bpill">${T[currentLang].cardFin}: ${c.fin}</span>
         </div>
         <button class="lbtn ${isL?'done':''}" onclick="toggleLearned(event,${c.id})">${isL?T[currentLang].cardDone:T[currentLang].cardMark}</button>
+        <button class="tbtn" onclick="openTrace(event,${c.id})">${T[currentLang].cardTrace}</button>
       </div>
     </div>
   </div>`;
@@ -2787,6 +2879,7 @@ function setQuizType(type, btn) {
   document.getElementById('cntQuizWrap').style.display   = type==='cnt'     ? '' : 'none';
   document.getElementById('vowQuizWrap').style.display   = type==='vow'     ? '' : 'none';
   document.getElementById('toneQuizWrap').style.display  = type==='tone'    ? '' : 'none';
+  document.getElementById('vocalQuizWrap').style.display = type==='vocal'   ? '' : 'none';
   if(type==='phrases') { renderPhCatBtns(); updatePhStartFreeBar(); }
   // Toujours revenir à l'écran de départ pour pouvoir changer de mode
   if(type==='cons') {
@@ -2808,6 +2901,11 @@ function setQuizType(type, btn) {
     document.getElementById('toneQStart').style.display='';
     document.getElementById('toneQGame').style.display='none';
     document.getElementById('toneQScore').style.display='none';
+  } else if(type==='vocal') {
+    document.getElementById('vocalQStart').style.display='';
+    document.getElementById('vocalQGame').style.display='none';
+    document.getElementById('vocalQScore').style.display='none';
+    _vocalCheckSupport();
   }
 }
 
@@ -3155,12 +3253,18 @@ let activeSpeakBtn = null;
 function initVoices() {
   function find() {
     const voices = window.speechSynthesis.getVoices();
-    thaiVoice = voices.find(v => v.lang === 'th-TH' || v.lang === 'th') || null;
+    thaiVoice = voices.find(v =>
+      v.lang.startsWith('th') ||
+      v.name.toLowerCase().includes('kanya') ||
+      v.name.toLowerCase().includes('thai')
+    ) || null;
     const warn = document.getElementById('voiceWarn');
-    if(warn) warn.style.display = thaiVoice ? 'none' : 'block';
+    if(!warn) return;
+    if(thaiVoice || window.speechSynthesis) warn.style.display = 'none';
   }
   find();
   window.speechSynthesis.addEventListener('voiceschanged', find);
+  setTimeout(find, 300);
 }
 
 function speakThai(text, triggerBtn) {
@@ -3799,6 +3903,278 @@ initVocab();
 updateProgress();
 initStats();
 initVoices();
+
+// ─── QUIZ VOCAL ─────────────────────────────────────────────────────────────
+let vocalPool = [], vocalIdx = 0, vocalScore = 0, vocalRecognizer = null, vocalAnswered = false, vocalTimer = null;
+
+function _vocalCheckSupport() {
+  const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+  const noSR = document.getElementById('vocalNoSR');
+  const btn  = document.getElementById('vocalStartBtn');
+  if(!SR) { noSR.style.display='block'; btn.disabled=true; }
+  else    { noSR.style.display='none';  btn.disabled=false; }
+}
+
+function startVocalQuiz() {
+  vocalPool = shuffle([...consonants]).slice(0, 10);
+  vocalIdx = 0; vocalScore = 0;
+  document.getElementById('vocalQStart').style.display = 'none';
+  document.getElementById('vocalQScore').style.display = 'none';
+  document.getElementById('vocalQGame').style.display  = '';
+  _showVocalQ();
+}
+
+function _showVocalQ() {
+  if(vocalTimer) { clearTimeout(vocalTimer); vocalTimer = null; }
+  if(vocalRecognizer) { try{ vocalRecognizer.abort(); }catch(e){} vocalRecognizer = null; }
+  const c = vocalPool[vocalIdx];
+  vocalAnswered = false;
+  const fr = currentLang !== 'en';
+  document.getElementById('vocalQProg').textContent = (vocalIdx+1) + ' / 10';
+  document.getElementById('vocalQChar').textContent = c.char;
+  const exWord = c.name.split(' ').slice(1).join(' ');
+  document.getElementById('vocalQHint').textContent = '→ ' + exWord + '  (' + c.rtgs + ')';
+  document.getElementById('vocalQMeaning').textContent = c.emoji + ' ' + (!fr && c.en ? c.en : c.meaning);
+  const st = document.getElementById('vocalQStatus');
+  st.textContent = fr ? 'Appuyez sur 🎤 et prononcez le nom' : 'Press 🎤 and pronounce the name';
+  st.className = 'vocal-status';
+  document.getElementById('vocalQRecognized').style.display = 'none';
+  document.getElementById('vocalQRecognized').textContent = '';
+  document.getElementById('vocalNextBtn').style.display = 'none';
+  document.getElementById('vocalSkipBtn').style.display = '';
+  const mic = document.getElementById('vocalMicBtn');
+  mic.classList.remove('listening');
+  mic.disabled = false;
+  mic.textContent = '🎤';
+}
+
+function startVocalListen() {
+  if(vocalAnswered) return;
+  const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+  if(!SR) return;
+  const mic = document.getElementById('vocalMicBtn');
+  const st  = document.getElementById('vocalQStatus');
+  const fr  = currentLang !== 'en';
+
+  if(vocalRecognizer) { try{ vocalRecognizer.abort(); }catch(e){} }
+  if(vocalTimer) { clearTimeout(vocalTimer); vocalTimer = null; }
+
+  const recog = new SR();
+  vocalRecognizer = recog;
+  recog.lang = 'th-TH';
+  recog.continuous = false;
+  recog.interimResults = false;
+  recog.maxAlternatives = 5;
+
+  mic.classList.add('listening');
+  mic.disabled = true;
+  mic.textContent = '⏹';
+  st.textContent = fr ? '🎙 Écoute en cours...' : '🎙 Listening...';
+  st.className = 'vocal-status listening';
+
+  let gotResult = false;
+
+  recog.onresult = e => {
+    gotResult = true;
+    if(vocalTimer) { clearTimeout(vocalTimer); vocalTimer = null; }
+    let best = '';
+    const alternatives = [];
+    for(let i = 0; i < e.results.length; i++) {
+      for(let j = 0; j < e.results[i].length; j++) {
+        alternatives.push(e.results[i][j].transcript.trim());
+      }
+    }
+    best = alternatives[0] || '';
+    _vocalShowResult(best, alternatives);
+  };
+
+  recog.onerror = ev => {
+    if(gotResult) return;
+    if(vocalTimer) { clearTimeout(vocalTimer); vocalTimer = null; }
+    mic.classList.remove('listening');
+    mic.disabled = false;
+    mic.textContent = '🎤';
+    if(ev.error === 'not-allowed') {
+      st.textContent = fr ? '⚠️ Accès micro refusé — autorisez le micro dans Chrome' : '⚠️ Mic access denied — allow mic in Chrome';
+      st.className = 'vocal-status ko';
+    } else if(ev.error === 'no-speech') {
+      st.textContent = fr ? 'Rien détecté, réessayez' : 'No speech detected, try again';
+      st.className = 'vocal-status ko';
+    } else {
+      st.textContent = fr ? 'Erreur, réessayez' : 'Error, try again';
+      st.className = 'vocal-status ko';
+    }
+  };
+
+  recog.onend = () => {
+    if(gotResult) return;
+    mic.classList.remove('listening');
+    mic.textContent = '🎤';
+    if(!vocalAnswered) mic.disabled = false;
+  };
+
+  recog.start();
+
+  // Timeout 7s — si aucun résultat, débloquer
+  vocalTimer = setTimeout(() => {
+    if(!gotResult && !vocalAnswered) {
+      try{ recog.abort(); }catch(e){}
+      mic.classList.remove('listening');
+      mic.disabled = false;
+      mic.textContent = '🎤';
+      st.textContent = fr ? 'Pas de réponse, réessayez ou passez' : 'No response, retry or skip';
+      st.className = 'vocal-status ko';
+    }
+  }, 7000);
+}
+
+function _vocalShowResult(best, alternatives) {
+  const mic = document.getElementById('vocalMicBtn');
+  const st  = document.getElementById('vocalQStatus');
+  const fr  = currentLang !== 'en';
+  const c   = vocalPool[vocalIdx];
+  const exWord = c.name.split(' ').slice(1).join(' ');
+
+  mic.classList.remove('listening');
+  mic.disabled = true;
+  mic.textContent = '🎤';
+  vocalAnswered = true;
+
+  const rec = document.getElementById('vocalQRecognized');
+  rec.textContent = best || (fr ? '(rien reconnu)' : '(nothing recognized)');
+  rec.style.display = 'block';
+
+  const correct = alternatives.some(r =>
+    r.includes(exWord) || r.includes(c.char) ||
+    r.replace(/\s/g,'').includes(exWord.replace(/\s/g,''))
+  );
+
+  if(correct) {
+    vocalScore++;
+    st.textContent = fr ? '✓ Correct !' : '✓ Correct!';
+    st.className = 'vocal-status ok';
+  } else {
+    st.textContent = (fr ? '✗ Attendu : ' : '✗ Expected: ') + exWord;
+    st.className = 'vocal-status ko';
+  }
+  document.getElementById('vocalNextBtn').style.display = '';
+  document.getElementById('vocalSkipBtn').style.display = 'none';
+}
+
+function skipVocalQ() {
+  if(vocalTimer) { clearTimeout(vocalTimer); vocalTimer = null; }
+  if(vocalRecognizer) { try{ vocalRecognizer.abort(); }catch(e){} vocalRecognizer = null; }
+  nextVocalQ();
+}
+
+function nextVocalQ() {
+  vocalIdx++;
+  if(vocalIdx >= 10) _showVocalScore();
+  else _showVocalQ();
+}
+
+function _showVocalScore() {
+  document.getElementById('vocalQGame').style.display  = 'none';
+  document.getElementById('vocalQScore').style.display = '';
+  document.getElementById('vocalQScoreVal').textContent = vocalScore;
+  const fr = currentLang !== 'en';
+  const pct = vocalScore * 10;
+  let msg = '';
+  if(pct===100) msg = fr ? 'Parfait ! Excellente prononciation !' : 'Perfect! Excellent pronunciation!';
+  else if(pct>=70) msg = fr ? 'Bien joué ! Continuez à pratiquer.' : 'Well done! Keep practising.';
+  else if(pct>=40) msg = fr ? 'Bon début, continuez !' : 'Good start, keep going!';
+  else msg = fr ? 'Continuez à vous entraîner !' : 'Keep practising!';
+  document.getElementById('vocalQScoreMsg').textContent = msg;
+}
+
+// ─── TRACÉ DES LETTRES ──────────────────────────────────────────────────────
+let traceCurrentId = null;
+let traceDrawing = false;
+let traceCtx = null;
+
+function openTrace(e, id) {
+  e.stopPropagation();
+  traceCurrentId = id;
+  const overlay = document.getElementById('traceOverlay');
+  overlay.classList.add('open');
+  _renderTrace(id);
+  _initTraceCanvas();
+}
+
+function closeTrace() {
+  document.getElementById('traceOverlay').classList.remove('open');
+}
+
+function closeTraceIfOutside(e) {
+  if(e.target === document.getElementById('traceOverlay')) closeTrace();
+}
+
+function _renderTrace(id) {
+  const c = consonants.find(x => x.id === id);
+  if(!c) return;
+  const idx = consonants.indexOf(c) + 1;
+  document.getElementById('traceTitle').textContent = c.char + ' — ' + c.rtgs;
+  document.getElementById('traceInfoChar').textContent = c.char;
+  document.getElementById('traceInfoName').textContent = c.name;
+  document.getElementById('traceInfoMeaning').textContent = c.emoji + ' ' + (currentLang==='en'&&c.en ? c.en : c.meaning);
+  const lbl = currentLang === 'en';
+  document.getElementById('traceLblModel').textContent = lbl ? 'Animated model' : 'Modèle animé';
+  document.getElementById('traceLblPractice').textContent = lbl ? 'Practice' : 'Entraîne-toi';
+  const anim = document.getElementById('traceCharAnim');
+  const ghost = document.getElementById('traceCharGhost');
+  anim.textContent = c.char;
+  ghost.textContent = c.char;
+  replayTrace();
+  clearTraceCanvas();
+}
+
+function replayTrace() {
+  const anim = document.getElementById('traceCharAnim');
+  anim.classList.remove('go');
+  void anim.offsetWidth;
+  anim.classList.add('go');
+}
+
+function traceNav(dir) {
+  const idx = consonants.findIndex(x => x.id === traceCurrentId);
+  const next = consonants[(idx + dir + consonants.length) % consonants.length];
+  traceCurrentId = next.id;
+  _renderTrace(next.id);
+}
+
+function _initTraceCanvas() {
+  const canvas = document.getElementById('traceCanvas');
+  traceCtx = canvas.getContext('2d');
+  traceCtx.strokeStyle = '#ffc300';
+  traceCtx.lineWidth = 4;
+  traceCtx.lineCap = 'round';
+  traceCtx.lineJoin = 'round';
+  canvas.onmousedown  = e => { traceDrawing=true; _traceMv(e); };
+  canvas.onmousemove  = e => { if(traceDrawing) _traceMv(e); };
+  canvas.onmouseup    = () => { traceDrawing=false; traceCtx.beginPath(); };
+  canvas.onmouseleave = () => { traceDrawing=false; traceCtx.beginPath(); };
+  canvas.ontouchstart = e => { e.preventDefault(); traceDrawing=true; _traceMv(e.touches[0]); };
+  canvas.ontouchmove  = e => { e.preventDefault(); if(traceDrawing) _traceMv(e.touches[0]); };
+  canvas.ontouchend   = () => { traceDrawing=false; traceCtx.beginPath(); };
+}
+
+function _traceMv(e) {
+  const canvas = document.getElementById('traceCanvas');
+  const r = canvas.getBoundingClientRect();
+  const x = (e.clientX - r.left) * (canvas.width / r.width);
+  const y = (e.clientY - r.top)  * (canvas.height / r.height);
+  if(!traceDrawing) return;
+  traceCtx.lineTo(x, y);
+  traceCtx.stroke();
+  traceCtx.beginPath();
+  traceCtx.moveTo(x, y);
+}
+
+function clearTraceCanvas() {
+  const canvas = document.getElementById('traceCanvas');
+  if(traceCtx) traceCtx.clearRect(0, 0, canvas.width, canvas.height);
+  if(traceCtx) traceCtx.beginPath();
+}
 </script>
 
 <!-- AUTH MODAL -->
@@ -3844,6 +4220,44 @@ initVoices();
       <div class="auth-err" id="regErr"></div>
       <button class="auth-submit" id="regSubmit" onclick="doRegister()">Créer mon compte</button>
       <div class="auth-sep" id="authSaveNote">Votre progression sera sauvegardée en ligne</div>
+    </div>
+  </div>
+</div>
+
+<!-- TRACÉ DES LETTRES -->
+<div id="traceOverlay" class="trace-overlay" onclick="closeTraceIfOutside(event)">
+  <div class="trace-modal">
+    <button class="trace-close" onclick="closeTrace()">✕</button>
+    <div class="trace-topbar">
+      <button class="trace-navbtn" onclick="traceNav(-1)">◀</button>
+      <div class="trace-title" id="traceTitle"></div>
+      <button class="trace-navbtn" onclick="traceNav(1)">▶</button>
+    </div>
+    <div class="trace-body">
+      <div class="trace-panel">
+        <div class="trace-panel-label" id="traceLblModel">Modèle animé</div>
+        <div class="trace-svg-wrap">
+          <svg id="traceSVG" viewBox="0 0 200 200">
+            <text id="traceCharAnim" class="trace-char-anim" x="100" y="50%" text-anchor="middle"></text>
+          </svg>
+        </div>
+        <button class="trace-btn trace-replay" onclick="replayTrace()">↺ Rejouer</button>
+      </div>
+      <div class="trace-panel">
+        <div class="trace-panel-label" id="traceLblPractice">Entraîne-toi</div>
+        <div class="trace-canvas-wrap">
+          <svg id="traceGhostSVG" viewBox="0 0 200 200">
+            <text id="traceCharGhost" class="trace-char-ghost" x="100" y="50%" text-anchor="middle"></text>
+          </svg>
+          <canvas id="traceCanvas" width="200" height="200"></canvas>
+        </div>
+        <button class="trace-btn trace-clear" onclick="clearTraceCanvas()">✕ Effacer</button>
+      </div>
+    </div>
+    <div class="trace-info">
+      <span class="trace-info-char" id="traceInfoChar"></span>
+      <span class="trace-info-name" id="traceInfoName"></span>
+      <span class="trace-info-meaning" id="traceInfoMeaning"></span>
     </div>
   </div>
 </div>
