@@ -16,6 +16,7 @@
 <script src="https://www.gstatic.com/firebasejs/10.13.1/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.13.1/firebase-auth-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.13.1/firebase-firestore-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.13.1/firebase-messaging-compat.js"></script>
 <style>
 :root {
   --thai-font: 'Noto Sans Thai', sans-serif;
@@ -801,6 +802,40 @@ footer{border-top:1px solid var(--border);padding:40px 24px;text-align:center;co
 .pwa-install-btn:hover{background:#e6af00}
 .pwa-close-btn{background:none;border:none;color:var(--text3);font-size:18px;cursor:pointer;padding:0 4px;line-height:1}
 @media(max-width:768px){#pwaBanner{bottom:80px;font-size:12px}}
+/* ── NOTIFICATIONS PUSH ─────────────────────────────────────────── */
+.notif-btn{background:rgba(255,255,255,.07);border:1px solid var(--border);color:var(--text2);padding:7px 10px;border-radius:8px;font-size:16px;cursor:pointer;transition:all .2s;line-height:1;position:relative}
+.notif-btn:hover{background:rgba(255,255,255,.14);color:var(--text)}
+.notif-btn.active{color:var(--gold);border-color:rgba(240,180,41,.4);background:rgba(240,180,41,.08)}
+.notif-dot{position:absolute;top:4px;right:4px;width:7px;height:7px;border-radius:50%;background:var(--rose);border:1.5px solid var(--bg);display:none}
+.notif-toast{position:fixed;top:76px;right:20px;background:var(--bg2);border:1px solid rgba(240,180,41,.5);border-radius:14px;padding:14px 16px;max-width:320px;z-index:600;box-shadow:0 8px 32px rgba(0,0,0,.6);transform:translateX(360px);transition:transform .35s cubic-bezier(.34,1.56,.64,1);display:flex;align-items:flex-start;gap:12px}
+.notif-toast.show{transform:translateX(0)}
+.notif-toast-icon{font-size:24px;flex-shrink:0;margin-top:1px}
+.notif-toast-body{flex:1;min-width:0}
+.notif-toast-title{font-size:13px;font-weight:700;color:var(--text);margin-bottom:3px}
+.notif-toast-msg{font-size:12px;color:var(--text2);line-height:1.4}
+.notif-toast-close{background:none;border:none;color:var(--text3);font-size:17px;cursor:pointer;padding:0;line-height:1;flex-shrink:0}
+.notif-toast-close:hover{color:var(--text)}
+.notif-modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.75);backdrop-filter:blur(12px);z-index:500;display:none;align-items:center;justify-content:center;padding:20px}
+.notif-modal-overlay.open{display:flex}
+.notif-modal{background:var(--bg2);border:1px solid var(--border-h);border-radius:20px;padding:30px 28px;max-width:420px;width:100%;position:relative;text-align:center}
+.notif-modal-close{position:absolute;top:14px;right:18px;background:none;border:none;color:var(--text3);font-size:22px;cursor:pointer}
+.notif-modal-close:hover{color:var(--text)}
+.notif-modal h3{font-size:20px;font-weight:800;color:var(--gold);margin-bottom:8px}
+.notif-modal p{font-size:13px;color:var(--text2);line-height:1.6;margin-bottom:20px}
+.notif-types{display:flex;flex-direction:column;gap:8px;margin-bottom:22px;text-align:left}
+.notif-type-row{display:flex;align-items:center;gap:12px;background:var(--bg3);border-radius:10px;padding:11px 14px}
+.notif-type-icon{font-size:20px;flex-shrink:0}
+.notif-type-title{font-size:13px;font-weight:700;color:var(--text);margin-bottom:2px}
+.notif-type-desc{font-size:11px;color:var(--text3)}
+.notif-enable-btn{width:100%;padding:13px;background:var(--gold);color:#000;border:none;border-radius:12px;font-family:'Inter',sans-serif;font-size:14px;font-weight:800;cursor:pointer;transition:all .2s}
+.notif-enable-btn:hover{background:#e6af00;transform:translateY(-1px);box-shadow:0 6px 20px rgba(240,180,41,.4)}
+.notif-enable-btn:disabled{opacity:.5;cursor:not-allowed;transform:none;box-shadow:none}
+.notif-disable-btn{width:100%;padding:10px;background:transparent;color:var(--text3);border:1px solid var(--border);border-radius:12px;font-family:'Inter',sans-serif;font-size:12px;cursor:pointer;margin-top:8px;transition:all .2s}
+.notif-disable-btn:hover{color:var(--rose);border-color:rgba(255,92,141,.4)}
+.notif-status{font-size:12px;font-weight:600;padding:9px 12px;border-radius:8px;margin-top:10px;line-height:1.4;text-align:left}
+.notif-status.ok{background:rgba(14,211,160,.1);color:var(--teal)}
+.notif-status.err{background:rgba(255,92,141,.1);color:var(--rose)}
+@media(max-width:480px){.notif-toast{top:auto;bottom:90px;right:10px;left:10px;max-width:none;transform:translateY(200px)}.notif-toast.show{transform:translateY(0)}}
 /* ── MINI-DICTIONNAIRE ───────────────────────────────────────────── */
 .dict-btn{background:rgba(255,255,255,.07);border:1px solid var(--border);color:var(--text2);padding:7px 12px;border-radius:8px;font-size:16px;cursor:pointer;transition:all .2s;line-height:1}
 .dict-btn:hover{background:rgba(255,255,255,.14);color:var(--text)}
@@ -925,6 +960,7 @@ footer{border-top:1px solid var(--border);padding:40px 24px;text-align:center;co
       <button class="logout-btn" id="logoutBtn" onclick="doLogout()">Déconnexion</button>
     </div>
     <button class="dict-btn" onclick="openDict()" title="Dictionnaire">🔍</button>
+    <button id="notifBtn" class="notif-btn" onclick="openNotifModal()" title="Notifications">🔔<span class="notif-dot" id="notifDot"></span></button>
     <button id="loginBtn" class="login-btn" onclick="openAuth()">Connexion</button>
     <div class="lang-sw">
       <button class="lang-opt active" id="langFR" onclick="setLang('fr')">FR</button>
@@ -4172,6 +4208,7 @@ initVocab();
 updateProgress();
 initStats();
 initVoices();
+initMessaging();
 
 // ─── PWA ────────────────────────────────────────────────────────────────────
 if('serviceWorker' in navigator) {
@@ -4195,6 +4232,142 @@ function installPwa() {
 }
 function closePwaBanner() {
   document.getElementById('pwaBanner').style.display = 'none';
+}
+
+// ─── PUSH NOTIFICATIONS (FCM) ──────────────────────────────────────────────
+// VAPID KEY : Firebase Console → Project Settings → Cloud Messaging
+//             → Web Push certificates → Generate key pair → coller ici
+const VAPID_KEY = 'BDl4PwHLNLmbTytidWfAFe5uMEQ4gxjWJVlRX4RozUbMirQtDj7vuK4SKBc6SaVEDqLvNdjlrY-X5aJgW6YbHyo';
+
+let _messaging = null;
+
+function initMessaging() {
+  try {
+    if (!firebase.messaging.isSupported()) return;
+    _messaging = firebase.messaging();
+    _messaging.onMessage(payload => {
+      const n = payload.notification || {};
+      showNotifToast(n.title || '📚 Thai ABC', n.body || '', n.icon || '📚');
+    });
+    updateNotifBtnState();
+  } catch(e) {}
+}
+
+function openNotifModal() {
+  updateNotifBtnState();
+  document.getElementById('notifModalOverlay').classList.add('open');
+}
+function closeNotifModal() {
+  document.getElementById('notifModalOverlay').classList.remove('open');
+}
+function closeNotifIfOutside(e) {
+  if(e.target.id === 'notifModalOverlay') closeNotifModal();
+}
+
+async function enableNotifications() {
+  const btn = document.getElementById('notifEnableBtn');
+  const status = document.getElementById('notifStatus');
+  btn.disabled = true;
+  btn.textContent = '⏳ Activation…';
+  status.style.display = 'none';
+
+  try {
+    // 1. Demande permission navigateur
+    const perm = await Notification.requestPermission();
+    if (perm !== 'granted') {
+      showNotifStatus('err', '❌ Permission refusée. Autorise les notifications dans les paramètres du navigateur, puis réessaie.');
+      btn.disabled = false;
+      btn.textContent = '🔔 Activer les notifications';
+      return;
+    }
+
+    // 2. Enregistre le SW FCM et obtient le token
+    if (!_messaging) initMessaging();
+    if (!_messaging) throw new Error('FCM non disponible sur ce navigateur');
+
+    const swReg = await navigator.serviceWorker.register('firebase-messaging-sw.js', { scope: '/alphabet-thai/' });
+    const token = await firebase.messaging().getToken({ vapidKey: VAPID_KEY, serviceWorkerRegistration: swReg });
+    if (!token) throw new Error('Token FCM vide');
+
+    // 4. Sauvegarde dans Firestore (si connecté) et localStorage
+    const user = auth.currentUser;
+    if (user) {
+      await db.collection('users').doc(user.uid).set({
+        fcmToken: token,
+        notifEnabled: true,
+        notifAt: firebase.firestore.FieldValue.serverTimestamp()
+      }, { merge: true });
+    }
+    localStorage.setItem('fcmToken', token);
+    localStorage.setItem('notifEnabled', '1');
+
+    showNotifStatus('ok', '✅ Notifications activées ! Tu recevras un rappel chaque soir à 20h.');
+    document.getElementById('notifDisableBtn').style.display = 'block';
+    btn.textContent = '✅ Activées';
+    btn.disabled = true;
+    document.getElementById('notifBtn').classList.add('active');
+
+  } catch(e) {
+    console.error('FCM error:', e);
+    showNotifStatus('err', '❌ Erreur : ' + (e.message || 'Essaie sur https:// et dans Chrome/Edge.'));
+    btn.disabled = false;
+    btn.textContent = '🔔 Activer les notifications';
+  }
+}
+
+async function disableNotifications() {
+  try {
+    if (_messaging) await firebase.messaging().deleteToken();
+  } catch(e) {}
+  localStorage.removeItem('fcmToken');
+  localStorage.setItem('notifEnabled', '0');
+  const user = auth.currentUser;
+  if (user) {
+    db.collection('users').doc(user.uid).set({ notifEnabled: false }, { merge: true }).catch(() => {});
+  }
+  document.getElementById('notifEnableBtn').disabled = false;
+  document.getElementById('notifEnableBtn').textContent = '🔔 Activer les notifications';
+  document.getElementById('notifDisableBtn').style.display = 'none';
+  document.getElementById('notifBtn').classList.remove('active');
+  showNotifStatus('ok', 'Notifications désactivées.');
+}
+
+function updateNotifBtnState() {
+  const enabled = localStorage.getItem('notifEnabled') === '1' && typeof Notification !== 'undefined' && Notification.permission === 'granted';
+  const btn = document.getElementById('notifBtn');
+  const enableBtn = document.getElementById('notifEnableBtn');
+  const disableBtn = document.getElementById('notifDisableBtn');
+  if (!btn) return;
+  if (enabled) {
+    btn.classList.add('active');
+    if (enableBtn) { enableBtn.textContent = '✅ Activées'; enableBtn.disabled = true; }
+    if (disableBtn) disableBtn.style.display = 'block';
+  } else {
+    btn.classList.remove('active');
+    if (enableBtn) { enableBtn.textContent = '🔔 Activer les notifications'; enableBtn.disabled = false; }
+    if (disableBtn) disableBtn.style.display = 'none';
+  }
+}
+
+function showNotifStatus(type, msg) {
+  const el = document.getElementById('notifStatus');
+  el.className = 'notif-status ' + (type === 'ok' ? 'ok' : 'err');
+  el.textContent = msg;
+  el.style.display = 'block';
+}
+
+function showNotifToast(title, msg, icon) {
+  document.getElementById('notifToastIcon').textContent = (icon && !icon.startsWith('http')) ? icon : '📚';
+  document.getElementById('notifToastTitle').textContent = title;
+  document.getElementById('notifToastMsg').textContent = msg;
+  const toast = document.getElementById('notifToast');
+  toast.classList.add('show');
+  clearTimeout(toast._hideTimer);
+  toast._hideTimer = setTimeout(hideNotifToast, 7000);
+}
+
+function hideNotifToast() {
+  document.getElementById('notifToast').classList.remove('show');
 }
 
 // ─── MINI-DICTIONNAIRE ──────────────────────────────────────────────────────
@@ -4836,6 +5009,51 @@ function clearTraceCanvas() {
       <button class="auth-submit" id="regSubmit" onclick="doRegister()">Créer mon compte</button>
       <div class="auth-sep" id="authSaveNote">Votre progression sera sauvegardée en ligne</div>
     </div>
+  </div>
+</div>
+
+<!-- NOTIFICATION TOAST (messages au premier plan) -->
+<div id="notifToast" class="notif-toast">
+  <div class="notif-toast-icon" id="notifToastIcon">📚</div>
+  <div class="notif-toast-body">
+    <div class="notif-toast-title" id="notifToastTitle"></div>
+    <div class="notif-toast-msg" id="notifToastMsg"></div>
+  </div>
+  <button class="notif-toast-close" onclick="hideNotifToast()">✕</button>
+</div>
+
+<!-- NOTIFICATION SETTINGS MODAL -->
+<div id="notifModalOverlay" class="notif-modal-overlay" onclick="closeNotifIfOutside(event)">
+  <div class="notif-modal">
+    <button class="notif-modal-close" onclick="closeNotifModal()">✕</button>
+    <h3>🔔 Rappels d'apprentissage</h3>
+    <p>Reçois des notifications pour maintenir ta série et progresser chaque jour. Maximum 1 par jour.</p>
+    <div class="notif-types">
+      <div class="notif-type-row">
+        <span class="notif-type-icon">🔥</span>
+        <div>
+          <div class="notif-type-title">Rappel de série</div>
+          <div class="notif-type-desc">Si tu n'as pas pratiqué depuis 24h</div>
+        </div>
+      </div>
+      <div class="notif-type-row">
+        <span class="notif-type-icon">📚</span>
+        <div>
+          <div class="notif-type-title">Révision quotidienne</div>
+          <div class="notif-type-desc">Un petit rappel chaque soir à 20h</div>
+        </div>
+      </div>
+      <div class="notif-type-row">
+        <span class="notif-type-icon">🏆</span>
+        <div>
+          <div class="notif-type-title">Bilan hebdomadaire</div>
+          <div class="notif-type-desc">Ton résumé de progression chaque dimanche</div>
+        </div>
+      </div>
+    </div>
+    <button class="notif-enable-btn" id="notifEnableBtn" onclick="enableNotifications()">🔔 Activer les notifications</button>
+    <button class="notif-disable-btn" id="notifDisableBtn" onclick="disableNotifications()" style="display:none">Désactiver les notifications</button>
+    <div class="notif-status" id="notifStatus" style="display:none"></div>
   </div>
 </div>
 

@@ -14,6 +14,7 @@ const CORE = [
   '/alphabet-thai/manifest.json',
   '/alphabet-thai/icon-192.png',
   '/alphabet-thai/icon-512.png',
+  '/alphabet-thai/firebase-messaging-sw.js',
 ];
 
 self.addEventListener('install', e => {
