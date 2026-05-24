@@ -4375,6 +4375,167 @@ renderTones();
 renderPhrases();
 initVocab();
 updateProgress();
+
+// ─── XP & BADGES ──────────────────────────────────────────────────────────────────────────────
+const BADGES = [
+  {id:'welcome',    icon:'🌟', name:'Bienvenu',           xp:10,  desc:'Première visite'},
+  {id:'first-quiz', icon:'🎯', name:'Premier Quiz',       xp:20,  desc:'Terminer un premier quiz'},
+  {id:'calligraphe',icon:'✏️', name:'Calligraphe',        xp:15,  desc:'Utiliser le tracé'},
+  {id:'letters5',   icon:'ก',  name:'5 Lettres',          xp:25,  desc:'Apprendre 5 consonnes'},
+  {id:'letters22',  icon:'📖', name:'Mi-chemin',          xp:50,  desc:'Apprendre 22 consonnes'},
+  {id:'letters44',  icon:'👑', name:'Maître des lettres', xp:200, desc:'44 consonnes maîtrisées'},
+  {id:'streak3',    icon:'📅', name:'3 jours de suite',   xp:30,  desc:'3 jours consécutifs'},
+  {id:'streak7',    icon:'🔥', name:'Semaine de feu',     xp:75,  desc:'7 jours consécutifs'},
+  {id:'streak30',   icon:'💪', name:'Mois de maître',     xp:300, desc:'30 jours consécutifs'},
+  {id:'perfect',    icon:'⭐', name:'Quiz Parfait',       xp:50,  desc:'Score 10/10 au quiz'},
+  {id:'champion',   icon:'🏆', name:'Champion',           xp:100, desc:'3 quiz à 10/10'},
+  {id:'vocab-done', icon:'🗣️', name:'Vocabulaire',        xp:25,  desc:'Terminer un quiz vocab'},
+  {id:'vocab-b1',   icon:'🎓', name:'Niveau B1',          xp:75,  desc:'Quiz vocab niveau B1'},
+  {id:'explorer',   icon:'🗺️', name:'Explorateur',        xp:20,  desc:'Visiter toutes les sections'},
+  {id:'phonetic',   icon:'🎤', name:'Phonéticien',        xp:30,  desc:'Compléter le quiz vocal'},
+];
+
+const XP_LEVELS = [
+  {min:0,    num:1, name:'Débutant'},
+  {min:100,  num:2, name:'Apprenti'},
+  {min:300,  num:3, name:'Étudiant'},
+  {min:700,  num:4, name:'Intermédiaire'},
+  {min:1500, num:5, name:'Avancé'},
+  {min:3000, num:6, name:'Expert'},
+  {min:6000, num:7, name:'Maître'},
+];
+
+const _visitedTabs = new Set(JSON.parse(localStorage.getItem('thai-visited-tabs')||'[]'));
+const _ALL_TABS = ['home','lesson','phrases','vocab','consonnes','voyelles','tons','quiz'];
+
+function _xpGet()       { return parseInt(localStorage.getItem('thai-xp')||'0'); }
+function _badgesGet()   { return JSON.parse(localStorage.getItem('thai-badges')||'[]'); }
+function _badgesSet(arr){ localStorage.setItem('thai-badges', JSON.stringify(arr)); }
+
+let _btTimer = null;
+function _hideBadgeToast() {
+  clearTimeout(_btTimer);
+  const t = document.getElementById('badgeToast');
+  if(t) t.classList.remove('show');
+}
+function _showBadgeToast(badge) {
+  const t = document.getElementById('badgeToast');
+  if(!t) return;
+  document.getElementById('btIcon').textContent = badge.icon;
+  document.getElementById('btName').textContent = badge.name;
+  document.getElementById('btXp').textContent   = '+' + badge.xp + ' XP';
+  t.classList.add('show');
+  clearTimeout(_btTimer);
+  _btTimer = setTimeout(_hideBadgeToast, 5000);
+  // Wire close button each time (safe to call multiple times)
+  const btn = document.getElementById('btClose');
+  if(btn) btn.onclick = e => { e.stopPropagation(); _hideBadgeToast(); };
+}
+
+function _tryUnlock(id) {
+  const earned = _badgesGet();
+  if(earned.includes(id)) return false;
+  const badge = BADGES.find(b => b.id === id);
+  if(!badge) return false;
+  earned.push(id);
+  _badgesSet(earned);
+  addXP(badge.xp);
+  _showBadgeToast(badge);
+  renderBadges();
+  return true;
+}
+
+function addXP(amount) {
+  const prev = _xpGet();
+  const next  = prev + amount;
+  localStorage.setItem('thai-xp', next);
+  _renderXpBar(next);
+}
+
+function _renderXpBar(xp) {
+  let lvl = XP_LEVELS[0];
+  for(const l of XP_LEVELS) { if(xp >= l.min) lvl = l; }
+  const lvlIdx = XP_LEVELS.indexOf(lvl);
+  const nextLvl = XP_LEVELS[lvlIdx + 1];
+  const fill = nextLvl
+    ? Math.min(100, Math.round((xp - lvl.min) / (nextLvl.min - lvl.min) * 100))
+    : 100;
+
+  const elLvl  = document.getElementById('xpLevelBadge');
+  const elPts  = document.getElementById('xpTotal');
+  const elFill = document.getElementById('xpFill');
+  const elNext = document.getElementById('xpNext');
+  if(elLvl)  elLvl.textContent  = 'Niveau ' + lvl.num + ' — ' + lvl.name;
+  if(elPts)  elPts.textContent  = xp + ' XP';
+  if(elFill) elFill.style.width = fill + '%';
+  if(elNext) elNext.textContent = nextLvl
+    ? (nextLvl.min - xp) + ' XP pour le niveau suivant'
+    : 'Niveau maximum atteint !';
+}
+
+function renderBadges() {
+  const grid = document.getElementById('badgesGrid');
+  if(!grid) return;
+  const earned = _badgesGet();
+  const count = document.getElementById('badgesHdCount');
+  if(count) count.textContent = earned.length + ' / ' + BADGES.length;
+  grid.innerHTML = BADGES.map(b => {
+    const isEarned = earned.includes(b.id);
+    const seenKey = 'thai-badge-seen-' + b.id;
+    const isNew = isEarned && !localStorage.getItem(seenKey);
+    return '<div class="badge-tile ' + (isEarned ? 'earned' : 'locked') + '" title="' + b.desc + '">' +
+      (isNew ? '<span class="badge-new"></span>' : '') +
+      '<span class="badge-icon">' + b.icon + '</span>' +
+      '<span class="badge-name">' + b.name + '</span></div>';
+  }).join('');
+  earned.forEach(id => localStorage.setItem('thai-badge-seen-' + id, '1'));
+}
+
+function checkBadges(ctx, data) {
+  data = data || {};
+  const streak  = parseInt(localStorage.getItem('thai-streak')||'0');
+  const perfects = parseInt(localStorage.getItem('thai-quiz-perfects')||'0');
+
+  if(ctx === 'visit') {
+    _tryUnlock('welcome');
+    if(streak >= 3)  _tryUnlock('streak3');
+    if(streak >= 7)  _tryUnlock('streak7');
+    if(streak >= 30) _tryUnlock('streak30');
+  }
+  if(ctx === 'letter') {
+    const n = learned.size;
+    if(n >= 5)  _tryUnlock('letters5');
+    if(n >= 22) _tryUnlock('letters22');
+    if(n >= 44) _tryUnlock('letters44');
+  }
+  if(ctx === 'quiz') {
+    _tryUnlock('first-quiz');
+    if(data.score === 10) {
+      const p = perfects + 1;
+      localStorage.setItem('thai-quiz-perfects', p);
+      _tryUnlock('perfect');
+      if(p >= 3) _tryUnlock('champion');
+    }
+  }
+  if(ctx === 'vocab') {
+    _tryUnlock('vocab-done');
+    const lv = data.level||'__ALL__';
+    if(lv !== 'A1' && lv !== '__ALL__') _tryUnlock('vocab-b1');
+  }
+  if(ctx === 'vocal')  _tryUnlock('phonetic');
+  if(ctx === 'trace')  _tryUnlock('calligraphe');
+  if(ctx === 'tab') {
+    _visitedTabs.add(data.tab);
+    localStorage.setItem('thai-visited-tabs', JSON.stringify([..._visitedTabs]));
+    if(_ALL_TABS.every(t => _visitedTabs.has(t))) _tryUnlock('explorer');
+  }
+}
+
+function initBadges() {
+  _renderXpBar(_xpGet());
+  renderBadges();
+}
+
 initStats();
 initBadges();
 initVoices();
@@ -5306,165 +5467,6 @@ function clearTraceCanvas() {
   if(traceCtx) traceCtx.beginPath();
 }
 
-// ─── XP & BADGES ──────────────────────────────────────────────────────────────────────────────
-const BADGES = [
-  {id:'welcome',    icon:'🌟', name:'Bienvenu',           xp:10,  desc:'Première visite'},
-  {id:'first-quiz', icon:'🎯', name:'Premier Quiz',       xp:20,  desc:'Terminer un premier quiz'},
-  {id:'calligraphe',icon:'✏️', name:'Calligraphe',        xp:15,  desc:'Utiliser le tracé'},
-  {id:'letters5',   icon:'ก',  name:'5 Lettres',          xp:25,  desc:'Apprendre 5 consonnes'},
-  {id:'letters22',  icon:'📖', name:'Mi-chemin',          xp:50,  desc:'Apprendre 22 consonnes'},
-  {id:'letters44',  icon:'👑', name:'Maître des lettres', xp:200, desc:'44 consonnes maîtrisées'},
-  {id:'streak3',    icon:'📅', name:'3 jours de suite',   xp:30,  desc:'3 jours consécutifs'},
-  {id:'streak7',    icon:'🔥', name:'Semaine de feu',     xp:75,  desc:'7 jours consécutifs'},
-  {id:'streak30',   icon:'💪', name:'Mois de maître',     xp:300, desc:'30 jours consécutifs'},
-  {id:'perfect',    icon:'⭐', name:'Quiz Parfait',       xp:50,  desc:'Score 10/10 au quiz'},
-  {id:'champion',   icon:'🏆', name:'Champion',           xp:100, desc:'3 quiz à 10/10'},
-  {id:'vocab-done', icon:'🗣️', name:'Vocabulaire',        xp:25,  desc:'Terminer un quiz vocab'},
-  {id:'vocab-b1',   icon:'🎓', name:'Niveau B1',          xp:75,  desc:'Quiz vocab niveau B1'},
-  {id:'explorer',   icon:'🗺️', name:'Explorateur',        xp:20,  desc:'Visiter toutes les sections'},
-  {id:'phonetic',   icon:'🎤', name:'Phonéticien',        xp:30,  desc:'Compléter le quiz vocal'},
-];
-
-const XP_LEVELS = [
-  {min:0,    num:1, name:'Débutant'},
-  {min:100,  num:2, name:'Apprenti'},
-  {min:300,  num:3, name:'Étudiant'},
-  {min:700,  num:4, name:'Intermédiaire'},
-  {min:1500, num:5, name:'Avancé'},
-  {min:3000, num:6, name:'Expert'},
-  {min:6000, num:7, name:'Maître'},
-];
-
-const _visitedTabs = new Set(JSON.parse(localStorage.getItem('thai-visited-tabs')||'[]'));
-const _ALL_TABS = ['home','lesson','phrases','vocab','consonnes','voyelles','tons','quiz'];
-
-function _xpGet()       { return parseInt(localStorage.getItem('thai-xp')||'0'); }
-function _badgesGet()   { return JSON.parse(localStorage.getItem('thai-badges')||'[]'); }
-function _badgesSet(arr){ localStorage.setItem('thai-badges', JSON.stringify(arr)); }
-
-let _btTimer = null;
-function _hideBadgeToast() {
-  clearTimeout(_btTimer);
-  const t = document.getElementById('badgeToast');
-  if(t) t.classList.remove('show');
-}
-function _showBadgeToast(badge) {
-  const t = document.getElementById('badgeToast');
-  if(!t) return;
-  document.getElementById('btIcon').textContent = badge.icon;
-  document.getElementById('btName').textContent = badge.name;
-  document.getElementById('btXp').textContent   = '+' + badge.xp + ' XP';
-  t.classList.add('show');
-  clearTimeout(_btTimer);
-  _btTimer = setTimeout(_hideBadgeToast, 5000);
-  // Wire close button each time (safe to call multiple times)
-  const btn = document.getElementById('btClose');
-  if(btn) btn.onclick = e => { e.stopPropagation(); _hideBadgeToast(); };
-}
-
-function _tryUnlock(id) {
-  const earned = _badgesGet();
-  if(earned.includes(id)) return false;
-  const badge = BADGES.find(b => b.id === id);
-  if(!badge) return false;
-  earned.push(id);
-  _badgesSet(earned);
-  addXP(badge.xp);
-  _showBadgeToast(badge);
-  renderBadges();
-  return true;
-}
-
-function addXP(amount) {
-  const prev = _xpGet();
-  const next  = prev + amount;
-  localStorage.setItem('thai-xp', next);
-  _renderXpBar(next);
-}
-
-function _renderXpBar(xp) {
-  let lvl = XP_LEVELS[0];
-  for(const l of XP_LEVELS) { if(xp >= l.min) lvl = l; }
-  const lvlIdx = XP_LEVELS.indexOf(lvl);
-  const nextLvl = XP_LEVELS[lvlIdx + 1];
-  const fill = nextLvl
-    ? Math.min(100, Math.round((xp - lvl.min) / (nextLvl.min - lvl.min) * 100))
-    : 100;
-
-  const elLvl  = document.getElementById('xpLevelBadge');
-  const elPts  = document.getElementById('xpTotal');
-  const elFill = document.getElementById('xpFill');
-  const elNext = document.getElementById('xpNext');
-  if(elLvl)  elLvl.textContent  = 'Niveau ' + lvl.num + ' — ' + lvl.name;
-  if(elPts)  elPts.textContent  = xp + ' XP';
-  if(elFill) elFill.style.width = fill + '%';
-  if(elNext) elNext.textContent = nextLvl
-    ? (nextLvl.min - xp) + ' XP pour le niveau suivant'
-    : 'Niveau maximum atteint !';
-}
-
-function renderBadges() {
-  const grid = document.getElementById('badgesGrid');
-  if(!grid) return;
-  const earned = _badgesGet();
-  const count = document.getElementById('badgesHdCount');
-  if(count) count.textContent = earned.length + ' / ' + BADGES.length;
-  grid.innerHTML = BADGES.map(b => {
-    const isEarned = earned.includes(b.id);
-    const seenKey = 'thai-badge-seen-' + b.id;
-    const isNew = isEarned && !localStorage.getItem(seenKey);
-    return '<div class="badge-tile ' + (isEarned ? 'earned' : 'locked') + '" title="' + b.desc + '">' +
-      (isNew ? '<span class="badge-new"></span>' : '') +
-      '<span class="badge-icon">' + b.icon + '</span>' +
-      '<span class="badge-name">' + b.name + '</span></div>';
-  }).join('');
-  earned.forEach(id => localStorage.setItem('thai-badge-seen-' + id, '1'));
-}
-
-function checkBadges(ctx, data) {
-  data = data || {};
-  const streak  = parseInt(localStorage.getItem('thai-streak')||'0');
-  const perfects = parseInt(localStorage.getItem('thai-quiz-perfects')||'0');
-
-  if(ctx === 'visit') {
-    _tryUnlock('welcome');
-    if(streak >= 3)  _tryUnlock('streak3');
-    if(streak >= 7)  _tryUnlock('streak7');
-    if(streak >= 30) _tryUnlock('streak30');
-  }
-  if(ctx === 'letter') {
-    const n = learned.size;
-    if(n >= 5)  _tryUnlock('letters5');
-    if(n >= 22) _tryUnlock('letters22');
-    if(n >= 44) _tryUnlock('letters44');
-  }
-  if(ctx === 'quiz') {
-    _tryUnlock('first-quiz');
-    if(data.score === 10) {
-      const p = perfects + 1;
-      localStorage.setItem('thai-quiz-perfects', p);
-      _tryUnlock('perfect');
-      if(p >= 3) _tryUnlock('champion');
-    }
-  }
-  if(ctx === 'vocab') {
-    _tryUnlock('vocab-done');
-    const lv = data.level||'__ALL__';
-    if(lv !== 'A1' && lv !== '__ALL__') _tryUnlock('vocab-b1');
-  }
-  if(ctx === 'vocal')  _tryUnlock('phonetic');
-  if(ctx === 'trace')  _tryUnlock('calligraphe');
-  if(ctx === 'tab') {
-    _visitedTabs.add(data.tab);
-    localStorage.setItem('thai-visited-tabs', JSON.stringify([..._visitedTabs]));
-    if(_ALL_TABS.every(t => _visitedTabs.has(t))) _tryUnlock('explorer');
-  }
-}
-
-function initBadges() {
-  _renderXpBar(_xpGet());
-  renderBadges();
-}
 
 </script>
 
