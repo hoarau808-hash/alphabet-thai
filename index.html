@@ -2271,7 +2271,7 @@ const T = {
     fAll:'Tous', fMid:'Moyenne (9)', fHigh:'Haute (11)', fLow:'Basse (24)',
     srchPh:'Chercher : ก, k, poulet…',
     voiceWarnTxt:'⚠️ Aucune voix thaïe détectée. Pour activer les sons, allez dans <strong>Préférences Système → Accessibilité → Contenu vocal</strong> et téléchargez une voix thaïe (ex. : <strong>Kanya</strong>), puis rechargez la page.',
-    cardIni:'Début', cardFin:'Fin', cardMark:'Marquer appris', cardDone:'✓ Maîtrisé', cardTrace:'✏️ Tracé', vocalQuizTitle:'Quiz Vocal', vocalQuizDesc:'Prononcez le nom de la consonne affichée. 10 questions.', shareBtn:'📤 Partager ma progression', shareTitle:'Partager ma progression',
+    cardIni:'Début', cardFin:'Fin', cardMark:'Marquer appris', cardDone:'✓ Maîtrisé', cardTrace:'✏️ Tracé', vocalQuizTitle:'Quiz Vocal', vocalQuizDesc:'Prononcez le nom de la consonne affichée. 10 questions.', shareBtn:'📤 Partager ma progression', shareTitle:'Partager ma progression', shareDl:'⬇ Télécharger', shareCopy:'📋 Copier le texte', shareNative:'📤 Partager',
     cntSecTag:'Compter en thaï', cntSecTitle:'Les nombres de 1 à 50', cntSecDesc:'Cliquez sur un nombre pour l\'entendre. Apprenez à compter en thaï !',
     vowTag:'Voyelles', vowTitle:'Les voyelles thaïes',
     vowDesc:'En thaï, les voyelles se placent avant, après, au-dessus ou en dessous de la consonne. Chaque voyelle a une forme courte et une forme longue.',
@@ -2387,7 +2387,7 @@ const T = {
     fAll:'All', fMid:'Middle (9)', fHigh:'High (11)', fLow:'Low (24)',
     srchPh:'Search: ก, k, chicken…',
     voiceWarnTxt:'⚠️ No Thai voice detected. To enable audio, go to <strong>System Preferences → Accessibility → Spoken Content</strong> and download a Thai voice (e.g. <strong>Kanya</strong>), then reload the page.',
-    cardIni:'Initial', cardFin:'Final', cardMark:'Mark as learned', cardDone:'✓ Mastered', cardTrace:'✏️ Trace', vocalQuizTitle:'Vocal Quiz', vocalQuizDesc:'Pronounce the name of the consonant shown. 10 questions.', shareBtn:'📤 Share my progress', shareTitle:'Share my progress',
+    cardIni:'Initial', cardFin:'Final', cardMark:'Mark as learned', cardDone:'✓ Mastered', cardTrace:'✏️ Trace', vocalQuizTitle:'Vocal Quiz', vocalQuizDesc:'Pronounce the name of the consonant shown. 10 questions.', shareBtn:'📤 Share my progress', shareTitle:'Share my progress', shareDl:'⬇ Download', shareCopy:'📋 Copy text', shareNative:'📤 Share',
     cntSecTag:'Count in Thai', cntSecTitle:'Numbers from 1 to 50', cntSecDesc:'Click on a number to hear it. Learn to count in Thai!',
     vowTag:'Vowels', vowTitle:'Thai Vowels',
     vowDesc:'In Thai, vowels are placed before, after, above, or below the consonant. Each vowel has a short and a long form.',
@@ -2604,6 +2604,7 @@ function applyLang() {
   const dh = document.getElementById('dictHint');
   if(dh) dh.textContent = currentLang==='en' ? 'Type at least 2 characters to search' : 'Tapez au moins 2 caractères pour rechercher';
   s('shareProgBtn', t.shareBtn); s('shareModalTitle', t.shareTitle);
+  s('shareDlBtn', t.shareDl); s('shareCopyBtn', t.shareCopy); s('shareNativeBtn', t.shareNative);
   s('qtypeVocalLbl', currentLang==='en' ? 'Vocal' : 'Vocal');
   // Title tag
   document.title = currentLang==='en' ? 'อักษรไทย — Learn the Thai Alphabet' : 'อักษรไทย — Apprendre l\'Alphabet Thaï';
@@ -5188,7 +5189,7 @@ function clearTraceCanvas() {
     <h3 id="shareModalTitle">Partager ma progression</h3>
     <img id="sharePreviewImg" class="share-preview" alt="progression">
     <div class="share-actions">
-      <button class="share-dl" onclick="downloadShareImg()">⬇ Télécharger</button>
+      <button class="share-dl" id="shareDlBtn" onclick="downloadShareImg()">⬇ Télécharger</button>
       <button class="share-copy" onclick="copyShareText()" id="shareCopyBtn">📋 Copier le texte</button>
       <button class="share-native" id="shareNativeBtn" onclick="nativeShare()" style="display:none">📤 Partager</button>
     </div>
