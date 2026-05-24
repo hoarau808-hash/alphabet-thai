@@ -4406,7 +4406,7 @@ const XP_LEVELS = [
 ];
 
 const _visitedTabs = new Set(JSON.parse(localStorage.getItem('thai-visited-tabs')||'[]'));
-const _ALL_TABS = ['home','lesson','phrases','vocab','consonnes','voyelles','tons','quiz'];
+const _ALL_TABS = ['home','lesson','phrases','vocab','consonnes','voyelles','quiz'];
 
 function _xpGet()       { return parseInt(localStorage.getItem('thai-xp')||'0'); }
 function _badgesGet()   { return JSON.parse(localStorage.getItem('thai-badges')||'[]'); }
@@ -4520,7 +4520,7 @@ function checkBadges(ctx, data) {
   if(ctx === 'vocab') {
     _tryUnlock('vocab-done');
     const lv = data.level||'__ALL__';
-    if(lv !== 'A1' && lv !== '__ALL__') _tryUnlock('vocab-b1');
+    if(lv === 'B1') _tryUnlock('vocab-b1');
   }
   if(ctx === 'vocal')  _tryUnlock('phonetic');
   if(ctx === 'trace')  _tryUnlock('calligraphe');
@@ -4532,6 +4532,8 @@ function checkBadges(ctx, data) {
 }
 
 function initBadges() {
+  _visitedTabs.add('home'); // page de départ, toujours considérée comme visitée
+  localStorage.setItem('thai-visited-tabs', JSON.stringify([..._visitedTabs]));
   _renderXpBar(_xpGet());
   renderBadges();
 }
