@@ -866,6 +866,19 @@ footer{border-top:1px solid var(--border);padding:40px 24px;text-align:center;co
 .bt-name{font-size:15px;font-weight:800;color:var(--text);margin-bottom:3px}
 .bt-xp{font-size:12px;font-weight:700;color:var(--teal)}
 @media(max-width:480px){.badges-grid{grid-template-columns:repeat(auto-fill,minmax(62px,1fr))}.badge-icon{font-size:22px}}
+/* ── QUIZ GRID ─────────────────────────────────────────────────── */
+.qgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:12px;margin-bottom:28px}
+.qcard{display:flex;flex-direction:column;align-items:center;gap:8px;padding:22px 14px 18px;background:var(--bg3);border:1.5px solid var(--border);border-radius:16px;cursor:pointer;transition:all .22s;text-align:center;position:relative;user-select:none}
+.qcard:hover{border-color:var(--border-h);transform:translateY(-3px);box-shadow:0 6px 24px rgba(0,0,0,.4)}
+.qcard.active{border-color:rgba(240,180,41,.55);background:rgba(240,180,41,.07);box-shadow:0 0 0 3px rgba(240,180,41,.15)}
+.qcard-icon{font-size:36px;line-height:1;margin-bottom:2px}
+.qcard-icon.thai{font-family:var(--thai-font);font-size:34px;color:var(--text);font-weight:700}
+.qcard-title{font-size:14px;font-weight:700;color:var(--text);line-height:1.2}
+.qcard.active .qcard-title{color:var(--gold)}
+.qcard-desc{font-size:11px;color:var(--text3);line-height:1.4}
+.qcard-back{display:inline-flex;align-items:center;gap:6px;background:none;border:1px solid var(--border);border-radius:8px;color:var(--text2);font-size:12px;font-weight:600;padding:7px 14px;cursor:pointer;margin-bottom:20px;transition:all .2s}
+.qcard-back:hover{border-color:var(--border-h);color:var(--text)}
+@media(max-width:768px){.qgrid{grid-template-columns:repeat(2,1fr);gap:10px}.qcard{padding:18px 10px 14px}.qcard-icon{font-size:30px}.qcard-icon.thai{font-size:28px}.qcard-title{font-size:13px}.qcard-desc{font-size:10px}}
 /* ── NOTIFICATIONS PUSH ─────────────────────────────────────────── */
 .notif-btn{background:rgba(255,255,255,.07);border:1px solid var(--border);color:var(--text2);padding:7px 10px;border-radius:8px;font-size:16px;cursor:pointer;transition:all .2s;line-height:1;position:relative}
 .notif-btn:hover{background:rgba(255,255,255,.14);color:var(--text)}
@@ -1295,19 +1308,48 @@ footer{border-top:1px solid var(--border);padding:40px 24px;text-align:center;co
 <div id="tab-quiz" class="tab-content">
   <div class="quiz-wrap">
 
-    <!-- Type toggle -->
-    <div class="qtype-sw">
-      <button class="qtype-btn active" id="qtype-cons" onclick="setQuizType('cons',this)">ก Consonnes</button>
-      <button class="qtype-btn" id="qtype-phrases" onclick="setQuizType('phrases',this)">💬 Phrases</button>
-      <button class="qtype-btn" id="qtype-cnt" onclick="setQuizType('cnt',this)">🔢 Chiffres</button>
-      <button class="qtype-btn" id="qtype-vow" onclick="setQuizType('vow',this)">เ Voyelles</button>
-      <button class="qtype-btn" id="qtype-tone" onclick="setQuizType('tone',this)">ก่ Tons</button>
-      <button class="qtype-btn" id="qtype-vocal" onclick="setQuizType('vocal',this)">🎤 <span id="qtypeVocalLbl">Vocal</span></button>
-      <button class="qtype-btn" id="qtype-vocab" onclick="setQuizType('vocab',this)">📚 <span id="qtypeVocabLbl">Vocab</span></button>
+    <!-- Quiz grid -->
+    <div class="qgrid" id="quizGrid">
+      <div class="qcard" id="qcard-cons" onclick="setQuizType('cons',this)">
+        <div class="qcard-icon thai">ก</div>
+        <div class="qcard-title" id="qtype-cons">Consonnes</div>
+        <div class="qcard-desc" id="qcardDescCons">Identifie les 44 consonnes thaïes</div>
+      </div>
+      <div class="qcard" id="qcard-phrases" onclick="setQuizType('phrases',this)">
+        <div class="qcard-icon">💬</div>
+        <div class="qcard-title" id="qtype-phrases">Phrases</div>
+        <div class="qcard-desc" id="qcardDescPhrases">Traduis des phrases courantes</div>
+      </div>
+      <div class="qcard" id="qcard-cnt" onclick="setQuizType('cnt',this)">
+        <div class="qcard-icon">🔢</div>
+        <div class="qcard-title" id="qtype-cnt">Chiffres</div>
+        <div class="qcard-desc" id="qcardDescCnt">Compte en thaï de 0 à 100</div>
+      </div>
+      <div class="qcard" id="qcard-vow" onclick="setQuizType('vow',this)">
+        <div class="qcard-icon thai">เ</div>
+        <div class="qcard-title" id="qtype-vow">Voyelles</div>
+        <div class="qcard-desc" id="qcardDescVow">Maîtrise les voyelles thaïes</div>
+      </div>
+      <div class="qcard" id="qcard-tone" onclick="setQuizType('tone',this)">
+        <div class="qcard-icon thai">ก่</div>
+        <div class="qcard-title" id="qtype-tone">Tons</div>
+        <div class="qcard-desc" id="qcardDescTone">Distingue les 5 tons du thaï</div>
+      </div>
+      <div class="qcard" id="qcard-vocal" onclick="setQuizType('vocal',this)">
+        <div class="qcard-icon">🎤</div>
+        <div class="qcard-title" id="qtypeVocalLbl">Vocal</div>
+        <div class="qcard-desc" id="qcardDescVocal">Prononce les consonnes à voix haute</div>
+      </div>
+      <div class="qcard" id="qcard-vocab" onclick="setQuizType('vocab',this)">
+        <div class="qcard-icon">📚</div>
+        <div class="qcard-title" id="qtypeVocabLbl">Vocabulaire</div>
+        <div class="qcard-desc" id="qcardDescVocab">Teste ton vocabulaire</div>
+      </div>
     </div>
 
     <!-- CONSONANTS QUIZ (existing) -->
-    <div id="consQuizWrap">
+    <div id="consQuizWrap" style="display:none">
+      <button class="qcard-back" onclick="showQuizGrid()">← <span>Changer de quiz</span></button>
       <div id="quizStart" class="quiz-start">
         <h2 id="quizTitle">Quiz Interactif</h2>
         <p id="quizDesc">Testez vos connaissances sur les consonnes thaïes. Choisissez votre mode d'apprentissage !</p>
@@ -1354,6 +1396,7 @@ footer{border-top:1px solid var(--border);padding:40px 24px;text-align:center;co
 
     <!-- PHRASES QUIZ (new) -->
     <div id="phQuizWrap" style="display:none">
+      <button class="qcard-back" onclick="showQuizGrid()">← <span>Changer de quiz</span></button>
 
       <!-- Start screen -->
       <div id="phQuizStart" class="quiz-start">
@@ -1424,6 +1467,7 @@ footer{border-top:1px solid var(--border);padding:40px 24px;text-align:center;co
 
     <!-- QUIZ CHIFFRES -->
     <div id="cntQuizWrap" style="display:none">
+      <button class="qcard-back" onclick="showQuizGrid()">← <span>Changer de quiz</span></button>
       <div class="quiz-card" id="cntQStart">
         <div class="qmodes">
           <button class="qmode active" id="cntBtnListen" onclick="setCntMode('listen',this)">🎧 Écoute</button>
@@ -1465,6 +1509,7 @@ footer{border-top:1px solid var(--border);padding:40px 24px;text-align:center;co
 
     <!-- QUIZ VOYELLES -->
     <div id="vowQuizWrap" style="display:none">
+      <button class="qcard-back" onclick="showQuizGrid()">← <span>Changer de quiz</span></button>
       <div class="quiz-card" id="vowQStart">
         <h2 id="vowQTitle" style="font-size:26px;font-weight:800;margin-bottom:10px;text-align:center">Quiz Voyelles</h2>
         <p id="vowQDesc" style="color:var(--text2);font-size:14px;margin-bottom:24px;text-align:center">10 questions sur les 18 voyelles thaïes.</p>
@@ -1501,6 +1546,7 @@ footer{border-top:1px solid var(--border);padding:40px 24px;text-align:center;co
 
     <!-- QUIZ TONS -->
     <div id="toneQuizWrap" style="display:none">
+      <button class="qcard-back" onclick="showQuizGrid()">← <span>Changer de quiz</span></button>
       <div class="quiz-card" id="toneQStart">
         <h2 id="toneQTitle" style="font-size:26px;font-weight:800;margin-bottom:10px;text-align:center">Quiz Tons</h2>
         <p id="toneQDesc" style="color:var(--text2);font-size:14px;margin-bottom:24px;text-align:center">10 questions sur les 5 tons thaïs.</p>
@@ -1536,6 +1582,7 @@ footer{border-top:1px solid var(--border);padding:40px 24px;text-align:center;co
     </div><!-- /toneQuizWrap -->
 
     <div id="vocalQuizWrap" style="display:none">
+      <button class="qcard-back" onclick="showQuizGrid()">← <span>Changer de quiz</span></button>
       <!-- Écran départ -->
       <div class="quiz-card" id="vocalQStart">
         <h2 style="font-size:26px;font-weight:800;margin-bottom:10px;text-align:center" id="vocalQTitle">Quiz Vocal</h2>
@@ -1573,6 +1620,7 @@ footer{border-top:1px solid var(--border);padding:40px 24px;text-align:center;co
 
     <!-- QUIZ VOCABULAIRE -->
     <div id="vocabQuizWrap" style="display:none">
+      <button class="qcard-back" onclick="showQuizGrid()">← <span>Changer de quiz</span></button>
       <!-- Écran départ -->
       <div class="quiz-card" id="vocabQStart">
         <h2 style="font-size:26px;font-weight:800;margin-bottom:8px;text-align:center" id="vocabQTitle">📚 Quiz Vocabulaire</h2>
@@ -2753,7 +2801,7 @@ function goTab(tab, btnEl) {
   if(ntabs[didx]!=null) ntabs[didx].classList.add('active');
   if(mtabs[midx]!=null) mtabs[midx].classList.add('active');
   window.scrollTo(0,0);
-  if(tab==='quiz' && !quizQ) resetQuizUI();
+  if(tab==='quiz') showQuizGrid();
 }
 
 // ─── STATISTIQUES ───────────────────────────────────────────────────────────
@@ -3340,22 +3388,30 @@ let lastPhraseThai = null;
 let phQuizOpts = [];
 let phQuizCount = parseInt(localStorage.getItem('ph-quiz-count')||'0');
 
-function setQuizType(type, btn) {
-  document.querySelectorAll('.qtype-btn').forEach(b=>b.classList.remove('active'));
-  if(btn) btn.classList.add('active');
-  document.getElementById('consQuizWrap').style.display  = type==='cons'    ? '' : 'none';
-  document.getElementById('phQuizWrap').style.display    = type==='phrases' ? '' : 'none';
-  document.getElementById('cntQuizWrap').style.display   = type==='cnt'     ? '' : 'none';
-  document.getElementById('vowQuizWrap').style.display   = type==='vow'     ? '' : 'none';
-  document.getElementById('toneQuizWrap').style.display  = type==='tone'    ? '' : 'none';
-  document.getElementById('vocalQuizWrap').style.display = type==='vocal'   ? '' : 'none';
-  document.getElementById('vocabQuizWrap').style.display = type==='vocab'   ? '' : 'none';
-  if(type==='phrases') { renderPhCatBtns(); updatePhStartFreeBar(); }
-  // Toujours revenir à l'écran de départ pour pouvoir changer de mode
+function showQuizGrid() {
+  // Hide all quiz wraps, deactivate all cards
+  ['consQuizWrap','phQuizWrap','cntQuizWrap','vowQuizWrap','toneQuizWrap','vocalQuizWrap','vocabQuizWrap']
+    .forEach(id => { const el=document.getElementById(id); if(el) el.style.display='none'; });
+  document.querySelectorAll('.qcard').forEach(c => c.classList.remove('active'));
+}
+
+function setQuizType(type, cardEl) {
+  // Activate selected card
+  document.querySelectorAll('.qcard').forEach(c => c.classList.remove('active'));
+  if(cardEl) cardEl.classList.add('active');
+  // Show selected wrap, hide others
+  const map = {cons:'consQuizWrap', phrases:'phQuizWrap', cnt:'cntQuizWrap',
+                vow:'vowQuizWrap', tone:'toneQuizWrap', vocal:'vocalQuizWrap', vocab:'vocabQuizWrap'};
+  Object.entries(map).forEach(([k,id]) => {
+    const el = document.getElementById(id);
+    if(el) el.style.display = k===type ? '' : 'none';
+  });
+  // Reset to start screen
   if(type==='cons') {
     document.getElementById('quizStart').style.display='';
     document.getElementById('quizPlay').style.display='none';
   } else if(type==='phrases') {
+    renderPhCatBtns(); updatePhStartFreeBar();
     document.getElementById('phQuizStart').style.display='';
     document.getElementById('phQuizPlay').style.display='none';
     document.getElementById('phPremiumGate').style.display='none';
@@ -3375,12 +3431,13 @@ function setQuizType(type, btn) {
     document.getElementById('vocalQStart').style.display='';
     document.getElementById('vocalQGame').style.display='none';
     document.getElementById('vocalQScore').style.display='none';
+    _vocalCheckSupport();
   } else if(type==='vocab') {
     document.getElementById('vocabQStart').style.display='';
     document.getElementById('vocabQGame').style.display='none';
     document.getElementById('vocabQScore').style.display='none';
-    _vocalCheckSupport();
   }
+  window.scrollTo(0,0);
 }
 
 function setPhMode(m, btn) {
