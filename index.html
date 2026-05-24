@@ -857,9 +857,9 @@ footer{border-top:1px solid var(--border);padding:40px 24px;text-align:center;co
 .badge-tile.earned .badge-name{color:var(--gold)}
 .badge-new{position:absolute;top:4px;right:4px;width:8px;height:8px;border-radius:50%;background:var(--rose);border:1.5px solid var(--bg3)}
 /* Badge unlock toast */
-#badgeToast{position:fixed;bottom:90px;left:50%;transform:translateX(-50%) translateY(160px);background:var(--bg2);border:1.5px solid var(--gold);border-radius:16px;padding:14px 28px;z-index:700;box-shadow:0 8px 40px rgba(240,180,41,.3);transition:transform .4s cubic-bezier(.34,1.56,.64,1);text-align:center;min-width:240px;cursor:pointer}
-#badgeToast.show{transform:translateX(-50%) translateY(0)}
-.bt-close{position:absolute;top:8px;right:10px;background:none;border:none;color:var(--text3);font-size:16px;cursor:pointer;line-height:1;padding:2px 4px}
+#badgeToast{position:fixed;top:50%;left:50%;transform:translate(-50%,calc(-50% + 60px));opacity:0;background:var(--bg2);border:1.5px solid var(--gold);border-radius:16px;padding:18px 32px 16px;z-index:700;box-shadow:0 8px 40px rgba(240,180,41,.3);transition:transform .4s cubic-bezier(.34,1.56,.64,1),opacity .3s;text-align:center;min-width:260px;pointer-events:none}
+#badgeToast.show{transform:translate(-50%,-50%);opacity:1;pointer-events:auto}
+.bt-close{position:absolute;top:8px;right:10px;background:none;border:none;color:var(--text3);font-size:18px;cursor:pointer;line-height:1;padding:4px 6px;z-index:1}
 .bt-close:hover{color:var(--text)}
 .bt-label{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.8px;color:var(--gold);margin-bottom:4px}
 .bt-icon{font-size:28px;margin-bottom:4px}
@@ -5357,6 +5357,9 @@ function _showBadgeToast(badge) {
   t.classList.add('show');
   clearTimeout(_btTimer);
   _btTimer = setTimeout(_hideBadgeToast, 5000);
+  // Wire close button each time (safe to call multiple times)
+  const btn = document.getElementById('btClose');
+  if(btn) btn.onclick = e => { e.stopPropagation(); _hideBadgeToast(); };
 }
 
 function _tryUnlock(id) {
@@ -5652,8 +5655,8 @@ function initBadges() {
 </div>
 
 <!-- BADGE TOAST -->
-<div id="badgeToast" onclick="_hideBadgeToast()">
-  <button class="bt-close" onclick="_hideBadgeToast()">✕</button>
+<div id="badgeToast">
+  <button class="bt-close" id="btClose">✕</button>
   <div class="bt-label">Badge débloqué !</div>
   <div class="bt-icon" id="btIcon">🏅</div>
   <div class="bt-name" id="btName"></div>
