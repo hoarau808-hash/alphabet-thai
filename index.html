@@ -324,6 +324,9 @@ footer{border-top:1px solid var(--border);padding:40px 24px;text-align:center;co
 .mtab{display:flex;flex-direction:column;align-items:center;gap:3px;padding:6px 16px;border:none;background:transparent;color:var(--text3);font-family:'Inter',sans-serif;font-size:10px;font-weight:600;cursor:pointer;letter-spacing:.5px;text-transform:uppercase}
 .mtab-icon{font-size:20px}
 .mtab.active{color:var(--gold)}
+/* SVG icons base */
+.mtab-icon svg{display:block;stroke:currentColor;fill:none;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
+.mtab-icon svg .ico-fill{fill:currentColor;stroke:none}
 /* MOBILE OVERFLOW MENU (hidden on desktop) */
 .mob-overflow-btn{display:none}
 .mob-menu{visibility:hidden;opacity:0;pointer-events:none;position:fixed;top:56px;left:0;right:0;background:rgba(7,11,20,.97);backdrop-filter:blur(24px);border-bottom:1px solid var(--border);z-index:99;padding:12px 14px;display:flex;flex-direction:column;gap:8px;transition:opacity .2s,transform .2s;transform:translateY(-8px)}
@@ -365,13 +368,13 @@ footer{border-top:1px solid var(--border);padding:40px 24px;text-align:center;co
   #userBadge{gap:6px}
   .premium-badge{display:none}
 
-  /* BOTTOM NAV — icônes seules, indicateur doré */
+  /* BOTTOM NAV — icônes SVG + labels courts */
   .mobnav{display:flex;padding:6px 0 14px}
-  .mtab{flex:1;padding:6px 2px;font-size:0;gap:2px;min-height:48px;justify-content:center}
-  .mtab-icon{font-size:24px;transition:transform .2s}
-  .mtab.active .mtab-icon{transform:translateY(-2px)}
-  .mtab::after{content:'';display:block;width:0;height:3px;border-radius:2px;background:var(--gold);margin:2px auto 0;transition:width .25s ease}
-  .mtab.active::after{width:16px}
+  .mtab{flex:1;padding:5px 1px;font-size:9px;gap:3px;min-height:50px;justify-content:center;letter-spacing:0;text-transform:none;font-weight:500;white-space:nowrap}
+  .mtab-icon{width:22px;height:22px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+  .mtab-icon svg{width:22px;height:22px}
+  .mtab::after{content:'';display:block;width:0;height:2.5px;border-radius:2px;background:var(--gold);margin:2px auto 0;transition:width .25s ease}
+  .mtab.active::after{width:14px}
 
   /* TAB CONTENT */
   .tab-content{padding-top:56px;padding-bottom:84px}
@@ -481,8 +484,8 @@ footer{border-top:1px solid var(--border);padding:40px 24px;text-align:center;co
   .hero{padding:64px 12px 40px}
   nav.topnav{padding:0 10px}
   .logo{font-size:15px}
-  .mtab{min-height:46px}
-  .mtab-icon{font-size:22px}
+  .mtab{min-height:46px;font-size:8px}
+  .mtab-icon svg{width:20px;height:20px}
   .btn-g,.btn-o{font-size:15px;padding:16px 20px}
   .qchar{font-size:64px}
   .qrtgs{font-size:26px}
@@ -1996,13 +1999,34 @@ footer{border-top:1px solid var(--border);padding:40px 24px;text-align:center;co
 
 <!-- MOBILE NAV -->
 <nav class="mobnav">
-  <button class="mtab active" onclick="goTab('home',this)"><span class="mtab-icon">🏠</span><span id="mtab-home">Accueil</span></button>
-  <button class="mtab" onclick="goTab('lesson',this)"><span class="mtab-icon">📖</span><span id="mtab-lesson">Leçon</span></button>
-  <button class="mtab" onclick="goTab('phrases',this)"><span class="mtab-icon">💬</span><span id="mtab-phrases">Phrases</span></button>
-  <button class="mtab" onclick="goTab('vocab',this)"><span class="mtab-icon">📚</span><span id="mtab-vocab">Vocab</span></button>
-  <button class="mtab" onclick="goTab('consonnes',this)"><span class="mtab-icon">🔤</span><span id="mtab-alpha">Alphabet</span></button>
-  <button class="mtab" onclick="goTab('voyelles',this)"><span class="mtab-icon">🔡</span><span id="mtab-vowels">Voyelles</span></button>
-  <button class="mtab" onclick="goTab('quiz',this)"><span class="mtab-icon">🎯</span><span id="mtab-quiz">Quiz</span></button>
+  <button class="mtab active" onclick="goTab('home',this)">
+    <span class="mtab-icon"><svg viewBox="0 0 24 24"><path d="M3 10L12 3l9 7v10a1 1 0 01-1 1H5a1 1 0 01-1-1z"/><path d="M9 21v-7h6v7"/></svg></span>
+    <span id="mtab-home">Accueil</span>
+  </button>
+  <button class="mtab" onclick="goTab('lesson',this)">
+    <span class="mtab-icon"><svg viewBox="0 0 24 24"><path d="M2 6s2.5-2 8-2 8 2 8 2v14s-2.5-2-8-2-8 2-8 2z"/><line x1="12" y1="6" x2="12" y2="20"/></svg></span>
+    <span id="mtab-lesson">Leçon</span>
+  </button>
+  <button class="mtab" onclick="goTab('phrases',this)">
+    <span class="mtab-icon"><svg viewBox="0 0 24 24"><path d="M3 5a2 2 0 012-2h14a2 2 0 012 2v9a2 2 0 01-2 2H8l-5 4v-4H5a2 2 0 01-2-2z"/></svg></span>
+    <span id="mtab-phrases">Phrases</span>
+  </button>
+  <button class="mtab" onclick="goTab('vocab',this)">
+    <span class="mtab-icon"><svg viewBox="0 0 24 24"><path d="M12 3L2 8l10 5 10-5-10-5z"/><path d="M2 13l10 5 10-5"/><path d="M2 18l10 5 10-5"/></svg></span>
+    <span id="mtab-vocab">Vocab</span>
+  </button>
+  <button class="mtab" onclick="goTab('consonnes',this)">
+    <span class="mtab-icon"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg></span>
+    <span id="mtab-alpha">Lettres</span>
+  </button>
+  <button class="mtab" onclick="goTab('voyelles',this)">
+    <span class="mtab-icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="1.5" class="ico-fill"/><path d="M9 9a4 4 0 000 6M15 9a4 4 0 010 6"/><path d="M6 6a8 8 0 000 12M18 6a8 8 0 010 12"/></svg></span>
+    <span id="mtab-vowels">Voyelles</span>
+  </button>
+  <button class="mtab" onclick="goTab('quiz',this)">
+    <span class="mtab-icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1.5" class="ico-fill"/></svg></span>
+    <span id="mtab-quiz">Quiz</span>
+  </button>
 </nav>
 
 <script>
@@ -2287,7 +2311,7 @@ const T = {
     phField:'fr',
     footerTxt:"Merci d'apprendre le thaï —", footerQ:'« Plus on apprend, plus on sait »',
     mobHome:'Accueil', mobLesson:'Leçon', mobPhrases:'Phrases',
-    mobVocab:'Vocab', mobAlpha:'Alphabet', mobVowels:'Voyelles', mobQuiz:'Quiz',
+    mobVocab:'Vocab', mobAlpha:'Lettres', mobVowels:'Voyelles', mobQuiz:'Quiz',
     quizTypeCnt:'🔢 Chiffres', quizTypeVow:'เ Voyelles', quizTypeTone:'ก่ Tons',
     phViewPhrases:'📋 Phrases de base', phViewSit:'🎭 Situations pratiques',
     sitTag:'Conversations', sitTitle:'Situations pratiques',
@@ -2403,7 +2427,7 @@ const T = {
     phField:'en',
     footerTxt:'Thank you for learning Thai —', footerQ:'"The more you learn, the more you know"',
     mobHome:'Home', mobLesson:'Lesson', mobPhrases:'Phrases',
-    mobVocab:'Vocab', mobAlpha:'Alphabet', mobVowels:'Vowels', mobQuiz:'Quiz',
+    mobVocab:'Vocab', mobAlpha:'Letters', mobVowels:'Vowels', mobQuiz:'Quiz',
     quizTypeCnt:'🔢 Numbers', quizTypeVow:'เ Vowels', quizTypeTone:'ก่ Tones',
     phViewPhrases:'📋 Basic Phrases', phViewSit:'🎭 Real Situations',
     sitTag:'Conversations', sitTitle:'Real-life situations',
