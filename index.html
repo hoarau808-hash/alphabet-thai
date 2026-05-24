@@ -787,6 +787,35 @@ footer{border-top:1px solid var(--border);padding:40px 24px;text-align:center;co
   .cntq-rtgs{font-size:17px}
   .cntq-input{width:130px;font-size:18px;padding:12px 14px}
 }
+/* ── MINI-DICTIONNAIRE ───────────────────────────────────────────── */
+.dict-btn{background:rgba(255,255,255,.07);border:1px solid var(--border);color:var(--text2);padding:7px 12px;border-radius:8px;font-size:16px;cursor:pointer;transition:all .2s;line-height:1}
+.dict-btn:hover{background:rgba(255,255,255,.14);color:var(--text)}
+.dict-overlay{position:fixed;inset:0;background:rgba(0,0,0,.85);backdrop-filter:blur(14px);z-index:500;display:none;flex-direction:column;align-items:center;padding:60px 16px 20px}
+.dict-overlay.open{display:flex}
+.dict-close{position:absolute;top:16px;right:20px;background:none;border:none;color:var(--text2);font-size:22px;cursor:pointer}
+.dict-close:hover{color:var(--text)}
+.dict-title{font-size:20px;font-weight:800;color:var(--gold);margin-bottom:16px}
+.dict-input-wrap{width:100%;max-width:560px;position:relative;margin-bottom:20px}
+.dict-input{width:100%;padding:14px 48px 14px 20px;background:var(--bg2);border:2px solid var(--border-h);border-radius:14px;color:var(--text);font-size:17px;font-family:'Inter',sans-serif;outline:none;transition:border-color .2s;box-sizing:border-box}
+.dict-input:focus{border-color:var(--gold)}
+.dict-input-icon{position:absolute;right:16px;top:50%;transform:translateY(-50%);font-size:18px;color:var(--text3);pointer-events:none}
+.dict-results{width:100%;max-width:560px;overflow-y:auto;flex:1}
+.dict-section-title{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--text3);margin:16px 0 8px;padding-left:4px}
+.dict-card{background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:13px 16px;display:flex;align-items:center;gap:12px;margin-bottom:8px;cursor:pointer;transition:all .2s}
+.dict-card:hover{border-color:var(--border-h);background:var(--bg3)}
+.dict-card-icon{font-size:22px;flex-shrink:0;width:32px;text-align:center}
+.dict-card-thai{font-family:var(--thai-font);font-size:24px;font-weight:600;color:var(--gold);line-height:1}
+.dict-card-body{flex:1;min-width:0}
+.dict-card-main{font-size:13px;font-weight:600;color:var(--text);margin-bottom:2px}
+.dict-card-sub{font-size:12px;color:var(--text3)}
+.dict-card-rtgs{font-size:12px;color:var(--teal);font-style:italic}
+.dict-tag{font-size:10px;font-weight:700;padding:2px 7px;border-radius:4px;flex-shrink:0}
+.dict-tag.vocab{background:rgba(255,195,0,.15);color:var(--gold)}
+.dict-tag.cons{background:rgba(14,211,160,.15);color:var(--teal)}
+.dict-tag.phrase{background:rgba(100,149,237,.15);color:#6495ed}
+.dict-tag.vowel{background:rgba(255,92,141,.15);color:var(--rose)}
+.dict-empty{text-align:center;color:var(--text3);font-size:14px;padding:40px 0}
+.dict-hint{text-align:center;color:var(--text3);font-size:13px;padding:30px 0}
 /* ── PARTAGE DE PROGRESSION ──────────────────────────────────────── */
 .share-btn{display:flex;align-items:center;justify-content:center;gap:8px;margin:20px auto 0;padding:11px 24px;background:rgba(255,195,0,.12);color:var(--gold);border:1px solid rgba(255,195,0,.3);border-radius:10px;font-size:14px;font-weight:600;cursor:pointer;transition:all .2s;font-family:'Inter',sans-serif}
 .share-btn:hover{background:rgba(255,195,0,.22)}
@@ -881,6 +910,7 @@ footer{border-top:1px solid var(--border);padding:40px 24px;text-align:center;co
       <span class="premium-badge" id="premiumBadge" style="display:none">Premium</span>
       <button class="logout-btn" id="logoutBtn" onclick="doLogout()">Déconnexion</button>
     </div>
+    <button class="dict-btn" onclick="openDict()" title="Dictionnaire">🔍</button>
     <button id="loginBtn" class="login-btn" onclick="openAuth()">Connexion</button>
     <div class="lang-sw">
       <button class="lang-opt active" id="langFR" onclick="setLang('fr')">FR</button>
@@ -2473,6 +2503,11 @@ function applyLang() {
   const gd=document.getElementById('phGateDesc'); if(gd) gd.textContent=t.phGateDesc(FREE_PH_QUIZ_LIMIT);
   renderPhCatBtns(); updatePhStartFreeBar();
   s('vocalQTitle', t.vocalQuizTitle); s('vocalQDesc', t.vocalQuizDesc);
+  s('dictTitle', currentLang==='en' ? '🔍 Dictionary' : '🔍 Dictionnaire');
+  const di = document.getElementById('dictInput');
+  if(di) di.placeholder = currentLang==='en' ? 'Search in Thai, romanisation, French or English…' : 'Chercher en thaï, romanisation, français ou anglais…';
+  const dh = document.getElementById('dictHint');
+  if(dh) dh.textContent = currentLang==='en' ? 'Type at least 2 characters to search' : 'Tapez au moins 2 caractères pour rechercher';
   s('shareProgBtn', t.shareBtn); s('shareModalTitle', t.shareTitle);
   s('qtypeVocalLbl', currentLang==='en' ? 'Vocal' : 'Vocal');
   // Title tag
@@ -4124,6 +4159,151 @@ updateProgress();
 initStats();
 initVoices();
 
+// ─── MINI-DICTIONNAIRE ──────────────────────────────────────────────────────
+function openDict() {
+  document.getElementById('dictOverlay').classList.add('open');
+  setTimeout(() => document.getElementById('dictInput').focus(), 80);
+  const q = document.getElementById('dictInput').value;
+  if(q.length >= 2) searchDict(q);
+}
+function closeDict() {
+  document.getElementById('dictOverlay').classList.remove('open');
+}
+function closeDictIfOutside(e) {
+  if(e.target === document.getElementById('dictOverlay')) closeDict();
+}
+document.addEventListener('keydown', e => {
+  if(e.key === 'Escape') { closeDict(); closeTrace(); closeShareModal(); }
+});
+
+function searchDict(q) {
+  const box = document.getElementById('dictResults');
+  q = q.trim();
+  if(q.length < 2) {
+    box.innerHTML = '<div class="dict-hint" id="dictHint">'+(currentLang==='en'?'Type at least 2 characters to search':'Tapez au moins 2 caractères pour rechercher')+'</div>';
+    return;
+  }
+  const ql = q.toLowerCase();
+  const fr = currentLang !== 'en';
+
+  const match = (str) => str && str.toLowerCase().includes(ql);
+
+  // Vocab
+  const vocRes = vocabData.filter(v =>
+    match(v.thai) || match(v.rtgs) || match(v.fr) || match(v.en)
+  ).slice(0, 8);
+
+  // Consonnes
+  const consRes = consonants.filter(c =>
+    match(c.char) || match(c.rtgs) || match(c.meaning) || match(c.en) || match(c.name) || match(c.nr)
+  ).slice(0, 6);
+
+  // Phrases
+  const phRes = phrases.filter(p =>
+    match(p.thai) || match(p.rtgs) || match(p.fr) || match(p.en)
+  ).slice(0, 6);
+
+  // Voyelles
+  const allVowels = [...(vowels.short||[]), ...(vowels.long||[])];
+  const vowRes = allVowels.filter(v =>
+    match(v.char) || match(v.rtgs) || match(v.desc) || match(v.en)
+  ).slice(0, 4);
+
+  if(!vocRes.length && !consRes.length && !phRes.length && !vowRes.length) {
+    box.innerHTML = '<div class="dict-empty">'+(fr?'Aucun résultat pour «'+q+'»':'No results for "'+q+'"')+'</div>';
+    return;
+  }
+
+  let html = '';
+
+  if(vocRes.length) {
+    html += '<div class="dict-section-title">'+(fr?'Vocabulaire':'Vocabulary')+' ('+vocRes.length+')</div>';
+    html += vocRes.map(v => {
+      const icon = v.color
+        ? `<span style="display:inline-block;width:24px;height:24px;border-radius:50%;background:${v.color};flex-shrink:0"></span>`
+        : `<span class="dict-card-icon">${v.emoji}</span>`;
+      const lbl = v.level ? `<span class="vcard-level ${v.level}" style="margin-left:6px">${v.level}</span>` : '';
+      return `<div class="dict-card" onclick="dictGoVocab('${v.thai.replace(/'/g,"\\'")}')">
+        ${icon}
+        <div class="dict-card-body">
+          <div class="dict-card-thai">${v.thai}</div>
+          <div class="dict-card-main">${fr?v.fr:v.en}${lbl}</div>
+          <div class="dict-card-rtgs">${v.rtgs}</div>
+        </div>
+        <span class="dict-tag vocab">${fr?'Vocab':'Vocab'}</span>
+        <button class="pspk" onclick="event.stopPropagation();speakThai('${v.thai.replace(/'/g,"\\'")}',this)" style="margin-left:4px">🔊</button>
+      </div>`;
+    }).join('');
+  }
+
+  if(consRes.length) {
+    html += '<div class="dict-section-title">'+(fr?'Consonnes':'Consonants')+' ('+consRes.length+')</div>';
+    html += consRes.map(c => `
+      <div class="dict-card" onclick="dictGoCons(${c.id})">
+        <span class="dict-card-icon" style="font-family:var(--thai-font);font-size:28px;color:var(--gold)">${c.char}</span>
+        <div class="dict-card-body">
+          <div class="dict-card-thai" style="font-size:14px">${c.name}</div>
+          <div class="dict-card-main">${fr?c.meaning:c.en} ${c.emoji}</div>
+          <div class="dict-card-rtgs">${c.rtgs} · ${fr?'Classe':'Class'} ${c.cls} · ini: ${c.ini}</div>
+        </div>
+        <span class="dict-tag cons">${fr?'Consonne':'Consonant'}</span>
+        <button class="pspk" onclick="event.stopPropagation();speakById(${c.id},event)" style="margin-left:4px">🔊</button>
+      </div>`).join('');
+  }
+
+  if(phRes.length) {
+    html += '<div class="dict-section-title">'+(fr?'Phrases':'Phrases')+' ('+phRes.length+')</div>';
+    html += phRes.map(p => `
+      <div class="dict-card" onclick="dictGoPhrases()">
+        <span class="dict-card-icon">💬</span>
+        <div class="dict-card-body">
+          <div class="dict-card-thai">${p.thai}</div>
+          <div class="dict-card-main">${fr?p.fr:p.en}</div>
+          <div class="dict-card-rtgs">${p.rtgs}</div>
+        </div>
+        <span class="dict-tag phrase">${fr?'Phrase':'Phrase'}</span>
+        <button class="pspk" onclick="event.stopPropagation();speakThai('${p.thai.replace(/'/g,"\\'")}',this)" style="margin-left:4px">🔊</button>
+      </div>`).join('');
+  }
+
+  if(vowRes.length) {
+    html += '<div class="dict-section-title">'+(fr?'Voyelles':'Vowels')+' ('+vowRes.length+')</div>';
+    html += vowRes.map(v => `
+      <div class="dict-card" onclick="dictGoVowels()">
+        <span class="dict-card-icon" style="font-family:var(--thai-font);font-size:28px;color:var(--rose)">${v.char}</span>
+        <div class="dict-card-body">
+          <div class="dict-card-main">${fr?v.desc:v.en}</div>
+          <div class="dict-card-rtgs">${v.rtgs}</div>
+        </div>
+        <span class="dict-tag vowel">${fr?'Voyelle':'Vowel'}</span>
+        <button class="pspk" onclick="event.stopPropagation();speakVowel('${v.char.replace(/'/g,"\\'")}',this)" style="margin-left:4px">🔊</button>
+      </div>`).join('');
+  }
+
+  box.innerHTML = html;
+}
+
+function dictGoVocab(thai) {
+  closeDict();
+  goTab('vocab');
+  setTimeout(() => {
+    const inp = document.getElementById('vsrchInput');
+    if(inp) { inp.value = thai; renderVocab(); }
+  }, 150);
+}
+function dictGoCons(id) {
+  closeDict();
+  goTab('consonnes');
+}
+function dictGoPhrases() {
+  closeDict();
+  goTab('phrases');
+}
+function dictGoVowels() {
+  closeDict();
+  goTab('voyelles');
+}
+
 // ─── PARTAGE DE PROGRESSION ─────────────────────────────────────────────────
 let _shareDataUrl = '', _shareText = '';
 
@@ -4618,6 +4798,21 @@ function clearTraceCanvas() {
       <button class="auth-submit" id="regSubmit" onclick="doRegister()">Créer mon compte</button>
       <div class="auth-sep" id="authSaveNote">Votre progression sera sauvegardée en ligne</div>
     </div>
+  </div>
+</div>
+
+<!-- MINI-DICTIONNAIRE -->
+<div id="dictOverlay" class="dict-overlay" onclick="closeDictIfOutside(event)">
+  <button class="dict-close" onclick="closeDict()">✕</button>
+  <div class="dict-title" id="dictTitle">🔍 Dictionnaire</div>
+  <div class="dict-input-wrap">
+    <input class="dict-input" id="dictInput" type="text" autocomplete="off" spellcheck="false"
+      placeholder="Chercher en thaï, romanisation, français ou anglais…"
+      oninput="searchDict(this.value)">
+    <span class="dict-input-icon">🔍</span>
+  </div>
+  <div class="dict-results" id="dictResults">
+    <div class="dict-hint" id="dictHint">Tapez au moins 2 caractères pour rechercher</div>
   </div>
 </div>
 
