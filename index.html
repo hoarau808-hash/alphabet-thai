@@ -879,6 +879,40 @@ footer{border-top:1px solid var(--border);padding:40px 24px;text-align:center;co
 .qcard-back{display:inline-flex;align-items:center;gap:6px;background:none;border:1px solid var(--border);border-radius:8px;color:var(--text2);font-size:12px;font-weight:600;padding:7px 14px;cursor:pointer;margin-bottom:20px;transition:all .2s}
 .qcard-back:hover{border-color:var(--border-h);color:var(--text)}
 @media(max-width:768px){.qgrid{grid-template-columns:repeat(2,1fr);gap:10px}.qcard{padding:18px 10px 14px}.qcard-icon{font-size:30px}.qcard-icon.thai{font-size:28px}.qcard-title{font-size:13px}.qcard-desc{font-size:10px}}
+/* ── DÉFI QUOTIDIEN ──────────────────────────────────────────────── */
+.daily-section{max-width:1100px;margin:40px auto 0;padding:0 24px}
+.daily-card{background:var(--bg3);border:1.5px solid rgba(240,180,41,.35);border-radius:18px;padding:28px 28px 24px;position:relative;overflow:hidden}
+.daily-card::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at top right,rgba(240,180,41,.06) 0%,transparent 65%);pointer-events:none}
+.daily-hd{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;flex-wrap:wrap;gap:8px}
+.daily-hd-left{display:flex;align-items:center;gap:10px}
+.daily-tag{font-size:11px;font-weight:800;letter-spacing:.8px;text-transform:uppercase;color:var(--gold);background:rgba(240,180,41,.12);border:1px solid rgba(240,180,41,.25);padding:4px 12px;border-radius:20px}
+.daily-title{font-size:18px;font-weight:800;color:var(--text)}
+.daily-timer{font-size:12px;font-weight:600;color:var(--text3);background:var(--bg2);border:1px solid var(--border);padding:5px 12px;border-radius:20px;font-variant-numeric:tabular-nums}
+.daily-body{display:flex;align-items:center;gap:32px;flex-wrap:wrap}
+.daily-char-box{display:flex;flex-direction:column;align-items:center;gap:6px;flex-shrink:0}
+.daily-char{font-family:var(--thai-font);font-size:80px;line-height:1;color:var(--text);font-weight:700}
+.daily-char-hint{font-size:11px;color:var(--text3);font-weight:600;letter-spacing:.4px}
+.daily-right{flex:1;min-width:240px}
+.daily-question{font-size:14px;color:var(--text2);margin-bottom:14px;font-weight:500}
+.daily-opts{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.daily-opt{padding:12px 10px;background:var(--bg2);border:1.5px solid var(--border);border-radius:10px;color:var(--text);font-family:'Inter',sans-serif;font-size:13px;font-weight:600;cursor:pointer;transition:all .18s;text-align:center}
+.daily-opt:hover:not(:disabled){border-color:var(--gold);color:var(--gold);background:rgba(240,180,41,.06)}
+.daily-opt.correct{border-color:var(--teal)!important;background:rgba(14,211,160,.1)!important;color:var(--teal)!important}
+.daily-opt.wrong{border-color:var(--rose)!important;background:rgba(255,92,141,.08)!important;color:var(--rose)!important}
+.daily-opt:disabled{cursor:default;opacity:.7}
+.daily-result{margin-top:16px;padding:14px 18px;border-radius:12px;display:flex;align-items:center;gap:12px}
+.daily-result.ok{background:rgba(14,211,160,.08);border:1px solid rgba(14,211,160,.25)}
+.daily-result.ko{background:rgba(255,92,141,.06);border:1px solid rgba(255,92,141,.2)}
+.daily-result-icon{font-size:24px;flex-shrink:0}
+.daily-result-text{font-size:13px;font-weight:600;color:var(--text)}
+.daily-result-xp{font-size:12px;font-weight:700;color:var(--teal);margin-top:2px}
+.daily-done-wrap{display:flex;align-items:center;gap:20px;flex-wrap:wrap}
+.daily-done-icon{font-size:48px;flex-shrink:0}
+.daily-done-text{flex:1}
+.daily-done-title{font-size:16px;font-weight:800;color:var(--text);margin-bottom:4px}
+.daily-done-sub{font-size:13px;color:var(--text2)}
+.daily-done-next{margin-top:6px;font-size:12px;color:var(--text3);font-weight:600}
+@media(max-width:768px){.daily-section{margin-top:28px}.daily-body{flex-direction:column;gap:16px}.daily-char{font-size:64px}.daily-char-box{flex-direction:row;gap:12px}.daily-char-hint{margin-top:0}.daily-right{width:100%}.daily-opts{gap:6px}.daily-card{padding:20px 18px}}
 /* ── NOTIFICATIONS PUSH ─────────────────────────────────────────── */
 .notif-btn{background:rgba(255,255,255,.07);border:1px solid var(--border);color:var(--text2);padding:7px 10px;border-radius:8px;font-size:16px;cursor:pointer;transition:all .2s;line-height:1;position:relative}
 .notif-btn:hover{background:rgba(255,255,255,.14);color:var(--text)}
@@ -1096,6 +1130,20 @@ footer{border-top:1px solid var(--border);padding:40px 24px;text-align:center;co
   </div>
 
   <!-- MON PROGRÈS -->
+  <!-- DÉFI QUOTIDIEN -->
+  <div class="daily-section">
+    <div class="daily-card" id="dailyCard">
+      <div class="daily-hd">
+        <div class="daily-hd-left">
+          <span class="daily-tag">🌅 Défi du jour</span>
+          <span class="daily-title" id="dailyTitleLbl">Défi Quotidien</span>
+        </div>
+        <span class="daily-timer" id="dailyTimer"></span>
+      </div>
+      <div id="dailyInner"></div>
+    </div>
+  </div>
+
   <div class="myprog-wrap">
     <div class="sec-hd" style="margin-bottom:0">
       <div class="sec-tag">Statistiques personnelles</div>
@@ -4597,6 +4645,7 @@ function initBadges() {
 
 initStats();
 initBadges();
+initDailyChallenge();
 initVoices();
 initMessaging();
 
@@ -5526,6 +5575,127 @@ function clearTraceCanvas() {
   if(traceCtx) traceCtx.beginPath();
 }
 
+
+
+// ─── DÉFI QUOTIDIEN ─────────────────────────────────────────────────────────
+function _dailySeed() {
+  const d = new Date();
+  return Math.floor((d - new Date(d.getFullYear(), 0, 0)) / 86400000);
+}
+
+function _dailyConsonnant() {
+  return consonants[_dailySeed() % consonants.length];
+}
+
+function _dailyTimeLeft() {
+  const now = new Date();
+  const midnight = new Date(now); midnight.setHours(24,0,0,0);
+  const diff = midnight - now;
+  const h = Math.floor(diff/3600000);
+  const m = Math.floor((diff%3600000)/60000);
+  return h+'h'+String(m).padStart(2,'0');
+}
+
+function initDailyChallenge() {
+  _renderDailyChallenge();
+  setInterval(() => {
+    const t = document.getElementById('dailyTimer');
+    if(t) t.textContent = _dailyTimeLeft();
+  }, 30000);
+}
+
+function _renderDailyChallenge() {
+  const inner = document.getElementById('dailyInner');
+  const timer = document.getElementById('dailyTimer');
+  if(!inner) return;
+  const en = currentLang === 'en';
+  if(timer) timer.textContent = _dailyTimeLeft();
+
+  const today = new Date().toDateString();
+  const lastDate = localStorage.getItem('thai-daily-date');
+  const done = lastDate === today;
+
+  const correct = _dailyConsonnant();
+
+  if(done) {
+    const wasOk = localStorage.getItem('thai-daily-result') === '1';
+    inner.innerHTML =
+      '<div class="daily-done-wrap">' +
+        '<div class="daily-done-icon">' + (wasOk ? '✅' : '📚') + '</div>' +
+        '<div class="daily-done-text">' +
+          '<div class="daily-done-title">' + (wasOk
+            ? (en ? 'Challenge completed! Well done.' : 'Défi relevé ! Bravo.')
+            : (en ? 'You'll get it tomorrow!' : 'Tu feras mieux demain !')) + '</div>' +
+          '<div class="daily-done-sub">' +
+            (en ? 'Today's consonant: ' : 'Consonne du jour : ') +
+            '<strong style="font-family:var(--thai-font);font-size:18px">' + correct.char + '</strong>' +
+            ' — ' + correct.name + ' (' + correct.rtgs + ')' +
+          '</div>' +
+          '<div class="daily-done-next">' + (en ? 'Next challenge in ' : 'Prochain défi dans ') + _dailyTimeLeft() + '</div>' +
+        '</div>' +
+      '</div>';
+    return;
+  }
+
+  // Build 4 options: correct + 3 wrong
+  const wrongs = shuffle(consonants.filter(c => c.id !== correct.id)).slice(0,3);
+  const opts = shuffle([correct, ...wrongs]);
+
+  inner.innerHTML =
+    '<div class="daily-body">' +
+      '<div class="daily-char-box">' +
+        '<div class="daily-char">' + correct.char + '</div>' +
+        '<div class="daily-char-hint">' + (en ? 'Class: ' : 'Classe : ') + (currentLang==='en'&&correct.classEn ? correct.classEn : correct.class) + '</div>' +
+      '</div>' +
+      '<div class="daily-right">' +
+        '<div class="daily-question">' + (en ? 'What is the romanized sound of this consonant?' : 'Quel est le son romanisé de cette consonne ?') + '</div>' +
+        '<div class="daily-opts">' +
+          opts.map(o =>
+            '<button class="daily-opt" onclick="answerDailyQ(' + o.id + ',' + correct.id + ')">' + o.rtgs + '</button>'
+          ).join('') +
+        '</div>' +
+      '</div>' +
+    '</div>';
+}
+
+function answerDailyQ(selectedId, correctId) {
+  const isCorrect = selectedId === correctId;
+  const today = new Date().toDateString();
+  localStorage.setItem('thai-daily-date', today);
+  localStorage.setItem('thai-daily-result', isCorrect ? '1' : '0');
+  const en = currentLang === 'en';
+  const xp = isCorrect ? 30 : 5;
+
+  // Disable buttons, highlight correct/wrong
+  document.querySelectorAll('.daily-opt').forEach(btn => {
+    btn.disabled = true;
+    const id = parseInt(btn.getAttribute('onclick').match(/\d+/)[0]);
+    if(id === correctId) btn.classList.add('correct');
+    else if(id === selectedId && !isCorrect) btn.classList.add('wrong');
+  });
+
+  // Show result
+  const right = document.querySelector('.daily-right');
+  if(right) {
+    const res = document.createElement('div');
+    res.className = 'daily-result ' + (isCorrect ? 'ok' : 'ko');
+    res.innerHTML =
+      '<span class="daily-result-icon">' + (isCorrect ? '🎉' : '💡') + '</span>' +
+      '<div>' +
+        '<div class="daily-result-text">' + (isCorrect
+          ? (en ? 'Correct! Great job.' : 'Correct ! Bien joué.')
+          : (en ? 'Not quite — ' : 'Pas tout à fait — ') + consonants.find(c=>c.id===correctId)?.rtgs) + '</div>' +
+        '<div class="daily-result-xp">+' + xp + ' XP</div>' +
+      '</div>';
+    right.appendChild(res);
+  }
+
+  addXP(xp);
+  if(isCorrect) checkBadges('daily');
+
+  // Auto-refresh to done state after 3s
+  setTimeout(_renderDailyChallenge, 3000);
+}
 
 </script>
 
