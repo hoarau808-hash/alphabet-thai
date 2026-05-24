@@ -857,8 +857,10 @@ footer{border-top:1px solid var(--border);padding:40px 24px;text-align:center;co
 .badge-tile.earned .badge-name{color:var(--gold)}
 .badge-new{position:absolute;top:4px;right:4px;width:8px;height:8px;border-radius:50%;background:var(--rose);border:1.5px solid var(--bg3)}
 /* Badge unlock toast */
-#badgeToast{position:fixed;top:72px;left:50%;transform:translateX(-50%) translateY(-90px);background:var(--bg2);border:1.5px solid var(--gold);border-radius:16px;padding:14px 24px;z-index:700;box-shadow:0 8px 40px rgba(240,180,41,.3);transition:transform .4s cubic-bezier(.34,1.56,.64,1);text-align:center;min-width:240px;pointer-events:none}
+#badgeToast{position:fixed;top:72px;left:50%;transform:translateX(-50%) translateY(-90px);background:var(--bg2);border:1.5px solid var(--gold);border-radius:16px;padding:14px 28px;z-index:700;box-shadow:0 8px 40px rgba(240,180,41,.3);transition:transform .4s cubic-bezier(.34,1.56,.64,1);text-align:center;min-width:240px;cursor:pointer}
 #badgeToast.show{transform:translateX(-50%) translateY(0)}
+.bt-close{position:absolute;top:8px;right:10px;background:none;border:none;color:var(--text3);font-size:16px;cursor:pointer;line-height:1;padding:2px 4px}
+.bt-close:hover{color:var(--text)}
 .bt-label{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.8px;color:var(--gold);margin-bottom:4px}
 .bt-icon{font-size:28px;margin-bottom:4px}
 .bt-name{font-size:15px;font-weight:800;color:var(--text);margin-bottom:3px}
@@ -5341,6 +5343,11 @@ function _badgesGet()   { return JSON.parse(localStorage.getItem('thai-badges')|
 function _badgesSet(arr){ localStorage.setItem('thai-badges', JSON.stringify(arr)); }
 
 let _btTimer = null;
+function _hideBadgeToast() {
+  clearTimeout(_btTimer);
+  const t = document.getElementById('badgeToast');
+  if(t) t.classList.remove('show');
+}
 function _showBadgeToast(badge) {
   const t = document.getElementById('badgeToast');
   if(!t) return;
@@ -5349,7 +5356,7 @@ function _showBadgeToast(badge) {
   document.getElementById('btXp').textContent   = '+' + badge.xp + ' XP';
   t.classList.add('show');
   clearTimeout(_btTimer);
-  _btTimer = setTimeout(() => t.classList.remove('show'), 4000);
+  _btTimer = setTimeout(_hideBadgeToast, 5000);
 }
 
 function _tryUnlock(id) {
@@ -5645,7 +5652,8 @@ function initBadges() {
 </div>
 
 <!-- BADGE TOAST -->
-<div id="badgeToast">
+<div id="badgeToast" onclick="_hideBadgeToast()">
+  <button class="bt-close" onclick="_hideBadgeToast()">✕</button>
   <div class="bt-label">Badge débloqué !</div>
   <div class="bt-icon" id="btIcon">🏅</div>
   <div class="bt-name" id="btName"></div>
