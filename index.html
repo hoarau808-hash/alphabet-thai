@@ -446,6 +446,10 @@ footer{border-top:1px solid var(--border);padding:40px 24px;text-align:center;co
 
   /* FILTER BUTTONS — min 44px touch */
   .fbtn{padding:11px 16px;font-size:14px;min-height:44px}
+  /* Star button on card back — compact square, not wide like filter buttons */
+  .cback-btns .fbtn{padding:7px 10px;font-size:17px;min-height:36px;min-width:40px;flex-shrink:0}
+  /* Star indicator on card front — slightly bigger on mobile */
+  .fdot{font-size:14px;top:8px;right:8px}
   .pcbtn{padding:11px 16px;font-size:14px;min-height:44px}
   .qmode{padding:12px 18px;font-size:14px;min-height:44px}
   .alph-controls{gap:8px}
@@ -3837,6 +3841,105 @@ const phrases = [
   {level:'B1',cat:'Avancé', thai:'ภาษาไทยมีโทนเสียงห้าแบบ',   rtgs:'phaasǎa thai mii thoon sǐang hâa bàaep', fr:'Le thaï a cinq tons', en:'Thai has five tones'},
   {level:'B1',cat:'Avancé', thai:'การเขียนภาษาไทยต่างจากภาษาอื่น', rtgs:'gaan khǐan phaasǎa thai dtàang jàak phaasǎa ùen', fr:"L'écriture thaïe est différente des autres langues", en:'Thai writing is different from other languages'},
   {level:'B1',cat:'Avancé', thai:'ผมอยากเข้าใจวัฒนธรรมไทยมากขึ้น', rtgs:'phǒm yàak khâo jai wátthana tham thai mâak khûen', fr:'Je veux mieux comprendre la culture thaïe', en:'I want to better understand Thai culture'},
+
+  // ══ PLAGE / VACANCES ══════════════════════════════════════════════════════
+  {level:'A1',cat:'Plage', thai:'ทะเล',              rtgs:'tha-lee',                       fr:'La mer',                              en:'The sea'},
+  {level:'A1',cat:'Plage', thai:'ชายหาด',             rtgs:'chaai hàat',                    fr:'La plage',                            en:'The beach'},
+  {level:'A1',cat:'Plage', thai:'น้ำสวยมาก',          rtgs:'nám suǎy mâak',                 fr:"L'eau est très belle",                en:'The water is very beautiful'},
+  {level:'A1',cat:'Plage', thai:'อยากว่ายน้ำ',        rtgs:'yàak wâay nám',                 fr:'Je veux nager',                       en:'I want to swim'},
+  {level:'A2',cat:'Plage', thai:'เช่าเก้าอี้ชายหาดได้ไหม',rtgs:'châo gâo-îi chaai hàat dâi mǎi',fr:'Puis-je louer une chaise de plage ?', en:'Can I rent a beach chair?'},
+  {level:'A2',cat:'Plage', thai:'มีร่มกันแดดไหม',     rtgs:'mii rôm gan daet mǎi',          fr:'Y a-t-il un parasol ?',               en:'Is there a beach umbrella?'},
+  {level:'A2',cat:'Plage', thai:'ทาครีมกันแดดก่อนนะ', rtgs:'thaa khriim gan daet gàwn ná',  fr:'Mets de la crème solaire avant',      en:'Apply sunscreen first'},
+  {level:'A2',cat:'Plage', thai:'คลื่นแรงไหมวันนี้',  rtgs:'khlûen raeng mǎi wan níi',      fr:'Les vagues sont fortes aujourd\'hui ?',en:'Are the waves strong today?'},
+  {level:'A2',cat:'Plage', thai:'เกาะนี้สวยมากเลย',   rtgs:'gàw níi suǎy mâak loei',        fr:'Cette île est vraiment magnifique',   en:'This island is really beautiful'},
+  {level:'B1',cat:'Plage', thai:'ดำน้ำดูปะการังได้ที่ไหน', rtgs:'dam nám duu bpà-gaa-rang dâi thîi nǎi', fr:'Où peut-on faire de la plongée ?', en:'Where can we go snorkeling?'},
+  {level:'B1',cat:'Plage', thai:'ควรระวังกระแสน้ำบริเวณนี้',rtgs:'khuuan rá-wang grà-sǎe nám bà-rì-ween níi', fr:'Attention aux courants dans cette zone', en:'Be careful of the currents in this area'},
+  {level:'B1',cat:'Plage', thai:'ต้องการเช่าอุปกรณ์ดำน้ำ',  rtgs:'dtâwng gaan châo ùp-bpà-gorn dam nám', fr:"J'ai besoin de louer du matériel de plongée", en:'I need to rent snorkeling equipment'},
+
+  // ══ MASSAGE / SPA ═════════════════════════════════════════════════════════
+  {level:'A1',cat:'Massage', thai:'นวด',              rtgs:'nûat',                          fr:'Massage',                             en:'Massage'},
+  {level:'A1',cat:'Massage', thai:'นวดไทย',           rtgs:'nûat thai',                     fr:'Massage thaï',                        en:'Thai massage'},
+  {level:'A1',cat:'Massage', thai:'เจ็บ',             rtgs:'jèp',                           fr:'Ça fait mal',                         en:'It hurts'},
+  {level:'A1',cat:'Massage', thai:'เบาๆ หน่อยนะ',     rtgs:'bao bao nàwy ná',               fr:'Plus doucement s\'il vous plaît',     en:'Softer please'},
+  {level:'A2',cat:'Massage', thai:'อยากนวด หนึ่ง ชั่วโมง', rtgs:'yàak nûat nùeng chûa moong', fr:'Je voudrais un massage d\'une heure', en:'I would like a one-hour massage'},
+  {level:'A2',cat:'Massage', thai:'นวดน้ำมันมีไหม',   rtgs:'nûat nám man mii mǎi',          fr:'Faites-vous des massages à l\'huile ?',en:'Do you do oil massages?'},
+  {level:'A2',cat:'Massage', thai:'แรงขึ้นหน่อยได้ไหม',rtgs:'raeng khûen nàwy dâi mǎi',     fr:'Pouvez-vous appuyer plus fort ?',     en:'Can you press harder?'},
+  {level:'A2',cat:'Massage', thai:'ราคาเท่าไหร่ต่อชั่วโมง', rtgs:'raakaa thâo-rài dtàw chûa moong', fr:'Quel est le prix par heure ?',  en:'What is the price per hour?'},
+  {level:'A2',cat:'Massage', thai:'จองนวดล่วงหน้าได้ไหม', rtgs:'jawng nûat lûang nâa dâi mǎi', fr:'Puis-je réserver à l\'avance ?',   en:'Can I book in advance?'},
+  {level:'B1',cat:'Massage', thai:'ฉันมีปัญหาที่ไหล่ข้างซ้าย', rtgs:'chǎn mii bpan-hǎa thîi lài kâang sáai', fr:"J'ai un problème à l'épaule gauche", en:'I have a problem with my left shoulder'},
+  {level:'B1',cat:'Massage', thai:'ช่วยนวดที่คอและบ่าหน่อย', rtgs:'chûay nûat thîi kaw láe bàa nàwy', fr:'Pouvez-vous masser le cou et les épaules ?', en:'Can you massage the neck and shoulders?'},
+  {level:'B1',cat:'Massage', thai:'ขอผ้าห่มเพิ่มได้ไหม', rtgs:'khǎw phâa hòm phôem dâi mǎi', fr:'Puis-je avoir une couverture supplémentaire ?', en:'Can I have an extra blanket?'},
+
+  // ══ RELIGION / TEMPLES ════════════════════════════════════════════════════
+  {level:'A1',cat:'Temples', thai:'วัด',              rtgs:'wát',                           fr:'Temple / monastère',                  en:'Temple / monastery'},
+  {level:'A1',cat:'Temples', thai:'พระพุทธรูป',       rtgs:'phrá phút-thá-rûup',            fr:'Statue de Bouddha',                   en:'Buddha statue'},
+  {level:'A1',cat:'Temples', thai:'ไหว้พระ',          rtgs:'wâi phrá',                      fr:'Prier / vénérer',                     en:'To pray / worship'},
+  {level:'A2',cat:'Temples', thai:'วัดนี้สร้างเมื่อไหร่', rtgs:'wát níi sâang mûea rài',   fr:'Quand ce temple a-t-il été construit ?',en:'When was this temple built?'},
+  {level:'A2',cat:'Temples', thai:'ต้องแต่งกายยังไง', rtgs:'dtâwng dtàeng gaai yang ngai', fr:'Comment faut-il s\'habiller ?',        en:'What should I wear?'},
+  {level:'A2',cat:'Temples', thai:'ต้องถอดรองเท้าก่อนเข้า',rtgs:'dtâwng thàwt rawng tháo gàwn khâo', fr:'Il faut enlever ses chaussures avant d\'entrer', en:'You must remove shoes before entering'},
+  {level:'A2',cat:'Temples', thai:'ถ่ายรูปได้ไหมในวัด', rtgs:'thàai rûup dâi mǎi nai wát', fr:'Peut-on prendre des photos dans le temple ?', en:'Can I take photos inside the temple?'},
+  {level:'A2',cat:'Temples', thai:'ค่าเข้าชมเท่าไหร่', rtgs:'khâa khâo chom thâo rài',     fr:"Quel est le prix d'entrée ?",         en:'What is the entrance fee?'},
+  {level:'B1',cat:'Temples', thai:'ขอทำบุญได้ที่ไหน',  rtgs:'khǎw tham bun dâi thîi nǎi',   fr:'Où peut-on faire un don / une offrande ?', en:'Where can I make an offering?'},
+  {level:'B1',cat:'Temples', thai:'พระสงฆ์ฉันอาหารตอนเช้า', rtgs:'phrá sǒng chǎn aa-hǎan dtawn cháo', fr:'Les moines mangent le matin', en:'Monks eat in the morning'},
+  {level:'B1',cat:'Temples', thai:'ห้ามแต่งตัวโป๊เข้าวัด', rtgs:'hâam dtàeng tua bpóe khâo wát', fr:'Les tenues révélatrices sont interdites dans les temples', en:'Revealing clothing is forbidden in temples'},
+  {level:'B1',cat:'Temples', thai:'วันพระตรงกับวันอะไร', rtgs:'wan phrá trong gàp wan à-rai', fr:"Quel jour est le jour du Bouddha cette semaine ?", en:"What day is Buddhist holy day this week?"},
+
+  // ══ TÉLÉPHONE / TECHNOLOGIE ════════════════════════════════════════════════
+  {level:'A1',cat:'Téléphone', thai:'โทรศัพท์',       rtgs:'thoo-rá-sàp',                  fr:'Téléphone',                           en:'Phone'},
+  {level:'A1',cat:'Téléphone', thai:'เบอร์โทรของคุณคืออะไร', rtgs:'boer thoo khǎwng khun khue à-rai', fr:'Quel est votre numéro ?',    en:'What is your number?'},
+  {level:'A1',cat:'Téléphone', thai:'มีไวไฟไหม',       rtgs:'mii wai fai mǎi',               fr:'Y a-t-il le Wi-Fi ?',                 en:'Is there Wi-Fi?'},
+  {level:'A1',cat:'Téléphone', thai:'รหัส Wi-Fi คืออะไร', rtgs:'rá-hàt wai fai khue à-rai', fr:'Quel est le mot de passe Wi-Fi ?',    en:'What is the Wi-Fi password?'},
+  {level:'A2',cat:'Téléphone', thai:'แบตหมดแล้ว',      rtgs:'bàet mòt láew',                 fr:'Ma batterie est morte',               en:'My battery is dead'},
+  {level:'A2',cat:'Téléphone', thai:'ขอชาร์จแบตได้ไหม', rtgs:'khǎw châat bàet dâi mǎi',     fr:'Puis-je charger mon téléphone ?',     en:'Can I charge my phone?'},
+  {level:'A2',cat:'Téléphone', thai:'ซื้อซิมการ์ดได้ที่ไหน', rtgs:'súe sim gaat dâi thîi nǎi', fr:'Où puis-je acheter une carte SIM ?', en:'Where can I buy a SIM card?'},
+  {level:'A2',cat:'Téléphone', thai:'ใช้แอปอะไรติดต่อกัน', rtgs:'chái áep à-rai dtìt dtàaw gan', fr:'Quelle appli utilises-tu pour communiquer ?', en:'What app do you use to communicate?'},
+  {level:'B1',cat:'Téléphone', thai:'สัญญาณอินเทอร์เน็ตไม่ดี', rtgs:'sǎn-yaan in-thoe-nét mâi dii', fr:'La connexion internet est mauvaise', en:'The internet connection is bad'},
+  {level:'B1',cat:'Téléphone', thai:'โทรหาฉันผ่าน LINE ได้เลย', rtgs:'thoo hǎa chǎn phàan LINE dâi loei', fr:'Appelle-moi sur LINE', en:'Call me on LINE'},
+  {level:'B1',cat:'Téléphone', thai:'ขอแชร์ตำแหน่งที่ตั้งหน่อย', rtgs:'khǎw chaae dtam-nàeng thîi dtâng nàwy', fr:'Partage ta localisation avec moi', en:'Share your location with me'},
+  {level:'B1',cat:'Téléphone', thai:'กล้องโทรศัพท์ใช้ถ่ายรูปได้ดีมาก', rtgs:'glâwng thoo-rá-sàp chái thàai rûup dâi dii mâak', fr:'La caméra du téléphone prend de très bonnes photos', en:'The phone camera takes very good photos'},
+
+  // ══ BANQUE / CHANGE ════════════════════════════════════════════════════════
+  {level:'A1',cat:'Banque', thai:'ธนาคาร',            rtgs:'thá-naa-kaan',                  fr:'Banque',                              en:'Bank'},
+  {level:'A1',cat:'Banque', thai:'ตู้เอทีเอ็ม',      rtgs:'dtûu ee-thii-em',               fr:'Distributeur automatique',            en:'ATM'},
+  {level:'A1',cat:'Banque', thai:'แลกเงินได้ที่ไหน',  rtgs:'lâek ngoen dâi thîi nǎi',       fr:'Où puis-je changer de l\'argent ?',   en:'Where can I exchange money?'},
+  {level:'A2',cat:'Banque', thai:'อัตราแลกเปลี่ยนวันนี้เป็นยังไง', rtgs:'àt-traa lâek bplìan wan níi bpen yang ngai', fr:'Quel est le taux de change aujourd\'hui ?', en:'What is the exchange rate today?'},
+  {level:'A2',cat:'Banque', thai:'มีค่าธรรมเนียมไหม',  rtgs:'mii khâa tham niam mǎi',        fr:'Y a-t-il des frais ?',               en:'Are there any fees?'},
+  {level:'A2',cat:'Banque', thai:'ขอแลกเงินยูโรเป็นบาท', rtgs:'khǎw lâek ngoen yuu-roo bpen bàat', fr:'Je voudrais changer des euros en bahts', en:'I would like to exchange euros to bahts'},
+  {level:'A2',cat:'Banque', thai:'บัตรเครดิตรับได้ไหม', rtgs:'bàt khrée-dìt ráp dâi mǎi',  fr:'Acceptez-vous les cartes de crédit ?', en:'Do you accept credit cards?'},
+  {level:'A2',cat:'Banque', thai:'ถอนเงินสดได้เท่าไหร่ต่อครั้ง', rtgs:'thǎwn ngoen sòt dâi thâo rài dtàw khráng', fr:'Combien puis-je retirer par fois ?', en:'How much can I withdraw at a time?'},
+  {level:'B1',cat:'Banque', thai:'บัตรถูกกลืนโดยตู้เอทีเอ็ม', rtgs:'bàt thuuk kluen doi dtûu ee-thii-em', fr:'Mon carte a été avalée par le distributeur', en:'My card was swallowed by the ATM'},
+  {level:'B1',cat:'Banque', thai:'ต้องโอนเงินไปต่างประเทศ', rtgs:'dtâwng oon ngoen bpai dtàang bprà-thêet', fr:'Je dois faire un virement à l\'étranger', en:'I need to transfer money abroad'},
+  {level:'B1',cat:'Banque', thai:'ช่วยออกใบเสร็จให้ด้วยได้ไหม', rtgs:'chûay àwk bai sèt hâi dûay dâi mǎi', fr:'Pouvez-vous me donner un reçu ?', en:'Can you give me a receipt?'},
+  {level:'B1',cat:'Banque', thai:'บัญชีธนาคารแบบไหนที่เหมาะสำหรับชาวต่างชาติ', rtgs:'ban-chii thá-naa-kaan bàap nǎi thîi mâw sǎm-ràp chaao dtàang châat', fr:'Quel type de compte convient aux étrangers ?', en:'What type of account suits foreigners?'},
+
+  // ══ STREET FOOD / MARCHÉ ══════════════════════════════════════════════════
+  {level:'A1',cat:'Street food', thai:'ตลาด',         rtgs:'dtà-làat',                      fr:'Marché',                              en:'Market'},
+  {level:'A1',cat:'Street food', thai:'อร่อยมาก',      rtgs:'à-ròy mâak',                    fr:'Très délicieux',                      en:'Very delicious'},
+  {level:'A1',cat:'Street food', thai:'ไม่เผ็ด',       rtgs:'mâi phèt',                      fr:'Pas épicé',                           en:'Not spicy'},
+  {level:'A1',cat:'Street food', thai:'เผ็ดมาก',       rtgs:'phèt mâak',                     fr:'Très épicé',                          en:'Very spicy'},
+  {level:'A2',cat:'Street food', thai:'อันนี้คืออะไร', rtgs:'an níi khue à-rai',             fr:'Qu\'est-ce que c\'est ?',             en:'What is this?'},
+  {level:'A2',cat:'Street food', thai:'ขอดูก่อนได้ไหม', rtgs:'khǎw duu gàwn dâi mǎi',       fr:'Puis-je regarder d\'abord ?',         en:'Can I look first?'},
+  {level:'A2',cat:'Street food', thai:'ลดราคาได้ไหม',  rtgs:'lót raakaa dâi mǎi',            fr:'Pouvez-vous baisser le prix ?',       en:'Can you lower the price?'},
+  {level:'A2',cat:'Street food', thai:'ขอสองที่',       rtgs:'khǎw sǎwng thîi',               fr:'Deux portions s\'il vous plaît',      en:'Two portions please'},
+  {level:'A2',cat:'Street food', thai:'กินที่นี่หรือห่อกลับบ้าน', rtgs:'gin thîi níi rǔe hàw glàp bâan', fr:'Sur place ou à emporter ?',   en:'Eat here or take away?'},
+  {level:'A2',cat:'Street food', thai:'ตลาดนัดเปิดทุกวันไหม', rtgs:'dtà-làat nát bpòet thúk wan mǎi', fr:'Le marché est-il ouvert tous les jours ?', en:'Is the market open every day?'},
+  {level:'B1',cat:'Street food', thai:'อาหารทำสดใหม่ทุกวันไหม', rtgs:'aa-hǎan tham sòt mài thúk wan mǎi', fr:'La nourriture est-elle préparée fraîche chaque jour ?', en:'Is the food freshly prepared every day?'},
+  {level:'B1',cat:'Street food', thai:'มีส่วนผสมอะไรบ้าง',  rtgs:'mii sùan phà-sǒm à-rai bâang', fr:'Quels sont les ingrédients ?',       en:'What are the ingredients?'},
+  {level:'B1',cat:'Street food', thai:'แพ้ถั่วลิสง ขอแบบไม่ใส่ได้ไหม', rtgs:'pháe thùa lí-sǒng khǎw bàap mâi sài dâi mǎi', fr:'Je suis allergique aux cacahuètes, sans s\'il vous plaît', en:'I\'m allergic to peanuts, without please'},
+
+  // ══ B1 ENRICHI — SITUATIONS QUOTIDIENNES ═══════════════════════════════════
+  {level:'B1',cat:'Social', thai:'ช่วยแนะนำเพื่อนให้รู้จักกันหน่อย', rtgs:'chûay náe-nam phûean hâi rúu-jàk gan nàwy', fr:'Peux-tu nous présenter ?', en:'Can you introduce us to each other?'},
+  {level:'B1',cat:'Social', thai:'เราคุยกันบ่อยขึ้นได้ไหม', rtgs:'rao khui gan bàwy khûen dâi mǎi', fr:'Peut-on se parler plus souvent ?', en:'Can we talk more often?'},
+  {level:'B1',cat:'Travail', thai:'ประชุมกี่โมง',      rtgs:'bprà-chum gìi moong',           fr:'La réunion est à quelle heure ?',     en:'What time is the meeting?'},
+  {level:'B1',cat:'Travail', thai:'ส่งรายงานวันศุกร์ได้ไหม', rtgs:'sòng raai-ngaan wan sùk dâi mǎi', fr:'Puis-je envoyer le rapport vendredi ?', en:'Can I send the report on Friday?'},
+  {level:'B1',cat:'Conditions', thai:'ถ้าฝนตกเราจะยกเลิกไหม', rtgs:'thâa fǒn dtòk rao jà yók-lôek mǎi', fr:'Si il pleut, on annule ?', en:'If it rains, should we cancel?'},
+  {level:'B1',cat:'Conditions', thai:'ขึ้นอยู่กับสภาพอากาศ', rtgs:'khûen yùu gàp sà-phâap aa-gàat', fr:'Ça dépend de la météo', en:'It depends on the weather'},
+  {level:'B1',cat:'Expressions', thai:'ได้ยินแล้ว เข้าใจแล้ว', rtgs:'dâi yin láew khâo jai láew', fr:'J\'ai compris', en:'I heard and understood'},
+  {level:'B1',cat:'Expressions', thai:'ไม่แน่ใจนัก',    rtgs:'mâi nâe jai nák',               fr:'Je ne suis pas sûr(e)',               en:'I\'m not so sure'},
+  {level:'B1',cat:'Restaurant', thai:'ขอเมนูแนะนำของวันนี้', rtgs:'khǎw mee-nuu náe-nam khǎwng wan níi', fr:'Quels sont les plats du jour ?', en:'What are today\'s specials?'},
+  {level:'B1',cat:'Restaurant', thai:'ปรุงแบบไม่เค็มได้ไหม', rtgs:'bprung bàap mâi khem dâi mǎi', fr:'Pouvez-vous le préparer moins salé ?', en:'Can you make it less salty?'},
+  {level:'B1',cat:'Hôtel', thai:'ขอเปลี่ยนห้องได้ไหม เสียงดังมาก', rtgs:'khǎw bplìan hâwng dâi mǎi sǐang dang mâak', fr:'Puis-je changer de chambre ? C\'est très bruyant', en:'Can I change rooms? It\'s very noisy'},
+  {level:'B1',cat:'Hôtel', thai:'ช่วยเรียกแท็กซี่ไปสนามบินหน่อย', rtgs:'chûay rîak tháek-sîi bpai sà-nǎam bin nàwy', fr:'Pouvez-vous appeler un taxi pour l\'aéroport ?', en:'Can you call a taxi to the airport?'},
 ];
 
 // ─── LANGUAGE ──────────────────────────────────────────────────────────────
@@ -4622,12 +4725,18 @@ const vocabData = [
   {level:'A2',cat:'Adjectifs',emoji:'🐢', fr:'Lent',     en:'Slow',       thai:'ช้า',        rtgs:'cháa'},
   {level:'A2',cat:'Adjectifs',emoji:'✅', fr:'Propre',   en:'Clean',      thai:'สะอาด',      rtgs:'sa-àat'},
   // Météo — A2
-  {level:'A2',cat:'Météo',emoji:'☀️', fr:'Soleil',    en:'Sun',        thai:'แดด',         rtgs:'dàet'},
-  {level:'A2',cat:'Météo',emoji:'🌧️',fr:'Pluie',     en:'Rain',       thai:'ฝน',          rtgs:'fǒn'},
-  {level:'A2',cat:'Météo',emoji:'💨', fr:'Vent',      en:'Wind',       thai:'ลม',          rtgs:'lom'},
-  {level:'A2',cat:'Météo',emoji:'☁️', fr:'Nuage',     en:'Cloud',      thai:'เมฆ',         rtgs:'mêek'},
-  {level:'A2',cat:'Météo',emoji:'⛈️', fr:'Orage',     en:'Storm',      thai:'พายุ',        rtgs:'phaa-yú'},
-  {level:'A2',cat:'Météo',emoji:'🌡️',fr:'Humide',    en:'Humid',      thai:'ชื้น',        rtgs:'chúun'},
+  {level:'A2',cat:'Météo',emoji:'☀️', fr:'Soleil',             en:'Sun',           thai:'แดด',      rtgs:'dàet'},
+  {level:'A2',cat:'Météo',emoji:'🌧️',fr:'Pluie',              en:'Rain',          thai:'ฝน',       rtgs:'fǒn'},
+  {level:'A2',cat:'Météo',emoji:'💨', fr:'Vent',               en:'Wind',          thai:'ลม',       rtgs:'lom'},
+  {level:'A2',cat:'Météo',emoji:'☁️', fr:'Nuage',              en:'Cloud',         thai:'เมฆ',      rtgs:'mêek'},
+  {level:'A2',cat:'Météo',emoji:'⛈️', fr:'Orage',              en:'Storm',         thai:'พายุ',     rtgs:'phaa-yú'},
+  {level:'A2',cat:'Météo',emoji:'🌡️',fr:'Humide',             en:'Humid',         thai:'ชื้น',     rtgs:'chúun'},
+  {level:'A2',cat:'Météo',emoji:'🔥', fr:'Chaud',              en:'Hot',           thai:'ร้อน',     rtgs:'rón'},
+  {level:'A2',cat:'Météo',emoji:'🥶', fr:'Froid',              en:'Cold',          thai:'หนาว',     rtgs:'nǎao'},
+  {level:'A2',cat:'Météo',emoji:'🌫️',fr:'Brouillard',         en:'Fog',           thai:'หมอก',     rtgs:'mòok'},
+  {level:'A2',cat:'Météo',emoji:'🌈', fr:'Arc-en-ciel',        en:'Rainbow',       thai:'รุ้ง',     rtgs:'rûng'},
+  {level:'A2',cat:'Météo',emoji:'⚡', fr:'Éclair',             en:'Lightning',     thai:'ฟ้าแลบ',   rtgs:'fáa lâep'},
+  {level:'B1',cat:'Météo',emoji:'🌦️',fr:'Saison des pluies',  en:'Rainy season',  thai:'ฤดูฝน',    rtgs:'rú-duu fǒn'},
   // Émotions — B1
   {level:'B1',cat:'Émotions',emoji:'😊', fr:'Heureux',    en:'Happy',     thai:'มีความสุข',  rtgs:'mii khwaam sùk'},
   {level:'A2',cat:'Émotions',emoji:'😢', fr:'Triste',     en:'Sad',       thai:'เศร้า',      rtgs:'sâo'},
@@ -4715,6 +4824,11 @@ const vocabData = [
   {level:'B1',cat:'Société',emoji:'📚', fr:'Système éducatif',     en:'Education system', thai:'ระบบการศึกษา',          rtgs:'ra-bòp kaan sùek-sǎa'},
   {level:'B1',cat:'Société',emoji:'🌐', fr:'Mondialisation',       en:'Globalisation',    thai:'โลกาภิวัตน์',           rtgs:'look-kaa-phi-wát'},
   // Caractère — B1
+  {level:'A2',cat:'Caractère',emoji:'😇', fr:'Honnête',            en:'Honest',           thai:'ซื่อสัตย์',             rtgs:'sûue sàt'},
+  {level:'A2',cat:'Caractère',emoji:'🤗', fr:'Généreux',           en:'Generous',         thai:'ใจกว้าง',               rtgs:'jai kwâang'},
+  {level:'A2',cat:'Caractère',emoji:'🦁', fr:'Courageux',          en:'Brave',            thai:'กล้าหาญ',               rtgs:'klâa hǎan'},
+  {level:'A2',cat:'Caractère',emoji:'😒', fr:'Paresseux',          en:'Lazy',             thai:'ขี้เกียจ',              rtgs:'khîi kìat'},
+  {level:'B1',cat:'Caractère',emoji:'🌿', fr:'Déterminé',          en:'Determined',       thai:'มุ่งมั่น',               rtgs:'mûng mân'},
   {level:'B1',cat:'Caractère',emoji:'💪', fr:'Responsabilité',     en:'Responsibility',   thai:'ความรับผิดชอบ',         rtgs:'khwaam ráp phìt choop'},
   {level:'B1',cat:'Caractère',emoji:'🧠', fr:'Prise de décision',  en:'Decision-making',  thai:'การตัดสินใจ',            rtgs:'kaan tàt sin jai'},
   {level:'B1',cat:'Caractère',emoji:'❤️', fr:'Compassion',         en:'Compassion',       thai:'ความเห็นอกเห็นใจ',     rtgs:'khwaam hěn ok hěn jai'},
@@ -5178,7 +5292,13 @@ function setQuizType(type, cardEl) {
     _updateReviewBadge();
   }
   applyLang();
-  window.scrollTo(0,0);
+  if (window.innerWidth <= 768) {
+    const wrapId = map[type];
+    const wrapEl = document.getElementById(wrapId);
+    if (wrapEl) setTimeout(() => wrapEl.scrollIntoView({ behavior: 'smooth', block: 'start' }), 60);
+  } else {
+    window.scrollTo(0, 0);
+  }
 }
 
 function setPhMode(m, btn) {
