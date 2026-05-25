@@ -237,7 +237,7 @@ nav.topnav{
 .ccard{perspective:1000px;height:240px;cursor:pointer}
 .ccard-inner{position:relative;width:100%;height:100%;transition:transform .6s cubic-bezier(.4,.2,.2,1);transform-style:preserve-3d}
 .ccard.flipped .ccard-inner{transform:rotateY(180deg)}
-.cface{position:absolute;inset:0;border-radius:var(--r);border:1px solid var(--border);background:var(--bg3);backface-visibility:hidden;display:flex;flex-direction:column;align-items:center;justify-content:center;transition:border-color .25s,box-shadow .25s}
+.cface{position:absolute;inset:0;border-radius:var(--r);border:1px solid var(--border);background:var(--bg3);backface-visibility:hidden;display:flex;flex-direction:column;align-items:center;justify-content:center;transition:border-color .25s,box-shadow .25s;overflow:hidden}
 .ccard:hover .cface{border-color:var(--border-h);box-shadow:0 8px 24px rgba(0,0,0,.35)}
 .cback{transform:rotateY(180deg);justify-content:flex-start;align-items:flex-start;padding:14px}
 .cface.mid{border-left:3px solid var(--mid)}
