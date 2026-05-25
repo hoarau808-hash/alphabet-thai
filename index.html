@@ -4593,6 +4593,7 @@ function loadLangPref() {
 // ─── STATE ─────────────────────────────────────────────────────────────────
 const learned = new Set(JSON.parse(localStorage.getItem('thai-learned')||'[]'));
 const favorites = new Set(JSON.parse(localStorage.getItem('thai-favorites')||'[]'));
+const _srsData = JSON.parse(localStorage.getItem('thai-srs') || '{}');
 let filter = 'all';
 let quizMode = 'c2r';
 let quizScore = {ok:0, ko:0};
@@ -8370,7 +8371,6 @@ function _showRevScore() {
 }
 // ─── SRS — Répétition espacée (SM-2) ────────────────────────────────────────
 let _srsPool = [], _srsIdx = 0, _srsEasy = 0, _srsHard = 0;
-const _srsData = JSON.parse(localStorage.getItem('thai-srs') || '{}');
 
 function _srsSave() {
   try { localStorage.setItem('thai-srs', JSON.stringify(_srsData)); } catch(e) {}
