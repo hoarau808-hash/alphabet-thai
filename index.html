@@ -271,6 +271,15 @@ nav.topnav{
 .qcard-review{border-color:rgba(255,195,0,.3);background:linear-gradient(135deg,rgba(255,195,0,.04),transparent)}
 .qcard-review:hover{border-color:var(--gold)}
 .qcard-review .qcard-icon{filter:drop-shadow(0 0 6px rgba(255,195,0,.4))}
+.qcard-srs{border-color:rgba(14,211,160,.3);background:linear-gradient(135deg,rgba(14,211,160,.04),transparent)}
+.qcard-srs:hover{border-color:var(--teal)}
+.qcard-srs .qcard-icon{filter:drop-shadow(0 0 6px rgba(14,211,160,.4))}
+.srs-due-badge{display:inline-block;background:rgba(14,211,160,.15);color:var(--teal);border-radius:10px;font-size:11px;font-weight:700;padding:2px 8px;margin-top:4px}
+.srs-btn-wrap{display:flex;gap:12px;margin-top:24px;width:100%}
+.srs-btn-hard{flex:1;padding:14px 8px;border-radius:12px;border:none;background:rgba(255,92,141,.12);color:var(--rose);font-family:'Inter',sans-serif;font-size:15px;font-weight:700;cursor:pointer;transition:all .2s;line-height:1.3}
+.srs-btn-hard:hover{background:rgba(255,92,141,.22)}
+.srs-btn-easy{flex:1;padding:14px 8px;border-radius:12px;border:none;background:rgba(14,211,160,.12);color:var(--teal);font-family:'Inter',sans-serif;font-size:15px;font-weight:700;cursor:pointer;transition:all .2s;line-height:1.3}
+.srs-btn-easy:hover{background:rgba(14,211,160,.22)}
 .fav-count-badge{display:inline-block;background:rgba(255,195,0,.15);color:var(--gold);border-radius:10px;font-size:11px;font-weight:700;padding:2px 8px;margin-top:4px}
 .fav-empty-note{font-size:12px;color:var(--text3);margin-top:4px}
 .bchar{font-family:var(--thai-font);font-size:30px;font-weight:600;margin-bottom:0;display:block}
@@ -1749,6 +1758,12 @@ body.romaji-on .cntq-rtgs.romaji-text{display:block;font-size:20px;font-style:it
         <div class="qcard-desc" id="reviewCardDesc">Retravaille les consonnes marquées ⭐</div>
         <div class="fav-count-badge" id="reviewFavCount">0 marquées</div>
       </div>
+      <div class="qcard qcard-srs" id="qcard-srs" onclick="setQuizType('srs',this)">
+        <div class="qcard-icon">🧠</div>
+        <div class="qcard-title" id="srsCardTitle">Répétition espacée</div>
+        <div class="qcard-desc" id="srsCardDesc">Algorithme Anki · mémorise pour toujours</div>
+        <div class="srs-due-badge" id="srsDueBadge">0 à réviser</div>
+      </div>
     </div>
 
     <!-- CONSONANTS QUIZ (existing) -->
@@ -2324,6 +2339,66 @@ body.romaji-on .cntq-rtgs.romaji-text{display:block;font-size:20px;font-style:it
         <button class="btn-g" onclick="startReviewQuiz()" id="reviewReplayBtn">Rejouer</button>
       </div>
     </div><!-- /reviewQuizWrap -->
+
+    <div id="srsQuizWrap" style="display:none">
+      <button class="qcard-back" onclick="showQuizGrid()">← <span id="srsBackLbl">Changer de quiz</span></button>
+      <!-- Start -->
+      <div class="quiz-card" id="srsQStart">
+        <h2 style="font-size:24px;font-weight:800;margin-bottom:8px;text-align:center" id="srsQTitle">🧠 Répétition espacée</h2>
+        <p style="color:var(--text2);font-size:14px;margin-bottom:20px;text-align:center" id="srsQDesc">Système Anki : chaque consonne revient au bon moment.</p>
+        <div style="text-align:center;margin-bottom:16px">
+          <span class="srs-due-badge" style="font-size:14px;padding:6px 14px" id="srsQDueCount">0 à réviser</span>
+        </div>
+        <div id="srsQNoneMsg" style="display:none;background:rgba(14,211,160,.08);border:1px solid rgba(14,211,160,.2);border-radius:12px;padding:14px;font-size:13px;color:var(--teal);text-align:center;margin-bottom:16px">
+          ✓ <span id="srsNoneText">Aucune révision pour aujourd'hui. Reviens demain !</span>
+        </div>
+        <button class="btn-g" id="srsStartBtn" onclick="startSrsQuiz()">Commencer</button>
+      </div>
+      <!-- Game -->
+      <div class="quiz-card" id="srsQGame" style="display:none">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px">
+          <div style="font-size:13px;color:var(--text2)" id="srsQProg">1 / ?</div>
+          <div style="display:flex;gap:10px;font-size:13px">
+            <span style="color:var(--teal)" id="srsQEasy">✓ 0</span>
+            <span style="color:var(--rose)" id="srsQHard">✗ 0</span>
+          </div>
+        </div>
+        <!-- Phase question -->
+        <div id="srsQPhase">
+          <div id="srsQChar" style="font-family:var(--thai-font);font-size:90px;text-align:center;color:var(--teal);line-height:1;margin:16px 0"></div>
+          <div style="font-size:13px;color:var(--text3);text-align:center;margin-bottom:24px" id="srsQPrompt">Quel est le son romanisé de cette consonne ?</div>
+          <button class="btn-g" onclick="_srsReveal()" id="srsRevealBtn">Voir la réponse</button>
+        </div>
+        <!-- Phase réponse -->
+        <div id="srsAPhase" style="display:none">
+          <div id="srsAChar" style="font-family:var(--thai-font);font-size:90px;text-align:center;color:var(--teal);line-height:1;margin:10px 0"></div>
+          <div style="text-align:center;margin-bottom:4px"><span style="font-size:28px;font-weight:800;color:var(--text)" id="srsARtgs"></span></div>
+          <div style="text-align:center;font-size:14px;color:var(--text2);margin-bottom:10px" id="srsAMeaning"></div>
+          <div style="text-align:center;margin-bottom:4px"><span class="cclslbl" id="srsACls"></span></div>
+          <div class="srs-btn-wrap">
+            <button class="srs-btn-hard" onclick="_srsRate(2)">
+              <div>✗ <span id="srsBtnHardLbl">Difficile</span></div>
+              <div style="font-size:10px;opacity:.65;margin-top:3px" id="srsHintHard">demain</div>
+            </button>
+            <button class="srs-btn-easy" onclick="_srsRate(5)">
+              <div>✓ <span id="srsBtnEasyLbl">Facile</span></div>
+              <div style="font-size:10px;opacity:.65;margin-top:3px" id="srsHintEasy">dans Xj</div>
+            </button>
+          </div>
+        </div>
+      </div>
+      <!-- Score -->
+      <div class="quiz-card" id="srsQScore" style="display:none">
+        <div class="qscore" style="margin-bottom:12px">
+          <div class="qsi ok"><div class="qsv" id="srsScoreEasy">0</div><div class="qsl" id="srsLblEasy">facile</div></div>
+          <div class="qsi ko"><div class="qsv" id="srsScoreHard">0</div><div class="qsl" id="srsLblHard">difficile</div></div>
+        </div>
+        <div id="srsScoreMsg" style="font-size:15px;font-weight:700;margin-bottom:10px;text-align:center"></div>
+        <div id="srsNextInfo" style="font-size:13px;color:var(--text3);text-align:center;margin-bottom:24px"></div>
+        <button class="btn-g" onclick="startSrsQuiz()" id="srsReplayBtn">Rejouer les difficiles</button>
+        <button class="btn-o" onclick="showQuizGrid()" style="margin-top:10px" id="srsBackBtn2">Retour</button>
+      </div>
+    </div><!-- /srsQuizWrap -->
 
   </div>
 </div>
@@ -5218,13 +5293,14 @@ function toggleRomaji() {
 }
 
 function showQuizGrid() {
-  ['consQuizWrap','phQuizWrap','cntQuizWrap','vowQuizWrap','toneQuizWrap','vocalQuizWrap','vocabQuizWrap','dailyQuizWrap','marathonQuizWrap','chronoQuizWrap','fillQuizWrap','reviewQuizWrap']
+  ['consQuizWrap','phQuizWrap','cntQuizWrap','vowQuizWrap','toneQuizWrap','vocalQuizWrap','vocabQuizWrap','dailyQuizWrap','marathonQuizWrap','chronoQuizWrap','fillQuizWrap','reviewQuizWrap','srsQuizWrap']
     .forEach(id => { const el=document.getElementById(id); if(el) el.style.display='none'; });
   document.querySelectorAll('.qcard').forEach(c => c.classList.remove('active'));
   _showRomaji = false;
   document.body.classList.remove('romaji-on');
   _updateDailyBadge();
   _updateReviewBadge();
+  _updateSrsBadge();
 }
 
 function setQuizType(type, cardEl) {
@@ -5234,7 +5310,7 @@ function setQuizType(type, cardEl) {
   // Show selected wrap, hide others
   const map = {cons:'consQuizWrap', phrases:'phQuizWrap', cnt:'cntQuizWrap',
                 vow:'vowQuizWrap', tone:'toneQuizWrap', vocal:'vocalQuizWrap', vocab:'vocabQuizWrap',
-                daily:'dailyQuizWrap', marathon:'marathonQuizWrap', chrono:'chronoQuizWrap', fill:'fillQuizWrap', review:'reviewQuizWrap'};
+                daily:'dailyQuizWrap', marathon:'marathonQuizWrap', chrono:'chronoQuizWrap', fill:'fillQuizWrap', review:'reviewQuizWrap', srs:'srsQuizWrap'};
   Object.entries(map).forEach(([k,id]) => {
     const el = document.getElementById(id);
     if(el) el.style.display = k===type ? '' : 'none';
@@ -5290,6 +5366,11 @@ function setQuizType(type, cardEl) {
     document.getElementById('reviewQGame').style.display='none';
     document.getElementById('reviewQScore').style.display='none';
     _updateReviewBadge();
+  } else if(type==='srs') {
+    document.getElementById('srsQStart').style.display='';
+    document.getElementById('srsQGame').style.display='none';
+    document.getElementById('srsQScore').style.display='none';
+    _updateSrsBadge();
   }
   applyLang();
   if (window.innerWidth <= 768) {
@@ -6397,6 +6478,7 @@ initVocab();
 updateProgress();
 setTimeout(maybeShowOnboard, 800);
 _updateReviewBadge();
+_updateSrsBadge();
 
 // ─── XP & BADGES ──────────────────────────────────────────────────────────────────────────────
 const BADGES = [
@@ -8286,7 +8368,141 @@ function _showRevScore() {
   addXP(5 + _revScore.ok * 2);
   _saveQuizHistory(_revScore.ok, 'review');
 }
-// ───────────────────────────────────────────────────────────────────────────
+// ─── SRS — Répétition espacée (SM-2) ────────────────────────────────────────
+let _srsPool = [], _srsIdx = 0, _srsEasy = 0, _srsHard = 0;
+const _srsData = JSON.parse(localStorage.getItem('thai-srs') || '{}');
+
+function _srsSave() {
+  try { localStorage.setItem('thai-srs', JSON.stringify(_srsData)); } catch(e) {}
+}
+
+function _srsDueCards() {
+  const now = new Date(); now.setHours(0,0,0,0);
+  return consonants.filter(c => {
+    const d = _srsData[c.id];
+    if (!d || !d.dueDate) return true;
+    return new Date(d.dueDate) <= now;
+  });
+}
+
+function _srsNextInterval(id, rating) {
+  const d = _srsData[id] || {interval:0, ef:2.5, reps:0};
+  if (rating < 3) return 1;
+  if (!d.reps || d.reps === 0) return 1;
+  if (d.reps === 1) return 6;
+  return Math.round((d.interval || 1) * (d.ef || 2.5));
+}
+
+function _srsUpdate(id, rating) {
+  let d = _srsData[id] || {interval:0, ef:2.5, reps:0};
+  if (rating < 3) {
+    d.reps = 0; d.interval = 1;
+  } else {
+    if (!d.reps || d.reps === 0) d.interval = 1;
+    else if (d.reps === 1) d.interval = 6;
+    else d.interval = Math.round(d.interval * d.ef);
+    d.ef = Math.max(1.3, d.ef + 0.1 - (5-rating)*(0.08+(5-rating)*0.02));
+    d.reps = (d.reps || 0) + 1;
+  }
+  const due = new Date(); due.setHours(0,0,0,0);
+  due.setDate(due.getDate() + d.interval);
+  d.dueDate = due.toISOString().split('T')[0];
+  _srsData[id] = d;
+  _srsSave();
+}
+
+function _updateSrsBadge() {
+  const due = _srsDueCards();
+  const n = due.length;
+  const fr = currentLang !== 'en';
+  const lbl = n === 0 ? (fr ? '✓ À jour' : '✓ Up to date') : n + (fr ? ' à réviser' : ' due');
+  ['srsDueBadge','srsQDueCount'].forEach(id => { const el=document.getElementById(id); if(el) el.textContent=lbl; });
+  const startBtn = document.getElementById('srsStartBtn');
+  const noneMsg  = document.getElementById('srsQNoneMsg');
+  const noneTxt  = document.getElementById('srsNoneText');
+  if (startBtn) startBtn.disabled = n === 0;
+  if (noneMsg)  noneMsg.style.display = n === 0 ? '' : 'none';
+  if (noneTxt)  noneTxt.textContent = fr ? 'Aucune révision pour aujourd\'hui. Reviens demain !' : 'Nothing to review today. Come back tomorrow!';
+}
+
+function startSrsQuiz() {
+  _srsPool = [..._srsDueCards()].sort(() => Math.random() - .5);
+  if (_srsPool.length === 0) return;
+  _srsIdx = 0; _srsEasy = 0; _srsHard = 0;
+  document.getElementById('srsQStart').style.display = 'none';
+  document.getElementById('srsQScore').style.display = 'none';
+  document.getElementById('srsQGame').style.display = '';
+  _srsShowCard();
+}
+
+function _srsShowCard() {
+  const c = _srsPool[_srsIdx];
+  const fr = currentLang !== 'en';
+  document.getElementById('srsQProg').textContent = (_srsIdx+1) + ' / ' + _srsPool.length;
+  document.getElementById('srsQEasy').textContent = '✓ ' + _srsEasy;
+  document.getElementById('srsQHard').textContent  = '✗ ' + _srsHard;
+  document.getElementById('srsQChar').textContent  = c.char;
+  document.getElementById('srsQPrompt').textContent = fr ? 'Quel est le son romanisé de cette consonne ?' : 'What is the romanized sound of this consonant?';
+  document.getElementById('srsRevealBtn').textContent = fr ? 'Voir la réponse' : 'Show answer';
+  document.getElementById('srsQPhase').style.display = '';
+  document.getElementById('srsAPhase').style.display = 'none';
+}
+
+function _srsReveal() {
+  const c = _srsPool[_srsIdx];
+  const fr = currentLang !== 'en';
+  document.getElementById('srsAChar').textContent    = c.char;
+  document.getElementById('srsARtgs').textContent    = c.rtgs;
+  document.getElementById('srsAMeaning').textContent = c.emoji + ' ' + ((!fr && c.en) ? c.en : c.meaning);
+  const clsEl = document.getElementById('srsACls');
+  clsEl.textContent = c.cls; clsEl.className = 'cclslbl ' + c.cls;
+  const nextEasy = _srsNextInterval(c.id, 5);
+  const nextHard = _srsNextInterval(c.id, 2);
+  document.getElementById('srsHintEasy').textContent = fr ? 'dans ' + nextEasy + 'j' : 'in ' + nextEasy + 'd';
+  document.getElementById('srsHintHard').textContent = fr ? 'dans ' + nextHard + 'j' : 'in ' + nextHard + 'd';
+  document.getElementById('srsBtnEasyLbl').textContent = fr ? 'Facile'    : 'Easy';
+  document.getElementById('srsBtnHardLbl').textContent = fr ? 'Difficile' : 'Hard';
+  document.getElementById('srsQPhase').style.display = 'none';
+  document.getElementById('srsAPhase').style.display = '';
+}
+
+function _srsRate(rating) {
+  const c = _srsPool[_srsIdx];
+  _srsUpdate(c.id, rating);
+  if (rating >= 3) _srsEasy++; else _srsHard++;
+  _srsIdx++;
+  if (_srsIdx >= _srsPool.length) _showSrsScore();
+  else _srsShowCard();
+}
+
+function _showSrsScore() {
+  document.getElementById('srsQGame').style.display  = 'none';
+  document.getElementById('srsQScore').style.display = '';
+  const fr = currentLang !== 'en';
+  document.getElementById('srsScoreEasy').textContent = _srsEasy;
+  document.getElementById('srsScoreHard').textContent = _srsHard;
+  document.getElementById('srsLblEasy').textContent   = fr ? 'maîtrisé' : 'easy';
+  document.getElementById('srsLblHard').textContent   = fr ? 'difficile' : 'hard';
+  const total = _srsPool.length;
+  const pct   = Math.round(_srsEasy / total * 100);
+  const msg   = pct === 100 ? (fr ? 'Parfait ! 🎉' : 'Perfect! 🎉') :
+                pct >= 70  ? (fr ? 'Très bien !' : 'Well done!') :
+                pct >= 40  ? (fr ? 'Continue !' : 'Keep going!') :
+                              (fr ? 'Encore un effort !' : 'Keep practicing!');
+  document.getElementById('srsScoreMsg').textContent = msg;
+  const stillDue = _srsDueCards().length;
+  document.getElementById('srsNextInfo').textContent = stillDue > 0
+    ? (fr ? stillDue + ' consonnes encore à réviser aujourd\'hui.' : stillDue + ' consonants still due today.')
+    : (fr ? 'Plus rien à réviser aujourd\'hui. Bravo !' : 'Nothing left for today. Great job!');
+  const replayBtn = document.getElementById('srsReplayBtn');
+  replayBtn.textContent = fr ? (_srsHard > 0 ? 'Rejouer les difficiles' : 'Tout revoir') : (_srsHard > 0 ? 'Replay hard ones' : 'Review all');
+  replayBtn.disabled = stillDue === 0;
+  document.getElementById('srsBackBtn2').textContent = fr ? 'Retour' : 'Back';
+  _updateSrsBadge();
+  addXP(5 + _srsEasy * 3);
+  _saveQuizHistory(_srsEasy, 'srs');
+}
+// ────────────────────────────────────────────────────────────────────────────
 
 function _showFillScore() {
   document.getElementById('fillQGame').style.display = 'none';
