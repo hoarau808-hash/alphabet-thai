@@ -4,6 +4,16 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>อักษรไทย — Apprendre l'Alphabet Thaï</title>
+<meta name="description" content="Apprenez l'alphabet thaï, les voyelles, les tons et le vocabulaire avec des quiz interactifs, des lectures guidées et des exercices de grammaire. Gratuit et sans inscription.">
+<meta name="keywords" content="apprendre thaï, alphabet thaï, langue thaïe, quiz thaï, vocabulaire thaï, grammaire thaïe, learn Thai, Thai alphabet">
+<meta property="og:type" content="website">
+<meta property="og:title" content="อักษรไทย — Apprendre l'Alphabet Thaï">
+<meta property="og:description" content="Apprenez l'alphabet thaï, les voyelles, les tons et le vocabulaire avec des quiz interactifs. Gratuit, sans inscription.">
+<meta property="og:image" content="icon-512.png">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="อักษรไทย — Apprendre l'Alphabet Thaï">
+<meta name="twitter:description" content="Quiz interactifs pour apprendre l'alphabet thaï, les tons, le vocabulaire et la grammaire.">
+<link rel="canonical" href="https://hoarau808.github.io/alphabet/">
 <link rel="manifest" href="manifest.json">
 <meta name="theme-color" content="#ffc300">
 <meta name="apple-mobile-web-app-capable" content="yes">
@@ -147,6 +157,30 @@ nav.topnav{
 .scard-n{font-size:38px;font-weight:800;letter-spacing:-2px;background:linear-gradient(135deg,var(--gold),var(--teal));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
 .scard-l{font-size:12px;color:var(--text2);margin-top:4px;font-weight:500}
 
+/* HERO TRUST LINE */
+.hero-trust{font-size:13px;color:var(--text3);margin-top:20px;letter-spacing:.3px}
+
+/* FEATURES SECTION */
+.feat-section{padding:80px 24px;max-width:1200px;margin:0 auto}
+.feat-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+.feat-card{background:var(--bg3);border:1px solid var(--border);border-radius:18px;padding:28px 24px;cursor:pointer;transition:all .25s;position:relative;overflow:hidden}
+.feat-card::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(240,180,41,.04),transparent);opacity:0;transition:opacity .25s}
+.feat-card:hover{border-color:var(--border-h);transform:translateY(-3px);box-shadow:0 12px 40px rgba(0,0,0,.3)}
+.feat-card:hover::before{opacity:1}
+.feat-icon{font-size:32px;margin-bottom:14px}
+.feat-name{font-size:16px;font-weight:700;color:var(--text);margin-bottom:8px}
+.feat-desc{font-size:13px;color:var(--text2);line-height:1.6;margin:0}
+
+/* HOW IT WORKS */
+.how-section{padding:0 24px 80px;max-width:900px;margin:0 auto}
+.how-steps{display:flex;align-items:flex-start;gap:0}
+.how-step{flex:1;text-align:center;padding:0 16px}
+.how-line{width:60px;height:2px;background:linear-gradient(90deg,var(--gold),var(--teal));margin-top:40px;flex-shrink:0;opacity:.4}
+.how-num{width:40px;height:40px;border-radius:50%;background:linear-gradient(135deg,var(--gold),var(--teal));color:#000;font-weight:800;font-size:16px;display:flex;align-items:center;justify-content:center;margin:0 auto 12px}
+.how-icon{font-size:28px;margin-bottom:10px}
+.how-name{font-size:15px;font-weight:700;color:var(--text);margin-bottom:8px}
+.how-desc{font-size:13px;color:var(--text2);line-height:1.6;margin:0}
+
 /* SECTION */
 .sec{padding:80px 24px;max-width:1200px;margin:0 auto}
 .sec-hd{text-align:center;margin-bottom:56px}
@@ -227,6 +261,18 @@ nav.topnav{
 .ldot{position:absolute;top:10px;left:10px;width:7px;height:7px;border-radius:50%;background:var(--teal);display:none}
 .ccard.learned .ldot{display:block}
 .ccard.learned .cface{background:rgba(14,211,160,.03)}
+.fdot{position:absolute;top:10px;right:10px;font-size:11px;display:none;line-height:1}
+.ccard.faved .fdot{display:block}
+.fbtn{background:rgba(255,195,0,.08);color:var(--gold);border:1px solid rgba(255,195,0,.2);border-radius:7px;padding:6px;font-size:14px;cursor:pointer;transition:all .2s;line-height:1;min-width:32px}
+.fbtn:hover{background:rgba(255,195,0,.18)}
+.fbtn.fav-active{background:rgba(255,195,0,.22);border-color:rgba(255,195,0,.5)}
+.cback-btns{display:flex;gap:6px;margin-top:auto;width:100%}
+.cback-btns .lbtn{flex:1;margin-top:0}
+.qcard-review{border-color:rgba(255,195,0,.3);background:linear-gradient(135deg,rgba(255,195,0,.04),transparent)}
+.qcard-review:hover{border-color:var(--gold)}
+.qcard-review .qcard-icon{filter:drop-shadow(0 0 6px rgba(255,195,0,.4))}
+.fav-count-badge{display:inline-block;background:rgba(255,195,0,.15);color:var(--gold);border-radius:10px;font-size:11px;font-weight:700;padding:2px 8px;margin-top:4px}
+.fav-empty-note{font-size:12px;color:var(--text3);margin-top:4px}
 .bchar{font-family:var(--thai-font);font-size:30px;font-weight:600;margin-bottom:0;display:block}
 .bname{font-size:10px;color:var(--text3);font-family:var(--thai-font);margin-bottom:8px;display:block}
 .bsound{font-size:11px;color:var(--text2);line-height:1.4;margin-bottom:6px}
@@ -1078,6 +1124,23 @@ body.romaji-on .cntq-rtgs.romaji-text{display:block;font-size:20px;font-style:it
 .share-copy:hover{background:rgba(255,255,255,.18)}
 .share-native{background:var(--teal);color:#000}
 .share-native:hover{filter:brightness(1.1)}
+/* ── ONBOARDING ──────────────────────────────────────────────────── */
+.onboard-overlay{position:fixed;inset:0;background:rgba(0,0,0,.85);backdrop-filter:blur(14px);z-index:600;display:none;align-items:center;justify-content:center;padding:20px}
+.onboard-overlay.open{display:flex}
+.onboard-modal{background:var(--bg2);border:1px solid var(--border-h);border-radius:24px;padding:36px 32px;width:100%;max-width:460px;box-shadow:0 24px 80px rgba(0,0,0,.7);text-align:center}
+.onboard-thai{font-family:var(--thai-font);font-size:64px;line-height:1;margin-bottom:8px;background:linear-gradient(135deg,var(--gold),var(--teal));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.onboard-title{font-size:22px;font-weight:800;color:var(--text);margin-bottom:8px}
+.onboard-sub{font-size:14px;color:var(--text2);margin-bottom:28px;line-height:1.6}
+.onboard-features{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:28px;text-align:left}
+.onboard-feat{background:var(--bg3);border:1px solid var(--border);border-radius:12px;padding:12px 14px;display:flex;align-items:flex-start;gap:10px}
+.onboard-feat-icon{font-size:20px;flex-shrink:0;margin-top:1px}
+.onboard-feat-txt{font-size:12px;color:var(--text2);line-height:1.4}
+.onboard-feat-txt strong{display:block;color:var(--text);font-size:13px;margin-bottom:2px}
+.onboard-btn{width:100%;padding:14px;border:none;border-radius:14px;background:var(--gold);color:#000;font-size:15px;font-weight:700;font-family:'Inter',sans-serif;cursor:pointer;transition:all .2s;margin-bottom:10px}
+.onboard-btn:hover{background:#e6af00;transform:translateY(-1px)}
+.onboard-skip{background:none;border:none;color:var(--text3);font-size:13px;cursor:pointer;font-family:'Inter',sans-serif;padding:4px}
+.onboard-skip:hover{color:var(--text2)}
+@media(max-width:480px){.onboard-features{grid-template-columns:1fr}.onboard-modal{padding:28px 20px}}
 /* ── STATISTIQUES DÉTAILLÉES ─────────────────────────────────────── */
 .stats-overlay{position:fixed;inset:0;background:rgba(0,0,0,.8);backdrop-filter:blur(10px);z-index:500;display:none;align-items:center;justify-content:center}
 .stats-overlay.open{display:flex}
@@ -1109,8 +1172,12 @@ body.romaji-on .cntq-rtgs.romaji-text{display:block;font-size:20px;font-style:it
 .mic-btn:disabled{opacity:.45;cursor:not-allowed;animation:none}
 @keyframes micPulse{0%,100%{box-shadow:0 0 0 0 rgba(255,92,141,.5)}50%{box-shadow:0 0 0 18px rgba(255,92,141,0)}}
 .vocal-char{font-family:'Noto Sans Thai',sans-serif;font-size:110px;line-height:1;color:var(--gold);text-align:center;margin:8px 0}
+.vocal-char.vocal-phrase{font-size:clamp(22px,5vw,36px);line-height:1.4;margin:16px 0;font-family:'Noto Sans Thai',sans-serif}
+.vocal-char.vocal-vow{font-size:80px}
 .vocal-hint{font-size:15px;color:var(--text2);margin-bottom:6px;text-align:center}
 .vocal-meaning{font-size:13px;color:var(--text2);text-align:center;margin-bottom:18px}
+.vocal-mode-wrap{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-bottom:22px}
+.vocal-mode-wrap .qmode{flex:1;min-width:90px;text-align:center;font-size:12px;padding:8px 10px}
 .vocal-status{font-size:14px;min-height:22px;text-align:center;margin-bottom:16px;font-weight:600;transition:color .2s}
 .vocal-status.ok{color:var(--teal)}
 .vocal-status.ko{color:var(--rose)}
@@ -1153,6 +1220,21 @@ body.romaji-on .cntq-rtgs.romaji-text{display:block;font-size:20px;font-style:it
   .trace-body{grid-template-columns:1fr}
   .trace-svg-wrap,.trace-canvas-wrap{width:180px;height:180px}
   #traceSVG,#traceGhostSVG{width:180px;height:180px}
+}
+@media(max-width:768px){
+  .feat-section{padding:48px 16px}
+  .feat-grid{grid-template-columns:repeat(2,1fr);gap:12px}
+  .feat-card{padding:20px 16px}
+  .feat-icon{font-size:26px;margin-bottom:10px}
+  .feat-name{font-size:14px}
+  .how-section{padding:0 16px 56px}
+  .how-steps{flex-direction:column;align-items:center;gap:0}
+  .how-line{width:2px;height:32px;background:linear-gradient(180deg,var(--gold),var(--teal));margin:0 auto}
+  .how-step{padding:16px 0;width:100%;max-width:320px}
+}
+@media(max-width:480px){
+  .feat-grid{grid-template-columns:1fr;gap:10px}
+  .hero-trust{font-size:12px}
 }
 </style>
 </head>
@@ -1212,6 +1294,7 @@ body.romaji-on .cntq-rtgs.romaji-text{display:block;font-size:20px;font-style:it
         <button class="btn-g" id="heroBtn1" onclick="goTab('consonnes')">Commencer maintenant</button>
         <button class="btn-o" id="heroBtn2" onclick="goTab('quiz')">Tester mes connaissances</button>
       </div>
+      <div class="hero-trust" id="heroTrust">✓ Gratuit &nbsp;·&nbsp; ✓ Sans inscription &nbsp;·&nbsp; ✓ Mobile friendly</div>
       <div class="newsletter-wrap">
         <div class="newsletter-label" id="nlLabel">Recevoir les nouveautés du site</div>
         <div class="newsletter-row">
@@ -1230,12 +1313,83 @@ body.romaji-on .cntq-rtgs.romaji-text{display:block;font-size:20px;font-style:it
   <!-- STATS -->
   <div class="stats-wrap">
     <div class="stats-grid">
-      <div class="scard"><div class="scard-icon">🔤</div><div class="scard-n">44</div><div class="scard-l" id="statL1">Consonnes</div></div>
-      <div class="scard"><div class="scard-icon">🎵</div><div class="scard-n">5</div><div class="scard-l" id="statL2">Tons</div></div>
-      <div class="scard"><div class="scard-icon">🔡</div><div class="scard-n">28</div><div class="scard-l" id="statL3">Formes de voyelles</div></div>
-      <div class="scard"><div class="scard-icon">📚</div><div class="scard-n">3</div><div class="scard-l" id="statL4">Classes de consonnes</div></div>
+      <div class="scard"><div class="scard-icon">🔤</div><div class="scard-n">44</div><div class="scard-l" id="statL1">Consonnes thaïes</div></div>
+      <div class="scard"><div class="scard-icon">🧩</div><div class="scard-n">11</div><div class="scard-l" id="statL2">Modes de quiz</div></div>
+      <div class="scard"><div class="scard-icon">💬</div><div class="scard-n">200+</div><div class="scard-l" id="statL3">Phrases & vocabulaire</div></div>
+      <div class="scard"><div class="scard-icon">🔢</div><div class="scard-n">1000</div><div class="scard-l" id="statL4">Nombres appris</div></div>
     </div>
   </div>
+
+  <!-- FONCTIONNALITÉS -->
+  <section class="feat-section">
+    <div class="sec-hd">
+      <div class="sec-tag" id="featTag">Tout-en-un</div>
+      <div class="sec-title" id="featTitle">Tout ce qu'il faut pour apprendre le thaï</div>
+      <p class="sec-desc" id="featDesc">Du premier caractère à la première conversation — une seule app, gratuite.</p>
+    </div>
+    <div class="feat-grid">
+      <div class="feat-card" onclick="goTab('consonnes')">
+        <div class="feat-icon">🔤</div>
+        <div class="feat-name" id="feat1t">Alphabet interactif</div>
+        <p class="feat-desc" id="feat1d">44 consonnes avec audio, romanisation et tracé animé. Retourne les cartes pour apprendre.</p>
+      </div>
+      <div class="feat-card" onclick="goTab('quiz')">
+        <div class="feat-icon">🧩</div>
+        <div class="feat-name" id="feat2t">11 modes de quiz</div>
+        <p class="feat-desc" id="feat2d">Consonnes, voyelles, tons, vocabulaire, phrases, chrono, vocal… Un quiz pour chaque façon d'apprendre.</p>
+      </div>
+      <div class="feat-card" onclick="goTab('apprentissage')">
+        <div class="feat-icon">📝</div>
+        <div class="feat-name" id="feat3t">Grammaire claire</div>
+        <p class="feat-desc" id="feat3d">Structure SVO, particules de politesse, temps, interrogatifs — expliqués simplement avec des exemples.</p>
+      </div>
+      <div class="feat-card" onclick="goTab('apprentissage')">
+        <div class="feat-icon">📖</div>
+        <div class="feat-name" id="feat4t">Lecture guidée</div>
+        <p class="feat-desc" id="feat4d">Des textes réels mot par mot, avec traduction et romanisation au clic. Niveaux A1 à B1.</p>
+      </div>
+      <div class="feat-card" onclick="goTab('consonnes')">
+        <div class="feat-icon">🔢</div>
+        <div class="feat-name" id="feat5t">Chiffres jusqu'à 1000</div>
+        <p class="feat-desc" id="feat5d">1 à 100, centaines et milliers — avec audio pour entendre la prononciation correcte.</p>
+      </div>
+      <div class="feat-card" onclick="goTab('quiz')">
+        <div class="feat-icon">🎤</div>
+        <div class="feat-name" id="feat6t">Quiz vocal</div>
+        <p class="feat-desc" id="feat6d">Prononce les consonnes, voyelles et phrases à voix haute. Le micro vérifie ta prononciation.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- COMMENT ÇA MARCHE -->
+  <section class="how-section">
+    <div class="sec-hd">
+      <div class="sec-tag" id="howTag">Méthode</div>
+      <div class="sec-title" id="howTitle">Apprendre le thaï en 3 étapes</div>
+    </div>
+    <div class="how-steps">
+      <div class="how-step">
+        <div class="how-num">1</div>
+        <div class="how-icon">🔤</div>
+        <div class="how-name" id="how1t">Explore l'alphabet</div>
+        <p class="how-desc" id="how1d">Parcours les 44 consonnes thaïes, écoute leur son, retourne les cartes pour mémoriser le nom et le sens.</p>
+      </div>
+      <div class="how-line"></div>
+      <div class="how-step">
+        <div class="how-num">2</div>
+        <div class="how-icon">🧩</div>
+        <div class="how-name" id="how2t">Entraîne-toi avec les quiz</div>
+        <p class="how-desc" id="how2d">Teste tes connaissances : caractère → son, son → caractère, mode chrono, marathon de 50 questions…</p>
+      </div>
+      <div class="how-line"></div>
+      <div class="how-step">
+        <div class="how-num">3</div>
+        <div class="how-icon">📖</div>
+        <div class="how-name" id="how3t">Lis des textes réels</div>
+        <p class="how-desc" id="how3d">Applique tes acquis sur des textes authentiques. Clique sur chaque mot pour voir sa traduction.</p>
+      </div>
+    </div>
+  </section>
 
   <!-- MON PROGRÈS -->
   <div class="myprog-wrap">
@@ -1364,7 +1518,7 @@ body.romaji-on .cntq-rtgs.romaji-text{display:block;font-size:20px;font-style:it
   <div class="cnt-section">
     <div class="sec-hd">
       <div class="sec-tag" id="cntSecTag">Compter en thaï</div>
-      <div class="sec-title" id="cntSecTitle">Les nombres de 1 à 50</div>
+      <div class="sec-title" id="cntSecTitle">Les nombres de 1 à 100</div>
       <p class="sec-desc" id="cntSecDesc">Cliquez sur un nombre pour l'entendre. Apprenez à compter en thaï !</p>
     </div>
     <div class="cnt-grid">
@@ -1418,6 +1572,75 @@ body.romaji-on .cntq-rtgs.romaji-text{display:block;font-size:20px;font-style:it
       <div class="cnt-cell" onclick="speakCnt(this,'สี่สิบแปด')"><span class="cnt-n">48</span><span class="cnt-thai">สี่สิบแปด</span><span class="cnt-rtgs">si sip paet</span><span class="cnt-spk">🔊</span></div>
       <div class="cnt-cell" onclick="speakCnt(this,'สี่สิบเก้า')"><span class="cnt-n">49</span><span class="cnt-thai">สี่สิบเก้า</span><span class="cnt-rtgs">si sip kao</span><span class="cnt-spk">🔊</span></div>
       <div class="cnt-cell" onclick="speakCnt(this,'ห้าสิบ')"><span class="cnt-n">50</span><span class="cnt-thai">ห้าสิบ</span><span class="cnt-rtgs">ha sip</span><span class="cnt-spk">🔊</span></div>
+      <div class="cnt-cell" onclick="speakCnt(this,'ห้าสิบเอ็ด')"><span class="cnt-n">51</span><span class="cnt-thai">ห้าสิบเอ็ด</span><span class="cnt-rtgs">ha sip et</span><span class="cnt-spk">🔊</span></div>
+      <div class="cnt-cell" onclick="speakCnt(this,'ห้าสิบสอง')"><span class="cnt-n">52</span><span class="cnt-thai">ห้าสิบสอง</span><span class="cnt-rtgs">ha sip song</span><span class="cnt-spk">🔊</span></div>
+      <div class="cnt-cell" onclick="speakCnt(this,'ห้าสิบสาม')"><span class="cnt-n">53</span><span class="cnt-thai">ห้าสิบสาม</span><span class="cnt-rtgs">ha sip sam</span><span class="cnt-spk">🔊</span></div>
+      <div class="cnt-cell" onclick="speakCnt(this,'ห้าสิบสี่')"><span class="cnt-n">54</span><span class="cnt-thai">ห้าสิบสี่</span><span class="cnt-rtgs">ha sip si</span><span class="cnt-spk">🔊</span></div>
+      <div class="cnt-cell" onclick="speakCnt(this,'ห้าสิบห้า')"><span class="cnt-n">55</span><span class="cnt-thai">ห้าสิบห้า</span><span class="cnt-rtgs">ha sip ha</span><span class="cnt-spk">🔊</span></div>
+      <div class="cnt-cell" onclick="speakCnt(this,'ห้าสิบหก')"><span class="cnt-n">56</span><span class="cnt-thai">ห้าสิบหก</span><span class="cnt-rtgs">ha sip hok</span><span class="cnt-spk">🔊</span></div>
+      <div class="cnt-cell" onclick="speakCnt(this,'ห้าสิบเจ็ด')"><span class="cnt-n">57</span><span class="cnt-thai">ห้าสิบเจ็ด</span><span class="cnt-rtgs">ha sip jet</span><span class="cnt-spk">🔊</span></div>
+      <div class="cnt-cell" onclick="speakCnt(this,'ห้าสิบแปด')"><span class="cnt-n">58</span><span class="cnt-thai">ห้าสิบแปด</span><span class="cnt-rtgs">ha sip paet</span><span class="cnt-spk">🔊</span></div>
+      <div class="cnt-cell" onclick="speakCnt(this,'ห้าสิบเก้า')"><span class="cnt-n">59</span><span class="cnt-thai">ห้าสิบเก้า</span><span class="cnt-rtgs">ha sip kao</span><span class="cnt-spk">🔊</span></div>
+      <div class="cnt-cell" onclick="speakCnt(this,'หกสิบ')"><span class="cnt-n">60</span><span class="cnt-thai">หกสิบ</span><span class="cnt-rtgs">hok sip</span><span class="cnt-spk">🔊</span></div>
+      <div class="cnt-cell" onclick="speakCnt(this,'หกสิบเอ็ด')"><span class="cnt-n">61</span><span class="cnt-thai">หกสิบเอ็ด</span><span class="cnt-rtgs">hok sip et</span><span class="cnt-spk">🔊</span></div>
+      <div class="cnt-cell" onclick="speakCnt(this,'หกสิบสอง')"><span class="cnt-n">62</span><span class="cnt-thai">หกสิบสอง</span><span class="cnt-rtgs">hok sip song</span><span class="cnt-spk">🔊</span></div>
+      <div class="cnt-cell" onclick="speakCnt(this,'หกสิบสาม')"><span class="cnt-n">63</span><span class="cnt-thai">หกสิบสาม</span><span class="cnt-rtgs">hok sip sam</span><span class="cnt-spk">🔊</span></div>
+      <div class="cnt-cell" onclick="speakCnt(this,'หกสิบสี่')"><span class="cnt-n">64</span><span class="cnt-thai">หกสิบสี่</span><span class="cnt-rtgs">hok sip si</span><span class="cnt-spk">🔊</span></div>
+      <div class="cnt-cell" onclick="speakCnt(this,'หกสิบห้า')"><span class="cnt-n">65</span><span class="cnt-thai">หกสิบห้า</span><span class="cnt-rtgs">hok sip ha</span><span class="cnt-spk">🔊</span></div>
+      <div class="cnt-cell" onclick="speakCnt(this,'หกสิบหก')"><span class="cnt-n">66</span><span class="cnt-thai">หกสิบหก</span><span class="cnt-rtgs">hok sip hok</span><span class="cnt-spk">🔊</span></div>
+      <div class="cnt-cell" onclick="speakCnt(this,'หกสิบเจ็ด')"><span class="cnt-n">67</span><span class="cnt-thai">หกสิบเจ็ด</span><span class="cnt-rtgs">hok sip jet</span><span class="cnt-spk">🔊</span></div>
+      <div class="cnt-cell" onclick="speakCnt(this,'หกสิบแปด')"><span class="cnt-n">68</span><span class="cnt-thai">หกสิบแปด</span><span class="cnt-rtgs">hok sip paet</span><span class="cnt-spk">🔊</span></div>
+      <div class="cnt-cell" onclick="speakCnt(this,'หกสิบเก้า')"><span class="cnt-n">69</span><span class="cnt-thai">หกสิบเก้า</span><span class="cnt-rtgs">hok sip kao</span><span class="cnt-spk">🔊</span></div>
+      <div class="cnt-cell" onclick="speakCnt(this,'เจ็ดสิบ')"><span class="cnt-n">70</span><span class="cnt-thai">เจ็ดสิบ</span><span class="cnt-rtgs">jet sip</span><span class="cnt-spk">🔊</span></div>
+      <div class="cnt-cell" onclick="speakCnt(this,'เจ็ดสิบเอ็ด')"><span class="cnt-n">71</span><span class="cnt-thai">เจ็ดสิบเอ็ด</span><span class="cnt-rtgs">jet sip et</span><span class="cnt-spk">🔊</span></div>
+      <div class="cnt-cell" onclick="speakCnt(this,'เจ็ดสิบสอง')"><span class="cnt-n">72</span><span class="cnt-thai">เจ็ดสิบสอง</span><span class="cnt-rtgs">jet sip song</span><span class="cnt-spk">🔊</span></div>
+      <div class="cnt-cell" onclick="speakCnt(this,'เจ็ดสิบสาม')"><span class="cnt-n">73</span><span class="cnt-thai">เจ็ดสิบสาม</span><span class="cnt-rtgs">jet sip sam</span><span class="cnt-spk">🔊</span></div>
+      <div class="cnt-cell" onclick="speakCnt(this,'เจ็ดสิบสี่')"><span class="cnt-n">74</span><span class="cnt-thai">เจ็ดสิบสี่</span><span class="cnt-rtgs">jet sip si</span><span class="cnt-spk">🔊</span></div>
+      <div class="cnt-cell" onclick="speakCnt(this,'เจ็ดสิบห้า')"><span class="cnt-n">75</span><span class="cnt-thai">เจ็ดสิบห้า</span><span class="cnt-rtgs">jet sip ha</span><span class="cnt-spk">🔊</span></div>
+      <div class="cnt-cell" onclick="speakCnt(this,'เจ็ดสิบหก')"><span class="cnt-n">76</span><span class="cnt-thai">เจ็ดสิบหก</span><span class="cnt-rtgs">jet sip hok</span><span class="cnt-spk">🔊</span></div>
+      <div class="cnt-cell" onclick="speakCnt(this,'เจ็ดสิบเจ็ด')"><span class="cnt-n">77</span><span class="cnt-thai">เจ็ดสิบเจ็ด</span><span class="cnt-rtgs">jet sip jet</span><span class="cnt-spk">🔊</span></div>
+      <div class="cnt-cell" onclick="speakCnt(this,'เจ็ดสิบแปด')"><span class="cnt-n">78</span><span class="cnt-thai">เจ็ดสิบแปด</span><span class="cnt-rtgs">jet sip paet</span><span class="cnt-spk">🔊</span></div>
+      <div class="cnt-cell" onclick="speakCnt(this,'เจ็ดสิบเก้า')"><span class="cnt-n">79</span><span class="cnt-thai">เจ็ดสิบเก้า</span><span class="cnt-rtgs">jet sip kao</span><span class="cnt-spk">🔊</span></div>
+      <div class="cnt-cell" onclick="speakCnt(this,'แปดสิบ')"><span class="cnt-n">80</span><span class="cnt-thai">แปดสิบ</span><span class="cnt-rtgs">paet sip</span><span class="cnt-spk">🔊</span></div>
+      <div class="cnt-cell" onclick="speakCnt(this,'แปดสิบเอ็ด')"><span class="cnt-n">81</span><span class="cnt-thai">แปดสิบเอ็ด</span><span class="cnt-rtgs">paet sip et</span><span class="cnt-spk">🔊</span></div>
+      <div class="cnt-cell" onclick="speakCnt(this,'แปดสิบสอง')"><span class="cnt-n">82</span><span class="cnt-thai">แปดสิบสอง</span><span class="cnt-rtgs">paet sip song</span><span class="cnt-spk">🔊</span></div>
+      <div class="cnt-cell" onclick="speakCnt(this,'แปดสิบสาม')"><span class="cnt-n">83</span><span class="cnt-thai">แปดสิบสาม</span><span class="cnt-rtgs">paet sip sam</span><span class="cnt-spk">🔊</span></div>
+      <div class="cnt-cell" onclick="speakCnt(this,'แปดสิบสี่')"><span class="cnt-n">84</span><span class="cnt-thai">แปดสิบสี่</span><span class="cnt-rtgs">paet sip si</span><span class="cnt-spk">🔊</span></div>
+      <div class="cnt-cell" onclick="speakCnt(this,'แปดสิบห้า')"><span class="cnt-n">85</span><span class="cnt-thai">แปดสิบห้า</span><span class="cnt-rtgs">paet sip ha</span><span class="cnt-spk">🔊</span></div>
+      <div class="cnt-cell" onclick="speakCnt(this,'แปดสิบหก')"><span class="cnt-n">86</span><span class="cnt-thai">แปดสิบหก</span><span class="cnt-rtgs">paet sip hok</span><span class="cnt-spk">🔊</span></div>
+      <div class="cnt-cell" onclick="speakCnt(this,'แปดสิบเจ็ด')"><span class="cnt-n">87</span><span class="cnt-thai">แปดสิบเจ็ด</span><span class="cnt-rtgs">paet sip jet</span><span class="cnt-spk">🔊</span></div>
+      <div class="cnt-cell" onclick="speakCnt(this,'แปดสิบแปด')"><span class="cnt-n">88</span><span class="cnt-thai">แปดสิบแปด</span><span class="cnt-rtgs">paet sip paet</span><span class="cnt-spk">🔊</span></div>
+      <div class="cnt-cell" onclick="speakCnt(this,'แปดสิบเก้า')"><span class="cnt-n">89</span><span class="cnt-thai">แปดสิบเก้า</span><span class="cnt-rtgs">paet sip kao</span><span class="cnt-spk">🔊</span></div>
+      <div class="cnt-cell" onclick="speakCnt(this,'เก้าสิบ')"><span class="cnt-n">90</span><span class="cnt-thai">เก้าสิบ</span><span class="cnt-rtgs">kao sip</span><span class="cnt-spk">🔊</span></div>
+      <div class="cnt-cell" onclick="speakCnt(this,'เก้าสิบเอ็ด')"><span class="cnt-n">91</span><span class="cnt-thai">เก้าสิบเอ็ด</span><span class="cnt-rtgs">kao sip et</span><span class="cnt-spk">🔊</span></div>
+      <div class="cnt-cell" onclick="speakCnt(this,'เก้าสิบสอง')"><span class="cnt-n">92</span><span class="cnt-thai">เก้าสิบสอง</span><span class="cnt-rtgs">kao sip song</span><span class="cnt-spk">🔊</span></div>
+      <div class="cnt-cell" onclick="speakCnt(this,'เก้าสิบสาม')"><span class="cnt-n">93</span><span class="cnt-thai">เก้าสิบสาม</span><span class="cnt-rtgs">kao sip sam</span><span class="cnt-spk">🔊</span></div>
+      <div class="cnt-cell" onclick="speakCnt(this,'เก้าสิบสี่')"><span class="cnt-n">94</span><span class="cnt-thai">เก้าสิบสี่</span><span class="cnt-rtgs">kao sip si</span><span class="cnt-spk">🔊</span></div>
+      <div class="cnt-cell" onclick="speakCnt(this,'เก้าสิบห้า')"><span class="cnt-n">95</span><span class="cnt-thai">เก้าสิบห้า</span><span class="cnt-rtgs">kao sip ha</span><span class="cnt-spk">🔊</span></div>
+      <div class="cnt-cell" onclick="speakCnt(this,'เก้าสิบหก')"><span class="cnt-n">96</span><span class="cnt-thai">เก้าสิบหก</span><span class="cnt-rtgs">kao sip hok</span><span class="cnt-spk">🔊</span></div>
+      <div class="cnt-cell" onclick="speakCnt(this,'เก้าสิบเจ็ด')"><span class="cnt-n">97</span><span class="cnt-thai">เก้าสิบเจ็ด</span><span class="cnt-rtgs">kao sip jet</span><span class="cnt-spk">🔊</span></div>
+      <div class="cnt-cell" onclick="speakCnt(this,'เก้าสิบแปด')"><span class="cnt-n">98</span><span class="cnt-thai">เก้าสิบแปด</span><span class="cnt-rtgs">kao sip paet</span><span class="cnt-spk">🔊</span></div>
+      <div class="cnt-cell" onclick="speakCnt(this,'เก้าสิบเก้า')"><span class="cnt-n">99</span><span class="cnt-thai">เก้าสิบเก้า</span><span class="cnt-rtgs">kao sip kao</span><span class="cnt-spk">🔊</span></div>
+      <div class="cnt-cell" onclick="speakCnt(this,'หนึ่งร้อย')"><span class="cnt-n">100</span><span class="cnt-thai">หนึ่งร้อย</span><span class="cnt-rtgs">nueng roi</span><span class="cnt-spk">🔊</span></div>
+    </div>
+  </div>
+
+  <!-- CENTAINES ET MILLIERS -->
+  <div class="cnt-section" style="margin-top:8px">
+    <div class="sec-hd">
+      <div class="sec-tag" id="cntHundredsTag">Grands nombres</div>
+      <div class="sec-title" id="cntHundredsTitle">Centaines et milliers</div>
+      <p class="sec-desc" id="cntHundredsDesc">En thaï, les centaines se forment avec <strong style="font-family:var(--thai-font)">ร้อย</strong> (roi) et les milliers avec <strong style="font-family:var(--thai-font)">พัน</strong> (phan).</p>
+    </div>
+    <div class="cnt-grid">
+      <div class="cnt-cell" onclick="speakCnt(this,'สองร้อย')"><span class="cnt-n">200</span><span class="cnt-thai">สองร้อย</span><span class="cnt-rtgs">song roi</span><span class="cnt-spk">🔊</span></div>
+      <div class="cnt-cell" onclick="speakCnt(this,'สามร้อย')"><span class="cnt-n">300</span><span class="cnt-thai">สามร้อย</span><span class="cnt-rtgs">sam roi</span><span class="cnt-spk">🔊</span></div>
+      <div class="cnt-cell" onclick="speakCnt(this,'สี่ร้อย')"><span class="cnt-n">400</span><span class="cnt-thai">สี่ร้อย</span><span class="cnt-rtgs">si roi</span><span class="cnt-spk">🔊</span></div>
+      <div class="cnt-cell" onclick="speakCnt(this,'ห้าร้อย')"><span class="cnt-n">500</span><span class="cnt-thai">ห้าร้อย</span><span class="cnt-rtgs">ha roi</span><span class="cnt-spk">🔊</span></div>
+      <div class="cnt-cell" onclick="speakCnt(this,'หกร้อย')"><span class="cnt-n">600</span><span class="cnt-thai">หกร้อย</span><span class="cnt-rtgs">hok roi</span><span class="cnt-spk">🔊</span></div>
+      <div class="cnt-cell" onclick="speakCnt(this,'เจ็ดร้อย')"><span class="cnt-n">700</span><span class="cnt-thai">เจ็ดร้อย</span><span class="cnt-rtgs">jet roi</span><span class="cnt-spk">🔊</span></div>
+      <div class="cnt-cell" onclick="speakCnt(this,'แปดร้อย')"><span class="cnt-n">800</span><span class="cnt-thai">แปดร้อย</span><span class="cnt-rtgs">paet roi</span><span class="cnt-spk">🔊</span></div>
+      <div class="cnt-cell" onclick="speakCnt(this,'หนึ่งพัน')"><span class="cnt-n">1000</span><span class="cnt-thai">หนึ่งพัน</span><span class="cnt-rtgs">nueng phan</span><span class="cnt-spk">🔊</span></div>
     </div>
   </div>
 
@@ -1515,6 +1738,12 @@ body.romaji-on .cntq-rtgs.romaji-text{display:block;font-size:20px;font-style:it
         <div class="qcard-icon">✏️</div>
         <div class="qcard-title" id="fillCardTitleLbl">Mots manquants</div>
         <div class="qcard-desc" id="fillCardDescLbl">10 phrases · complète les blancs · +30 XP</div>
+      </div>
+      <div class="qcard qcard-review" id="qcard-review" onclick="setQuizType('review',this)">
+        <div class="qcard-icon">⭐</div>
+        <div class="qcard-title" id="reviewCardTitle">Révision perso</div>
+        <div class="qcard-desc" id="reviewCardDesc">Retravaille les consonnes marquées ⭐</div>
+        <div class="fav-count-badge" id="reviewFavCount">0 marquées</div>
       </div>
     </div>
 
@@ -1759,10 +1988,15 @@ body.romaji-on .cntq-rtgs.romaji-text{display:block;font-size:20px;font-style:it
       <button class="qcard-back" onclick="showQuizGrid()">← <span>Changer de quiz</span></button>
       <!-- Écran départ -->
       <div class="quiz-card" id="vocalQStart">
-        <h2 style="font-size:26px;font-weight:800;margin-bottom:10px;text-align:center" id="vocalQTitle">Quiz Vocal</h2>
-        <p style="color:var(--text2);font-size:14px;margin-bottom:24px;text-align:center" id="vocalQDesc">Prononcez le nom de la consonne affichée. 10 questions.</p>
+        <h2 style="font-size:26px;font-weight:800;margin-bottom:6px;text-align:center" id="vocalQTitle">Quiz Vocal</h2>
+        <p style="color:var(--text2);font-size:14px;margin-bottom:18px;text-align:center" id="vocalQDesc">Prononcez à voix haute ce qui est affiché. 10 questions.</p>
+        <div class="vocal-mode-wrap">
+          <button class="qmode active" id="vocalModeCons" onclick="setVocalMode('cons',this)">ก Consonnes</button>
+          <button class="qmode" id="vocalModeVow" onclick="setVocalMode('vow',this)">◌ Voyelles</button>
+          <button class="qmode" id="vocalModePhr" onclick="setVocalMode('phrases',this)">💬 Phrases</button>
+        </div>
         <div id="vocalNoSR" style="display:none;background:rgba(255,92,141,.1);border:1px solid rgba(255,92,141,.3);border-radius:10px;padding:12px 16px;font-size:13px;color:var(--rose);margin-bottom:20px;text-align:center">⚠️ Votre navigateur ne supporte pas la reconnaissance vocale. Utilisez Chrome.</div>
-        <button class="btn-g" id="vocalStartBtn" onclick="startVocalQuiz()">Commencer</button>
+        <button class="btn-g" id="vocalStartBtn" onclick="startVocalQuiz()" id="vocalStartBtnEl">Commencer</button>
       </div>
       <!-- Écran jeu -->
       <div class="quiz-card" id="vocalQGame" style="display:none">
@@ -2051,6 +2285,41 @@ body.romaji-on .cntq-rtgs.romaji-text{display:block;font-size:20px;font-style:it
         <button class="btn-g" id="fillReplayBtn" onclick="startFillQuiz()">Rejouer</button>
       </div>
     </div><!-- /fillQuizWrap -->
+
+    <!-- QUIZ RÉVISION PERSO -->
+    <div id="reviewQuizWrap" style="display:none">
+      <button class="qcard-back" onclick="showQuizGrid()">← <span id="reviewBackLbl">Changer de quiz</span></button>
+      <div class="quiz-card" id="reviewQStart">
+        <h2 style="font-size:24px;font-weight:800;margin-bottom:8px;text-align:center" id="reviewQTitle">⭐ Révision personnelle</h2>
+        <p style="color:var(--text2);font-size:14px;margin-bottom:20px;text-align:center" id="reviewQDesc">Revois uniquement les consonnes que tu as marquées.</p>
+        <div id="reviewQEmpty" style="display:none;background:rgba(255,195,0,.08);border:1px solid rgba(255,195,0,.2);border-radius:12px;padding:16px;font-size:13px;color:var(--gold);text-align:center;margin-bottom:20px" id="reviewEmptyMsg">
+          ⭐ Marque des consonnes avec l'étoile sur le dos des cartes pour les ajouter ici.
+        </div>
+        <div id="reviewQInfo" style="text-align:center;margin-bottom:20px">
+          <span class="fav-count-badge" style="font-size:14px;padding:6px 14px" id="reviewQCount">0 consonnes marquées</span>
+        </div>
+        <button class="btn-g" id="reviewStartBtn" onclick="startReviewQuiz()" disabled>Commencer</button>
+      </div>
+      <div class="quiz-card" id="reviewQGame" style="display:none">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px">
+          <div style="font-size:13px;color:var(--text2)" id="reviewQProg">1 / ?</div>
+          <div style="display:flex;gap:10px;font-size:13px">
+            <span style="color:var(--teal)" id="reviewQOk">✓ 0</span>
+            <span style="color:var(--rose)" id="reviewQKo">✗ 0</span>
+          </div>
+        </div>
+        <div class="quiz-q-area" id="reviewQArea"></div>
+        <div class="quiz-opts" id="reviewQOpts"></div>
+      </div>
+      <div class="quiz-card" id="reviewQScore" style="display:none">
+        <div class="qscore" style="margin-bottom:12px">
+          <div class="qsi ok"><div class="qsv" id="reviewQScoreOk">0</div><div class="qsl" id="reviewQLblOk">correct</div></div>
+          <div class="qsi ko"><div class="qsv" id="reviewQScoreKo">0</div><div class="qsl" id="reviewQLblKo">erreur</div></div>
+        </div>
+        <div id="reviewQScoreMsg" style="font-size:15px;font-weight:700;margin-bottom:24px;color:var(--text2)"></div>
+        <button class="btn-g" onclick="startReviewQuiz()" id="reviewReplayBtn">Rejouer</button>
+      </div>
+    </div><!-- /reviewQuizWrap -->
 
   </div>
 </div>
@@ -3584,7 +3853,19 @@ const T = {
     heroBadge:'Méthode interactive', heroTitle:'Maîtrisez', heroSubtitle:"l'Alphabet Thaï",
     heroSub:'44 consonnes, des voyelles riches, 5 tons — apprenez à votre rythme avec des cartes interactives et un quiz adaptatif.',
     heroBtn1:'Commencer maintenant', heroBtn2:'Tester mes connaissances', heroScroll:'Découvrir',
-    statL1:'Consonnes', statL2:'Tons', statL3:'Formes de voyelles', statL4:'Classes de consonnes',
+    statL1:'Consonnes thaïes', statL2:'Modes de quiz', statL3:'Phrases & vocabulaire', statL4:'Nombres appris',
+    heroTrust:'✓ Gratuit · ✓ Sans inscription · ✓ Mobile friendly',
+    featTag:'Tout-en-un', featTitle:'Tout ce qu\'il faut pour apprendre le thaï', featDesc:'Du premier caractère à la première conversation — une seule app, gratuite.',
+    feat1t:'Alphabet interactif', feat1d:'44 consonnes avec audio, romanisation et tracé. Retourne les cartes pour apprendre.',
+    feat2t:'11 modes de quiz', feat2d:'Consonnes, voyelles, tons, vocabulaire, phrases, chrono, vocal… Un quiz pour chaque façon d\'apprendre.',
+    feat3t:'Grammaire claire', feat3d:'Structure SVO, particules de politesse, temps, interrogatifs — expliqués avec des exemples.',
+    feat4t:'Lecture guidée', feat4d:'Des textes réels mot par mot, avec traduction et romanisation au clic. Niveaux A1 à B1.',
+    feat5t:'Chiffres jusqu\'à 1000', feat5d:'1 à 100, centaines et milliers — avec audio pour entendre la prononciation correcte.',
+    feat6t:'Quiz vocal', feat6d:'Prononce les consonnes, voyelles et phrases. Le micro vérifie ta prononciation.',
+    howTag:'Méthode', howTitle:'Apprendre le thaï en 3 étapes',
+    how1t:'Explore l\'alphabet', how1d:'Parcours les 44 consonnes, écoute leur son, retourne les cartes pour mémoriser.',
+    how2t:'Entraîne-toi avec les quiz', how2d:'Caractère → son, son → caractère, mode chrono, marathon de 50 questions…',
+    how3t:'Lis des textes réels', how3d:'Applique tes acquis sur des textes authentiques. Clique sur chaque mot pour voir sa traduction.',
     clsTag:'Structure', clsTitle:'Les 3 classes de consonnes',
     clsDesc:"Chaque consonne appartient à une classe qui détermine le ton de la syllabe. C'est la clé pour lire le thaï !",
     clsMid:'Classe Moyenne', clsHigh:'Classe Haute', clsLow:'Classe Basse',
@@ -3597,8 +3878,16 @@ const T = {
     fAll:'Tous', fMid:'Moyenne (9)', fHigh:'Haute (11)', fLow:'Basse (24)',
     srchPh:'Chercher : ก, k, poulet…',
     voiceWarnTxt:'⚠️ Aucune voix thaïe détectée. Pour activer les sons, allez dans <strong>Préférences Système → Accessibilité → Contenu vocal</strong> et téléchargez une voix thaïe (ex. : <strong>Kanya</strong>), puis rechargez la page.',
-    cardIni:'Début', cardFin:'Fin', cardMark:'Marquer appris', cardDone:'✓ Maîtrisé', cardTrace:'✏️ Tracé', vocalQuizTitle:'Quiz Vocal', vocalQuizDesc:'Prononcez le nom de la consonne affichée. 10 questions.', shareBtn:'📤 Partager ma progression', shareTitle:'Partager ma progression', shareDl:'⬇ Télécharger', shareCopy:'📋 Copier le texte', shareNative:'📤 Partager', vocabQTitleTxt:'📚 Quiz Vocabulaire', vocabQDescTxt:'10 questions sur le vocabulaire thaï.', vocabM1T:'Thaï → Traduction', vocabM1D:'Voir le mot thaï, trouver sa traduction', vocabM2T:'Traduction → Thaï', vocabM2D:'Voir la traduction, trouver le mot thaï', vocabQLvl:'Niveau', vocabLvlAll:'Tous', vocabQStart:'Commencer', vocabQNext:'Question suivante →', vocabQReplay:'Rejouer',
-    cntSecTag:'Compter en thaï', cntSecTitle:'Les nombres de 1 à 50', cntSecDesc:'Cliquez sur un nombre pour l\'entendre. Apprenez à compter en thaï !',
+    cardIni:'Début', cardFin:'Fin', cardMark:'Marquer appris', cardDone:'✓ Maîtrisé', cardTrace:'✏️ Tracé', vocalQuizTitle:'Quiz Vocal', vocalQuizDesc:'Prononcez à voix haute ce qui est affiché. 10 questions.',
+    vocalModeCons:'ก Consonnes', vocalModeVow:'◌ Voyelles', vocalModePhr:'💬 Phrases', shareBtn:'📤 Partager ma progression', shareTitle:'Partager ma progression', shareDl:'⬇ Télécharger', shareCopy:'📋 Copier le texte', shareNative:'📤 Partager', vocabQTitleTxt:'📚 Quiz Vocabulaire', vocabQDescTxt:'10 questions sur le vocabulaire thaï.', vocabM1T:'Thaï → Traduction', vocabM1D:'Voir le mot thaï, trouver sa traduction', vocabM2T:'Traduction → Thaï', vocabM2D:'Voir la traduction, trouver le mot thaï', vocabQLvl:'Niveau', vocabLvlAll:'Tous', vocabQStart:'Commencer', vocabQNext:'Question suivante →', vocabQReplay:'Rejouer',
+    cntSecTag:'Compter en thaï', cntSecTitle:'Les nombres de 1 à 100', cntSecDesc:'Cliquez sur un nombre pour l\'entendre. Apprenez à compter en thaï !',
+    cntHundredsTag:'Grands nombres', cntHundredsTitle:'Centaines et milliers', cntHundredsDesc:'En thaï, les centaines se forment avec ร้อย (roi) et les milliers avec พัน (phan).',
+    onboardTitle:'Bienvenue sur Thai ABC', onboardSub:'La façon la plus fun d\'apprendre l\'alphabet thaï et bien plus. Tout est gratuit, sans inscription.',
+    ob1t:'Alphabet complet', ob1d:'44 consonnes, voyelles et tons avec écoute audio',
+    ob2t:'Quiz interactifs', ob2d:'5 modes de quiz pour mémoriser rapidement',
+    ob3t:'Lecture guidée', ob3d:'Textes réels avec traduction mot par mot',
+    ob4t:'Chiffres & vocab', ob4d:'Nombres jusqu\'à 1000, vocabulaire du quotidien',
+    onboardBtn:'Commencer maintenant ✨', onboardSkip:'Passer',
     vowTag:'Voyelles', vowTitle:'Les voyelles thaïes',
     vowDesc:'En thaï, les voyelles se placent avant, après, au-dessus ou en dessous de la consonne. Chaque voyelle a une forme courte et une forme longue.',
     vowShortGroup:'Voyelles courtes', vowLongGroup:'Voyelles longues',
@@ -3698,7 +3987,7 @@ const T = {
     qcardDescCnt:'Compte en thaï de 0 à 100',
     qcardDescVow:'Maîtrise les voyelles thaïes',
     qcardDescTone:'Distingue les 5 tons du thaï',
-    qcardDescVocal:'Prononce les consonnes à voix haute',
+    qcardDescVocal:'Prononce consonnes, voyelles ou phrases',
     qcardDescVocab:'Teste ton vocabulaire',
     qtypeDailyLbl:'Défi du jour', qcardDescDaily:'5 questions mixtes · +30 XP',
     qtypeMarathonLbl:'Quiz Marathon', qcardDescMarathon:'20 questions mixtes sans pause',
@@ -3712,6 +4001,9 @@ const T = {
     chronoQDescTxt:'60 s · identifie les consonnes le plus vite possible · 1 bonne réponse = 1 pt',
     chronoBestLbl:'Meilleur score',
     fillCardTitleLbl:'Mots manquants', fillCardDescLbl:'10 phrases · complète les blancs · +30 XP',
+    reviewCardTitle:'Révision perso', reviewCardDesc:'Retravaille les consonnes marquées ⭐',
+    reviewQTitle:'⭐ Révision personnelle', reviewQDesc:'Revois uniquement les consonnes que tu as marquées.',
+    reviewStartBtn:'Commencer', reviewReplayBtn:'Rejouer', reviewQLblOk:'correct', reviewQLblKo:'erreur',
     fillQTitleTxt:'✏️ Mots manquants',
     fillQDescTxt:'10 phrases · complète chaque blanc avec le bon mot · +2 XP par bonne réponse'
   },
@@ -3724,7 +4016,19 @@ const T = {
     heroBadge:'Interactive method', heroTitle:'Master', heroSubtitle:'the Thai Alphabet',
     heroSub:'44 consonants, rich vowels, 5 tones — learn at your own pace with interactive flashcards and an adaptive quiz.',
     heroBtn1:'Start now', heroBtn2:'Test my knowledge', heroScroll:'Discover',
-    statL1:'Consonants', statL2:'Tones', statL3:'Vowel forms', statL4:'Consonant classes',
+    statL1:'Thai consonants', statL2:'Quiz modes', statL3:'Phrases & vocabulary', statL4:'Numbers learned',
+    heroTrust:'✓ Free · ✓ No sign-up · ✓ Mobile friendly',
+    featTag:'All-in-one', featTitle:'Everything you need to learn Thai', featDesc:'From first character to first conversation — one free app.',
+    feat1t:'Interactive alphabet', feat1d:'44 consonants with audio, romanization and stroke animation. Flip cards to memorize.',
+    feat2t:'11 quiz modes', feat2d:'Consonants, vowels, tones, vocab, phrases, speed quiz, vocal… A quiz for every learning style.',
+    feat3t:'Clear grammar', feat3d:'SVO structure, politeness particles, tenses, question words — explained simply with examples.',
+    feat4t:'Guided reading', feat4d:'Real texts word by word, with translation and romanization on click. Levels A1 to B1.',
+    feat5t:'Numbers up to 1000', feat5d:'1 to 100, hundreds and thousands — with audio to hear the correct pronunciation.',
+    feat6t:'Vocal quiz', feat6d:'Pronounce consonants, vowels and phrases out loud. The mic checks your pronunciation.',
+    howTag:'Method', howTitle:'Learn Thai in 3 steps',
+    how1t:'Explore the alphabet', how1d:'Browse the 44 Thai consonants, listen to their sounds, flip cards to memorize.',
+    how2t:'Practice with quizzes', how2d:'Character → sound, sound → character, speed mode, 50-question marathon…',
+    how3t:'Read real texts', how3d:'Apply what you\'ve learned on authentic texts. Click each word to see its translation.',
     clsTag:'Structure', clsTitle:'The 3 consonant classes',
     clsDesc:"Every consonant belongs to a class that determines the syllable's tone. This is the key to reading Thai!",
     clsMid:'Middle Class', clsHigh:'High Class', clsLow:'Low Class',
@@ -3737,8 +4041,16 @@ const T = {
     fAll:'All', fMid:'Middle (9)', fHigh:'High (11)', fLow:'Low (24)',
     srchPh:'Search: ก, k, chicken…',
     voiceWarnTxt:'⚠️ No Thai voice detected. To enable audio, go to <strong>System Preferences → Accessibility → Spoken Content</strong> and download a Thai voice (e.g. <strong>Kanya</strong>), then reload the page.',
-    cardIni:'Initial', cardFin:'Final', cardMark:'Mark as learned', cardDone:'✓ Mastered', cardTrace:'✏️ Trace', vocalQuizTitle:'Vocal Quiz', vocalQuizDesc:'Pronounce the name of the consonant shown. 10 questions.', shareBtn:'📤 Share my progress', shareTitle:'Share my progress', shareDl:'⬇ Download', shareCopy:'📋 Copy text', shareNative:'📤 Share', vocabQTitleTxt:'📚 Vocabulary Quiz', vocabQDescTxt:'10 questions on Thai vocabulary.', vocabM1T:'Thai → Translation', vocabM1D:'See the Thai word, find its translation', vocabM2T:'Translation → Thai', vocabM2D:'See the translation, find the Thai word', vocabQLvl:'Level', vocabLvlAll:'All', vocabQStart:'Start', vocabQNext:'Next question →', vocabQReplay:'Play again',
-    cntSecTag:'Count in Thai', cntSecTitle:'Numbers from 1 to 50', cntSecDesc:'Click on a number to hear it. Learn to count in Thai!',
+    cardIni:'Initial', cardFin:'Final', cardMark:'Mark as learned', cardDone:'✓ Mastered', cardTrace:'✏️ Trace', vocalQuizTitle:'Vocal Quiz', vocalQuizDesc:'Pronounce out loud what is shown. 10 questions.',
+    vocalModeCons:'ก Consonants', vocalModeVow:'◌ Vowels', vocalModePhr:'💬 Phrases', shareBtn:'📤 Share my progress', shareTitle:'Share my progress', shareDl:'⬇ Download', shareCopy:'📋 Copy text', shareNative:'📤 Share', vocabQTitleTxt:'📚 Vocabulary Quiz', vocabQDescTxt:'10 questions on Thai vocabulary.', vocabM1T:'Thai → Translation', vocabM1D:'See the Thai word, find its translation', vocabM2T:'Translation → Thai', vocabM2D:'See the translation, find the Thai word', vocabQLvl:'Level', vocabLvlAll:'All', vocabQStart:'Start', vocabQNext:'Next question →', vocabQReplay:'Play again',
+    cntSecTag:'Count in Thai', cntSecTitle:'Numbers from 1 to 100', cntSecDesc:'Click on a number to hear it. Learn to count in Thai!',
+    cntHundredsTag:'Large numbers', cntHundredsTitle:'Hundreds and thousands', cntHundredsDesc:'In Thai, hundreds use ร้อย (roi) and thousands use พัน (phan).',
+    onboardTitle:'Welcome to Thai ABC', onboardSub:'The most fun way to learn the Thai alphabet and more. Free, no account needed.',
+    ob1t:'Full alphabet', ob1d:'44 consonants, vowels and tones with audio',
+    ob2t:'Interactive quizzes', ob2d:'5 quiz modes to memorize fast',
+    ob3t:'Guided reading', ob3d:'Real texts with word-by-word translation',
+    ob4t:'Numbers & vocab', ob4d:'Numbers up to 1000, everyday vocabulary',
+    onboardBtn:'Start now ✨', onboardSkip:'Skip',
     vowTag:'Vowels', vowTitle:'Thai Vowels',
     vowDesc:'In Thai, vowels are placed before, after, above, or below the consonant. Each vowel has a short and a long form.',
     vowShortGroup:'Short Vowels', vowLongGroup:'Long Vowels',
@@ -3838,7 +4150,7 @@ const T = {
     qcardDescCnt:'Count in Thai from 0 to 100',
     qcardDescVow:'Master Thai vowels',
     qcardDescTone:'Distinguish the 5 Thai tones',
-    qcardDescVocal:'Pronounce consonants out loud',
+    qcardDescVocal:'Pronounce consonants, vowels or phrases',
     qcardDescVocab:'Test your vocabulary',
     qtypeDailyLbl:'Daily Challenge', qcardDescDaily:'5 mixed questions · +30 XP',
     qtypeMarathonLbl:'Quiz Marathon', qcardDescMarathon:'20 mixed questions non-stop',
@@ -3852,6 +4164,9 @@ const T = {
     chronoQDescTxt:'60 s · identify consonants as fast as possible · 1 correct = 1 point',
     chronoBestLbl:'Best score',
     fillCardTitleLbl:'Fill in the Blanks', fillCardDescLbl:'10 phrases · fill in the blanks · +30 XP',
+    reviewCardTitle:'Personal review', reviewCardDesc:'Practice the consonants you starred ⭐',
+    reviewQTitle:'⭐ Personal review', reviewQDesc:'Practice only the consonants you marked.',
+    reviewStartBtn:'Start', reviewReplayBtn:'Play again', reviewQLblOk:'correct', reviewQLblKo:'wrong',
     fillQTitleTxt:'✏️ Fill in the Blanks',
     fillQDescTxt:'10 phrases · fill each blank with the right word · +2 XP per correct answer'
   }
@@ -3920,6 +4235,13 @@ function applyLang() {
   s('heroScroll', t.heroScroll);
   // Stats
   s('statL1', t.statL1); s('statL2', t.statL2); s('statL3', t.statL3); s('statL4', t.statL4);
+  s('heroTrust', t.heroTrust);
+  s('featTag', t.featTag); s('featTitle', t.featTitle); s('featDesc', t.featDesc);
+  s('feat1t', t.feat1t); s('feat1d', t.feat1d); s('feat2t', t.feat2t); s('feat2d', t.feat2d);
+  s('feat3t', t.feat3t); s('feat3d', t.feat3d); s('feat4t', t.feat4t); s('feat4d', t.feat4d);
+  s('feat5t', t.feat5t); s('feat5d', t.feat5d); s('feat6t', t.feat6t); s('feat6d', t.feat6d);
+  s('howTag', t.howTag); s('howTitle', t.howTitle);
+  s('how1t', t.how1t); s('how1d', t.how1d); s('how2t', t.how2t); s('how2d', t.how2d); s('how3t', t.how3t); s('how3d', t.how3d);
   // Classes section
   s('clsTag', t.clsTag); s('clsTitle', t.clsTitle); s('clsDesc', t.clsDesc);
   s('clsBadgeMid', t.clsMid); s('clsDescMid', t.clsDescMid);
@@ -3933,6 +4255,11 @@ function applyLang() {
   h('voiceWarn', t.voiceWarnTxt);
   // Vowels tab
   s('cntSecTag', t.cntSecTag); s('cntSecTitle', t.cntSecTitle); s('cntSecDesc', t.cntSecDesc);
+  s('cntHundredsTag', t.cntHundredsTag); s('cntHundredsTitle', t.cntHundredsTitle); s('cntHundredsDesc', t.cntHundredsDesc);
+  s('onboardTitle', t.onboardTitle); s('onboardSub', t.onboardSub);
+  s('ob1t', t.ob1t); s('ob1d', t.ob1d); s('ob2t', t.ob2t); s('ob2d', t.ob2d);
+  s('ob3t', t.ob3t); s('ob3d', t.ob3d); s('ob4t', t.ob4t); s('ob4d', t.ob4d);
+  s('onboardBtn', t.onboardBtn); s('onboardSkip', t.onboardSkip);
   s('vowTag', t.vowTag); s('vowTitle', t.vowTitle); s('vowDesc', t.vowDesc);
   // Tones tab
   s('tonTag', t.tonTag); s('tonTitle', t.tonTitle); s('tonDesc', t.tonDesc);
@@ -4003,6 +4330,7 @@ function applyLang() {
   const gd=document.getElementById('phGateDesc'); if(gd) gd.textContent=t.phGateDesc(FREE_PH_QUIZ_LIMIT);
   renderPhCatBtns(); updatePhStartFreeBar();
   s('vocalQTitle', t.vocalQuizTitle); s('vocalQDesc', t.vocalQuizDesc);
+  s('vocalModeCons', t.vocalModeCons); s('vocalModeVow', t.vocalModeVow); s('vocalModePhr', t.vocalModePhr);
   s('vocalStartBtn', currentLang==='en' ? 'Start' : 'Commencer');
   s('vocalNoSR', currentLang==='en' ? '⚠️ Your browser does not support speech recognition. Please use Chrome.' : '⚠️ Votre navigateur ne supporte pas la reconnaissance vocale. Utilisez Chrome.');
   s('vocalNextBtn', currentLang==='en' ? 'Next →' : 'Suivant →');
@@ -4030,6 +4358,11 @@ function applyLang() {
   s('qtypeMarathonLbl', t.qtypeMarathonLbl); s('qcardDescMarathon', t.qcardDescMarathon);
   s('qtypeChronoLbl', t.qtypeChronoLbl); s('qcardDescChrono', t.qcardDescChrono);
   s('fillCardTitleLbl', t.fillCardTitleLbl); s('fillCardDescLbl', t.fillCardDescLbl);
+  s('reviewCardTitle', t.reviewCardTitle); s('reviewCardDesc', t.reviewCardDesc);
+  s('reviewQTitle', t.reviewQTitle); s('reviewQDesc', t.reviewQDesc);
+  s('reviewStartBtn', t.reviewStartBtn); s('reviewReplayBtn', t.reviewReplayBtn);
+  s('reviewQLblOk', t.reviewQLblOk); s('reviewQLblKo', t.reviewQLblKo);
+  _updateReviewBadge();
   // Daily quiz screens
   s('dailyAlreadyTitle', t.dailyAlreadyTitle); s('dailyAlreadySub', t.dailyAlreadySub);
   s('dailyAlreadyBackBtn', currentLang==='en' ? 'Back to quizzes' : 'Retour aux quiz');
@@ -4081,6 +4414,7 @@ function loadLangPref() {
 
 // ─── STATE ─────────────────────────────────────────────────────────────────
 const learned = new Set(JSON.parse(localStorage.getItem('thai-learned')||'[]'));
+const favorites = new Set(JSON.parse(localStorage.getItem('thai-favorites')||'[]'));
 let filter = 'all';
 let quizMode = 'c2r';
 let quizScore = {ok:0, ko:0};
@@ -4493,14 +4827,16 @@ function renderConsonants() {
 
 function cardHTML(c, i) {
   const isL = learned.has(c.id);
+  const isF = favorites.has(c.id);
   const exWord = c.name.split(' ').slice(1).join(' ');
   const finD = (c.fin === '—' || c.fin === '-') ? '—' : '-' + c.fin;
   const iniD = (c.ini === '—') ? '—' : c.ini + '-';
   return `
-  <div class="ccard ${c.cls} ${isL?'learned':''}" onclick="flipCard(this,${c.id})" style="animation-delay:${i*0.03}s">
+  <div class="ccard ${c.cls} ${isL?'learned':''} ${isF?'faved':''}" onclick="flipCard(this,${c.id})" style="animation-delay:${i*0.03}s">
     <div class="ccard-inner">
       <div class="cface ${c.cls}">
         <div class="ldot"></div>
+        <div class="fdot">⭐</div>
         <div class="cdot"></div>
         <div class="cchar">${c.char}</div>
         <div class="cthaiword">${exWord}</div>
@@ -4523,7 +4859,10 @@ function cardHTML(c, i) {
           <span class="bpill">${T[currentLang].cardIni}: ${c.ini}</span>
           <span class="bpill">${T[currentLang].cardFin}: ${c.fin}</span>
         </div>
-        <button class="lbtn ${isL?'done':''}" onclick="toggleLearned(event,${c.id})">${isL?T[currentLang].cardDone:T[currentLang].cardMark}</button>
+        <div class="cback-btns">
+          <button class="lbtn ${isL?'done':''}" onclick="toggleLearned(event,${c.id})">${isL?T[currentLang].cardDone:T[currentLang].cardMark}</button>
+          <button class="fbtn ${isF?'fav-active':''}" onclick="toggleFavorite(event,${c.id})" title="${isF?(currentLang==='en'?'Remove from review':'Retirer de la révision'):(currentLang==='en'?'Add to review':'Ajouter à la révision')}">⭐</button>
+        </div>
         <button class="tbtn" onclick="openTrace(event,${c.id})">${T[currentLang].cardTrace}</button>
       </div>
     </div>
@@ -4543,6 +4882,29 @@ function toggleLearned(e, id) {
   saveProgressToCloud();
   renderConsonants();
   if(!wasLearned) { addXP(5); checkBadges('letter'); }
+}
+
+function toggleFavorite(e, id) {
+  e.stopPropagation();
+  if(favorites.has(id)) favorites.delete(id);
+  else favorites.add(id);
+  localStorage.setItem('thai-favorites', JSON.stringify([...favorites]));
+  renderConsonants();
+  _updateReviewBadge();
+}
+
+function _updateReviewBadge() {
+  const n = favorites.size;
+  const fr = currentLang !== 'en';
+  const badge = document.getElementById('reviewFavCount');
+  const countEl = document.getElementById('reviewQCount');
+  const emptyEl = document.getElementById('reviewQEmpty');
+  const startBtn = document.getElementById('reviewStartBtn');
+  const label = fr ? (n + ' marquée' + (n>1?'s':'')) : (n + ' marked');
+  if(badge) badge.textContent = label;
+  if(countEl) countEl.textContent = fr ? (n + ' consonne' + (n>1?'s':'') + ' marquée' + (n>1?'s':'')) : (n + ' consonant' + (n!==1?'s':'') + ' marked');
+  if(emptyEl) emptyEl.style.display = n === 0 ? '' : 'none';
+  if(startBtn) startBtn.disabled = n < 2;
 }
 
 function updateProgress() {
@@ -4742,12 +5104,13 @@ function toggleRomaji() {
 }
 
 function showQuizGrid() {
-  ['consQuizWrap','phQuizWrap','cntQuizWrap','vowQuizWrap','toneQuizWrap','vocalQuizWrap','vocabQuizWrap','dailyQuizWrap','marathonQuizWrap','chronoQuizWrap','fillQuizWrap']
+  ['consQuizWrap','phQuizWrap','cntQuizWrap','vowQuizWrap','toneQuizWrap','vocalQuizWrap','vocabQuizWrap','dailyQuizWrap','marathonQuizWrap','chronoQuizWrap','fillQuizWrap','reviewQuizWrap']
     .forEach(id => { const el=document.getElementById(id); if(el) el.style.display='none'; });
   document.querySelectorAll('.qcard').forEach(c => c.classList.remove('active'));
   _showRomaji = false;
   document.body.classList.remove('romaji-on');
   _updateDailyBadge();
+  _updateReviewBadge();
 }
 
 function setQuizType(type, cardEl) {
@@ -4757,7 +5120,7 @@ function setQuizType(type, cardEl) {
   // Show selected wrap, hide others
   const map = {cons:'consQuizWrap', phrases:'phQuizWrap', cnt:'cntQuizWrap',
                 vow:'vowQuizWrap', tone:'toneQuizWrap', vocal:'vocalQuizWrap', vocab:'vocabQuizWrap',
-                daily:'dailyQuizWrap', marathon:'marathonQuizWrap', chrono:'chronoQuizWrap', fill:'fillQuizWrap'};
+                daily:'dailyQuizWrap', marathon:'marathonQuizWrap', chrono:'chronoQuizWrap', fill:'fillQuizWrap', review:'reviewQuizWrap'};
   Object.entries(map).forEach(([k,id]) => {
     const el = document.getElementById(id);
     if(el) el.style.display = k===type ? '' : 'none';
@@ -4808,6 +5171,11 @@ function setQuizType(type, cardEl) {
     document.getElementById('fillQStart').style.display='';
     document.getElementById('fillQGame').style.display='none';
     document.getElementById('fillQScore').style.display='none';
+  } else if(type==='review') {
+    document.getElementById('reviewQStart').style.display='';
+    document.getElementById('reviewQGame').style.display='none';
+    document.getElementById('reviewQScore').style.display='none';
+    _updateReviewBadge();
   }
   applyLang();
   window.scrollTo(0,0);
@@ -5291,7 +5659,27 @@ const cntData=[
   {n:40,thai:'สี่สิบ',rtgs:'si sip'},{n:41,thai:'สี่สิบเอ็ด',rtgs:'si sip et'},{n:42,thai:'สี่สิบสอง',rtgs:'si sip song'},
   {n:43,thai:'สี่สิบสาม',rtgs:'si sip sam'},{n:44,thai:'สี่สิบสี่',rtgs:'si sip si'},{n:45,thai:'สี่สิบห้า',rtgs:'si sip ha'},
   {n:46,thai:'สี่สิบหก',rtgs:'si sip hok'},{n:47,thai:'สี่สิบเจ็ด',rtgs:'si sip jet'},{n:48,thai:'สี่สิบแปด',rtgs:'si sip paet'},
-  {n:49,thai:'สี่สิบเก้า',rtgs:'si sip kao'},{n:50,thai:'ห้าสิบ',rtgs:'ha sip'}
+  {n:49,thai:'สี่สิบเก้า',rtgs:'si sip kao'},{n:50,thai:'ห้าสิบ',rtgs:'ha sip'},
+  {n:51,thai:'ห้าสิบเอ็ด',rtgs:'ha sip et'},{n:52,thai:'ห้าสิบสอง',rtgs:'ha sip song'},{n:53,thai:'ห้าสิบสาม',rtgs:'ha sip sam'},
+  {n:54,thai:'ห้าสิบสี่',rtgs:'ha sip si'},{n:55,thai:'ห้าสิบห้า',rtgs:'ha sip ha'},{n:56,thai:'ห้าสิบหก',rtgs:'ha sip hok'},
+  {n:57,thai:'ห้าสิบเจ็ด',rtgs:'ha sip jet'},{n:58,thai:'ห้าสิบแปด',rtgs:'ha sip paet'},{n:59,thai:'ห้าสิบเก้า',rtgs:'ha sip kao'},
+  {n:60,thai:'หกสิบ',rtgs:'hok sip'},{n:61,thai:'หกสิบเอ็ด',rtgs:'hok sip et'},{n:62,thai:'หกสิบสอง',rtgs:'hok sip song'},
+  {n:63,thai:'หกสิบสาม',rtgs:'hok sip sam'},{n:64,thai:'หกสิบสี่',rtgs:'hok sip si'},{n:65,thai:'หกสิบห้า',rtgs:'hok sip ha'},
+  {n:66,thai:'หกสิบหก',rtgs:'hok sip hok'},{n:67,thai:'หกสิบเจ็ด',rtgs:'hok sip jet'},{n:68,thai:'หกสิบแปด',rtgs:'hok sip paet'},
+  {n:69,thai:'หกสิบเก้า',rtgs:'hok sip kao'},{n:70,thai:'เจ็ดสิบ',rtgs:'jet sip'},{n:71,thai:'เจ็ดสิบเอ็ด',rtgs:'jet sip et'},
+  {n:72,thai:'เจ็ดสิบสอง',rtgs:'jet sip song'},{n:73,thai:'เจ็ดสิบสาม',rtgs:'jet sip sam'},{n:74,thai:'เจ็ดสิบสี่',rtgs:'jet sip si'},
+  {n:75,thai:'เจ็ดสิบห้า',rtgs:'jet sip ha'},{n:76,thai:'เจ็ดสิบหก',rtgs:'jet sip hok'},{n:77,thai:'เจ็ดสิบเจ็ด',rtgs:'jet sip jet'},
+  {n:78,thai:'เจ็ดสิบแปด',rtgs:'jet sip paet'},{n:79,thai:'เจ็ดสิบเก้า',rtgs:'jet sip kao'},{n:80,thai:'แปดสิบ',rtgs:'paet sip'},
+  {n:81,thai:'แปดสิบเอ็ด',rtgs:'paet sip et'},{n:82,thai:'แปดสิบสอง',rtgs:'paet sip song'},{n:83,thai:'แปดสิบสาม',rtgs:'paet sip sam'},
+  {n:84,thai:'แปดสิบสี่',rtgs:'paet sip si'},{n:85,thai:'แปดสิบห้า',rtgs:'paet sip ha'},{n:86,thai:'แปดสิบหก',rtgs:'paet sip hok'},
+  {n:87,thai:'แปดสิบเจ็ด',rtgs:'paet sip jet'},{n:88,thai:'แปดสิบแปด',rtgs:'paet sip paet'},{n:89,thai:'แปดสิบเก้า',rtgs:'paet sip kao'},
+  {n:90,thai:'เก้าสิบ',rtgs:'kao sip'},{n:91,thai:'เก้าสิบเอ็ด',rtgs:'kao sip et'},{n:92,thai:'เก้าสิบสอง',rtgs:'kao sip song'},
+  {n:93,thai:'เก้าสิบสาม',rtgs:'kao sip sam'},{n:94,thai:'เก้าสิบสี่',rtgs:'kao sip si'},{n:95,thai:'เก้าสิบห้า',rtgs:'kao sip ha'},
+  {n:96,thai:'เก้าสิบหก',rtgs:'kao sip hok'},{n:97,thai:'เก้าสิบเจ็ด',rtgs:'kao sip jet'},{n:98,thai:'เก้าสิบแปด',rtgs:'kao sip paet'},
+  {n:99,thai:'เก้าสิบเก้า',rtgs:'kao sip kao'},{n:100,thai:'หนึ่งร้อย',rtgs:'nueng roi'},
+  {n:200,thai:'สองร้อย',rtgs:'song roi'},{n:300,thai:'สามร้อย',rtgs:'sam roi'},{n:400,thai:'สี่ร้อย',rtgs:'si roi'},
+  {n:500,thai:'ห้าร้อย',rtgs:'ha roi'},{n:600,thai:'หกร้อย',rtgs:'hok roi'},{n:700,thai:'เจ็ดร้อย',rtgs:'jet roi'},
+  {n:800,thai:'แปดร้อย',rtgs:'paet roi'},{n:1000,thai:'หนึ่งพัน',rtgs:'nueng phan'}
 ];
 
 let cntQState={mode:'listen',questions:[],idx:0,score:0,answered:false};
@@ -5887,6 +6275,8 @@ renderTones();
 renderPhrases();
 initVocab();
 updateProgress();
+setTimeout(maybeShowOnboard, 800);
+_updateReviewBadge();
 
 // ─── XP & BADGES ──────────────────────────────────────────────────────────────────────────────
 const BADGES = [
@@ -6133,6 +6523,18 @@ function initMessaging() {
       showNotifToast(n.title || '📚 Thai ABC', n.body || '', n.icon || '📚');
     });
     updateNotifBtnState();
+  } catch(e) {}
+}
+
+function closeOnboard() {
+  document.getElementById('onboardOverlay').classList.remove('open');
+  try { localStorage.setItem('thai_onboard_done','1'); } catch(e) {}
+}
+function maybeShowOnboard() {
+  try {
+    if (!localStorage.getItem('thai_onboard_done')) {
+      document.getElementById('onboardOverlay').classList.add('open');
+    }
   } catch(e) {}
 }
 
@@ -6692,6 +7094,13 @@ async function nativeShare() {
 
 // ─── QUIZ VOCAL ─────────────────────────────────────────────────────────────
 let vocalPool = [], vocalIdx = 0, vocalScore = 0, vocalRecognizer = null, vocalAnswered = false, vocalTimer = null;
+let vocalMode = 'cons'; // 'cons' | 'vow' | 'phrases'
+
+function setVocalMode(mode, btn) {
+  vocalMode = mode;
+  document.querySelectorAll('.vocal-mode-wrap .qmode').forEach(b => b.classList.remove('active'));
+  if(btn) btn.classList.add('active');
+}
 
 function _vocalCheckSupport() {
   const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
@@ -6702,7 +7111,15 @@ function _vocalCheckSupport() {
 }
 
 function startVocalQuiz() {
-  vocalPool = shuffle([...consonants]).slice(0, 10);
+  if(vocalMode === 'vow') {
+    const allVow = [...vowels.short, ...vowels.long];
+    vocalPool = shuffle(allVow).slice(0, 10);
+  } else if(vocalMode === 'phrases') {
+    const easy = phrases.filter(p => p.level === 'A1' || p.level === 'A2');
+    vocalPool = shuffle(easy).slice(0, 10);
+  } else {
+    vocalPool = shuffle([...consonants]).slice(0, 10);
+  }
   vocalIdx = 0; vocalScore = 0;
   document.getElementById('vocalQStart').style.display = 'none';
   document.getElementById('vocalQScore').style.display = 'none';
@@ -6717,13 +7134,36 @@ function _showVocalQ() {
   vocalAnswered = false;
   const fr = currentLang !== 'en';
   document.getElementById('vocalQProg').textContent = (vocalIdx+1) + ' / 10';
-  document.getElementById('vocalQChar').textContent = c.char;
-  const exWord = c.name.split(' ').slice(1).join(' ');
-  document.getElementById('vocalQHint').textContent = '→ ' + exWord + '  (' + c.rtgs + ')';
-  document.getElementById('vocalQMeaning').textContent = c.emoji + ' ' + (!fr && c.en ? c.en : c.meaning);
-  const st = document.getElementById('vocalQStatus');
-  st.textContent = fr ? 'Appuyez sur 🎤 et prononcez le nom' : 'Press 🎤 and pronounce the name';
-  st.className = 'vocal-status';
+
+  const charEl = document.getElementById('vocalQChar');
+  charEl.className = 'vocal-char';
+
+  if(vocalMode === 'vow') {
+    charEl.classList.add('vocal-vow');
+    charEl.textContent = c.char;
+    document.getElementById('vocalQHint').textContent = c.rtgs;
+    document.getElementById('vocalQMeaning').textContent = fr ? c.desc : c.en;
+    const st = document.getElementById('vocalQStatus');
+    st.textContent = fr ? 'Appuyez sur 🎤 et prononcez le son' : 'Press 🎤 and pronounce the sound';
+    st.className = 'vocal-status';
+  } else if(vocalMode === 'phrases') {
+    charEl.classList.add('vocal-phrase');
+    charEl.textContent = c.thai;
+    document.getElementById('vocalQHint').textContent = c.rtgs;
+    document.getElementById('vocalQMeaning').textContent = fr ? c.fr : c.en;
+    const st = document.getElementById('vocalQStatus');
+    st.textContent = fr ? 'Appuyez sur 🎤 et prononcez la phrase' : 'Press 🎤 and pronounce the phrase';
+    st.className = 'vocal-status';
+  } else {
+    charEl.textContent = c.char;
+    const exWord = c.name.split(' ').slice(1).join(' ');
+    document.getElementById('vocalQHint').textContent = '→ ' + exWord + '  (' + c.rtgs + ')';
+    document.getElementById('vocalQMeaning').textContent = c.emoji + ' ' + (!fr && c.en ? c.en : c.meaning);
+    const st = document.getElementById('vocalQStatus');
+    st.textContent = fr ? 'Appuyez sur 🎤 et prononcez le nom' : 'Press 🎤 and pronounce the name';
+    st.className = 'vocal-status';
+  }
+
   document.getElementById('vocalQRecognized').style.display = 'none';
   document.getElementById('vocalQRecognized').textContent = '';
   document.getElementById('vocalNextBtn').style.display = 'none';
@@ -6819,7 +7259,6 @@ function _vocalShowResult(best, alternatives) {
   const st  = document.getElementById('vocalQStatus');
   const fr  = currentLang !== 'en';
   const c   = vocalPool[vocalIdx];
-  const exWord = c.name.split(' ').slice(1).join(' ');
 
   mic.classList.remove('listening');
   mic.disabled = true;
@@ -6830,17 +7269,36 @@ function _vocalShowResult(best, alternatives) {
   rec.textContent = best || (fr ? '(rien reconnu)' : '(nothing recognized)');
   rec.style.display = 'block';
 
-  const correct = alternatives.some(r =>
-    r.includes(exWord) || r.includes(c.char) ||
-    r.replace(/\s/g,'').includes(exWord.replace(/\s/g,''))
-  );
+  let correct = false;
+  let expectedLabel = '';
+
+  if(vocalMode === 'vow') {
+    correct = alternatives.some(r =>
+      r.includes(c.char.replace('อ','').trim()) || r.includes(c.char) || r.includes(c.rtgs)
+    );
+    expectedLabel = c.char + ' (' + c.rtgs + ')';
+  } else if(vocalMode === 'phrases') {
+    const thaiWords = c.thai.trim().split(/\s+/);
+    correct = alternatives.some(r => {
+      const matchCount = thaiWords.filter(w => w.length > 1 && r.includes(w)).length;
+      return matchCount >= Math.max(1, Math.floor(thaiWords.length * 0.4));
+    });
+    expectedLabel = c.thai;
+  } else {
+    const exWord = c.name.split(' ').slice(1).join(' ');
+    correct = alternatives.some(r =>
+      r.includes(exWord) || r.includes(c.char) ||
+      r.replace(/\s/g,'').includes(exWord.replace(/\s/g,''))
+    );
+    expectedLabel = exWord;
+  }
 
   if(correct) {
     vocalScore++;
     st.textContent = fr ? '✓ Correct !' : '✓ Correct!';
     st.className = 'vocal-status ok';
   } else {
-    st.textContent = (fr ? '✗ Attendu : ' : '✗ Expected: ') + exWord;
+    st.textContent = (fr ? '✗ Attendu : ' : '✗ Expected: ') + expectedLabel;
     st.className = 'vocal-status ko';
   }
   document.getElementById('vocalNextBtn').style.display = '';
@@ -7544,6 +8002,26 @@ const _fillBank = [
   {p:'วันนี้ ___ ร้อนมาก',      hint:'Aujourd\'hui il fait très chaud', hintEn:'The weather is very hot today',     a:'อากาศ',    w:['คน','อาหาร','น้ำ']},
   {p:'ฉัน ___ ไปตลาด',          hint:'Je vais aller au marché',         hintEn:'I\'m going to go to the market',    a:'จะ',       w:['ไม่','กำลัง','มาก']},
   {p:'ขอบคุณ ___',              hint:'Merci beaucoup',                   hintEn:'Thank you very much',               a:'มาก',      w:['ครับ','ดี','ไป']},
+  {p:'เธอ ___ หนังสือ',        hint:'Elle lit un livre',                 hintEn:'She reads a book',                  a:'อ่าน',     w:['กิน','ดื่ม','นอน']},
+  {p:'ผม ___ กาแฟ',            hint:'Je bois du café',                   hintEn:'I drink coffee',                    a:'ดื่ม',     w:['กิน','อ่าน','ไป']},
+  {p:'คุณ ___ มาจากไหน?',      hint:'D\'où venez-vous ?',                hintEn:'Where are you from?',               a:'มา',       w:['ไป','อยู่','กิน']},
+  {p:'ฉัน ___ ที่บ้าน',        hint:'Je reste à la maison',              hintEn:'I am at home',                      a:'อยู่',     w:['ไป','มา','กิน']},
+  {p:'ผม กำลัง ___ อยู่',      hint:'Je suis en train de dormir',        hintEn:'I am sleeping right now',           a:'นอน',      w:['กิน','ดื่ม','อ่าน']},
+  {p:'เธอ กำลัง ___ ข้าว',     hint:'Elle est en train de manger du riz',hintEn:'She is eating rice',                a:'กิน',      w:['ดื่ม','อ่าน','นอน']},
+  {p:'คุณ ___ ภาษาไทย ไหม?',   hint:'Parlez-vous thaï ?',                hintEn:'Do you speak Thai?',                a:'พูด',      w:['กิน','อ่าน','นอน']},
+  {p:'ฉัน กำลัง ___ ภาษาไทย', hint:'J\'apprends le thaï',               hintEn:'I am learning Thai',                a:'เรียน',    w:['พูด','อ่าน','กิน']},
+  {p:'เขา ___ ชอบ อาหาร เผ็ด', hint:'Il n\'aime pas la nourriture épicée',hintEn:'He doesn\'t like spicy food',     a:'ไม่',      w:['มาก','กำลัง','จะ']},
+  {p:'คุณ ชื่อ ___?',           hint:'Comment tu t\'appelles ?',          hintEn:'What is your name?',                a:'อะไร',     w:['ที่ไหน','เมื่อไหร่','ทำไม']},
+  {p:'ฉัน ___ น้ำ หน่อย',      hint:'Je voudrais un peu d\'eau',         hintEn:'I\'d like some water',              a:'ขอ',       w:['กิน','ดื่ม','อ่าน']},
+  {p:'อากาศ วันนี้ ___ มาก',   hint:'Il fait très chaud aujourd\'hui',   hintEn:'It\'s very hot today',              a:'ร้อน',     w:['ดี','ไม่','อยู่']},
+  {p:'นี่ ___ ของ ฉัน',        hint:'C\'est à moi',                      hintEn:'This is mine',                      a:'คือ',      w:['ไม่','มาก','ดี']},
+  {p:'ฉัน ชอบ ___ ไทย มาก',    hint:'J\'aime beaucoup la cuisine thaïe', hintEn:'I like Thai food a lot',            a:'อาหาร',    w:['หนังสือ','น้ำ','วันนี้']},
+  {p:'คุณ ___ ทำงาน ที่ไหน?',  hint:'Où est-ce que vous travaillez ?',   hintEn:'Where do you work?',                a:'ทำ',       w:['กิน','อ่าน','นอน']},
+  {p:'วันนี้ ___ ดี มาก',       hint:'Le temps est très beau aujourd\'hui',hintEn:'The weather is very nice today',   a:'อากาศ',    w:['คน','น้ำ','อาหาร']},
+  {p:'เขา ชอบ ___ น้ำ',         hint:'Il aime boire de l\'eau',           hintEn:'He likes to drink water',           a:'ดื่ม',     w:['กิน','นอน','อ่าน']},
+  {p:'___ มา วันนี้?',           hint:'Qui est venu aujourd\'hui ?',       hintEn:'Who came today?',                   a:'ใคร',      w:['อะไร','ที่ไหน','เมื่อไหร่']},
+  {p:'คุณ ไม่มา ___ ?',          hint:'Pourquoi vous ne venez pas ?',      hintEn:'Why aren\'t you coming?',           a:'ทำไม',     w:['อะไร','ที่ไหน','เมื่อไหร่']},
+  {p:'คุณ ไม่ ___ หรือ?',        hint:'Tu ne dors pas ?',                  hintEn:'You\'re not sleeping?',             a:'นอน',      w:['กิน','ดื่ม','อ่าน']},
 ];
 
 // Romanisation for fill-quiz words
@@ -7554,7 +8032,9 @@ const _fillRtgs = {
   'เท่าไหร่':'thao-rai','อะไร':'a-rai','ที่ไหน':'thi-nai','เมื่อไหร่':'mua-rai',
   'นอน':'non','อ่าน':'aan','กำลัง':'gam-lang',
   'อากาศ':'aa-gaat','คน':'khon','น้ำ':'nam',
-  'มา':'maa','จะ':'ja','ครับ':'khrap'
+  'มา':'maa','จะ':'ja','ครับ':'khrap',
+  'ชอบ':'chop','พูด':'phut','เรียน':'rian','ทำ':'tham',
+  'ใคร':'khrai','ทำไม':'tham-mai','ร้อน':'ron','ขอ':'kho'
 };
 
 let _fillQs=[], _fillIdx=0, _fillScore=0;
@@ -7613,6 +8093,80 @@ function nextFillQ() {
   document.getElementById('fillQNext').style.display = 'none';
   _renderFillQ();
 }
+
+// ─── QUIZ RÉVISION PERSONNELLE ─────────────────────────────────────────────
+let _revPool = [], _revIdx = 0, _revScore = {ok:0, ko:0}, _revAnswered = false;
+
+function startReviewQuiz() {
+  const favCons = consonants.filter(c => favorites.has(c.id));
+  if(favCons.length < 2) return;
+  _revPool = [...favCons].sort(() => Math.random() - .5);
+  _revIdx = 0; _revScore = {ok:0, ko:0}; _revAnswered = false;
+  document.getElementById('reviewQStart').style.display = 'none';
+  document.getElementById('reviewQScore').style.display = 'none';
+  document.getElementById('reviewQGame').style.display = '';
+  _showRevQ();
+}
+
+function _showRevQ() {
+  _revAnswered = false;
+  const c = _revPool[_revIdx];
+  const fr = currentLang !== 'en';
+  const total = _revPool.length;
+  document.getElementById('reviewQProg').textContent = (_revIdx+1) + ' / ' + total;
+  document.getElementById('reviewQOk').textContent = '✓ ' + _revScore.ok;
+  document.getElementById('reviewQKo').textContent = '✗ ' + _revScore.ko;
+
+  // Question : affiche le caractère
+  const area = document.getElementById('reviewQArea');
+  area.innerHTML = `<div style="font-family:var(--thai-font);font-size:90px;text-align:center;color:var(--gold);line-height:1;margin:10px 0">${c.char}</div>
+    <div style="font-size:13px;color:var(--text3);text-align:center;margin-bottom:18px">${fr?'Quel est le son romanisé ?':'What is the romanized sound?'}</div>`;
+
+  // Options : bonne réponse + 3 distracteurs depuis ALL consonants
+  const distractors = consonants.filter(x => x.id !== c.id && x.rtgs !== c.rtgs)
+    .sort(() => Math.random() - .5).slice(0, 3);
+  const opts = [...distractors, c].sort(() => Math.random() - .5);
+
+  const optsEl = document.getElementById('reviewQOpts');
+  optsEl.innerHTML = opts.map(o => `<button class="qopt" onclick="_answerRevQ(this,'${o.rtgs}','${c.rtgs}')">${o.rtgs}</button>`).join('');
+}
+
+function _answerRevQ(btn, chosen, correct) {
+  if(_revAnswered) return;
+  _revAnswered = true;
+  const isOk = chosen === correct;
+  if(isOk) { _revScore.ok++; btn.classList.add('correct'); }
+  else {
+    _revScore.ko++;
+    btn.classList.add('wrong');
+    document.querySelectorAll('#reviewQOpts .qopt').forEach(b => { if(b.textContent===correct) b.classList.add('correct'); });
+  }
+  document.getElementById('reviewQOk').textContent = '✓ ' + _revScore.ok;
+  document.getElementById('reviewQKo').textContent = '✗ ' + _revScore.ko;
+  setTimeout(() => {
+    _revIdx++;
+    if(_revIdx >= _revPool.length) _showRevScore();
+    else _showRevQ();
+  }, isOk ? 700 : 1200);
+}
+
+function _showRevScore() {
+  document.getElementById('reviewQGame').style.display = 'none';
+  document.getElementById('reviewQScore').style.display = '';
+  document.getElementById('reviewQScoreOk').textContent = _revScore.ok;
+  document.getElementById('reviewQScoreKo').textContent = _revScore.ko;
+  const fr = currentLang !== 'en';
+  const total = _revPool.length;
+  const pct = Math.round(_revScore.ok / total * 100);
+  const msg = pct === 100 ? (fr?'Parfait ! Tu maîtrises ces consonnes !':'Perfect! You master these consonants!') :
+              pct >= 70  ? (fr?'Bien joué ! Encore un peu de pratique.':'Well done! A bit more practice.') :
+              pct >= 40  ? (fr?'Continue, tu progresses !':'Keep going, you\'re improving!') :
+                           (fr?'Ces consonnes méritent plus d\'entraînement.':'These consonants need more practice.');
+  document.getElementById('reviewQScoreMsg').textContent = msg;
+  addXP(5 + _revScore.ok * 2);
+  _saveQuizHistory(_revScore.ok, 'review');
+}
+// ───────────────────────────────────────────────────────────────────────────
 
 function _showFillScore() {
   document.getElementById('fillQGame').style.display = 'none';
@@ -7953,6 +8507,23 @@ function clearTraceCanvas() {
   <div class="bt-icon" id="btIcon">🏅</div>
   <div class="bt-name" id="btName"></div>
   <div class="bt-xp"  id="btXp">+0 XP</div>
+</div>
+
+<!-- ONBOARDING MODAL -->
+<div id="onboardOverlay" class="onboard-overlay">
+  <div class="onboard-modal">
+    <div class="onboard-thai">ก ข ค</div>
+    <div class="onboard-title" id="onboardTitle">Bienvenue sur Thai ABC</div>
+    <p class="onboard-sub" id="onboardSub">La façon la plus fun d'apprendre l'alphabet thaï et bien plus. Tout est gratuit, sans inscription.</p>
+    <div class="onboard-features">
+      <div class="onboard-feat"><div class="onboard-feat-icon">🔤</div><div class="onboard-feat-txt"><strong id="ob1t">Alphabet complet</strong><span id="ob1d">44 consonnes, voyelles et tons avec écoute audio</span></div></div>
+      <div class="onboard-feat"><div class="onboard-feat-icon">🧩</div><div class="onboard-feat-txt"><strong id="ob2t">Quiz interactifs</strong><span id="ob2d">5 modes de quiz pour mémoriser rapidement</span></div></div>
+      <div class="onboard-feat"><div class="onboard-feat-icon">📖</div><div class="onboard-feat-txt"><strong id="ob3t">Lecture guidée</strong><span id="ob3d">Textes réels avec traduction mot par mot</span></div></div>
+      <div class="onboard-feat"><div class="onboard-feat-icon">🔢</div><div class="onboard-feat-txt"><strong id="ob4t">Chiffres & vocab</strong><span id="ob4d">Nombres jusqu'à 1000, vocabulaire du quotidien</span></div></div>
+    </div>
+    <button class="onboard-btn" id="onboardBtn" onclick="closeOnboard()">Commencer maintenant ✨</button>
+    <button class="onboard-skip" id="onboardSkip" onclick="closeOnboard()">Passer</button>
+  </div>
 </div>
 
 </body>
