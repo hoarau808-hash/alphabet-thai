@@ -48,6 +48,41 @@
   --r: 16px;
 }
 body.trad{--thai-font:'Sarabun',sans-serif}
+body.light{
+  --bg:#F2F5FC;--bg2:#FFFFFF;--bg3:#E5EAF5;
+  --border:rgba(0,0,0,0.08);--border-h:rgba(0,0,0,0.18);
+  --text:#111827;--text2:#4B5563;--text3:#9CA3AF;
+  --gold:#B8780A;--teal:#0A8A66;--rose:#CF1259;--blue:#1D53C5;
+}
+body.light .topnav{background:rgba(242,245,252,0.92)}
+body.light .mobnav{background:rgba(242,245,252,0.97)}
+body.light .nav-tabs{background:rgba(0,0,0,0.04)}
+body.light .ntab:hover{background:rgba(0,0,0,0.06)}
+body.light .btn-o{background:rgba(0,0,0,0.05);border-color:rgba(0,0,0,0.15);color:var(--text)}
+body.light .btn-o:hover{background:rgba(0,0,0,0.09)}
+body.light .qopt{background:var(--bg2);border-color:rgba(0,0,0,0.12)}
+body.light .qopt:hover:not(:disabled){background:rgba(184,120,10,0.08)}
+body.light .font-btn{background:rgba(0,0,0,0.05);border-color:rgba(0,0,0,0.1)}
+body.light .font-btn:hover{background:rgba(0,0,0,0.09)}
+body.light .lang-sw{background:rgba(0,0,0,0.05)}
+body.light .lang-opt:hover:not(.active){background:rgba(0,0,0,0.07);color:var(--text)}
+body.light .notif-btn{background:rgba(0,0,0,0.05);border-color:rgba(0,0,0,0.1)}
+body.light .notif-btn:hover{background:rgba(0,0,0,0.09)}
+body.light .login-btn{background:rgba(184,120,10,0.1);border-color:rgba(184,120,10,0.3)}
+body.light .newsletter-input{background:rgba(0,0,0,0.05);color:var(--text)}
+body.light .auth-close:hover{background:rgba(0,0,0,0.06);color:var(--text)}
+body.light .auth-tabs{background:rgba(0,0,0,0.04)}
+body.light .free-bar{background:rgba(0,0,0,0.03)}
+body.light .free-bar-track{background:rgba(0,0,0,0.08)}
+body.light .srs-btn-hard{background:rgba(207,18,89,0.1)}
+body.light .srs-btn-hard:hover{background:rgba(207,18,89,0.18)}
+body.light .srs-btn-easy{background:rgba(10,138,102,0.1)}
+body.light .srs-btn-easy:hover{background:rgba(10,138,102,0.18)}
+body.light .fchar{color:rgba(184,120,10,0.07)}
+body.light .ccard:hover .cface{box-shadow:0 8px 24px rgba(0,0,0,0.1)}
+body.light .ccard.learned .cface{background:rgba(10,138,102,0.04)}
+body.light .theme-btn{background:rgba(0,0,0,0.05)}
+body.light .theme-btn:hover{background:rgba(0,0,0,0.09)}
 *{margin:0;padding:0;box-sizing:border-box}
 html{scroll-behavior:smooth}
 body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;overflow-x:hidden}
@@ -55,6 +90,8 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-h
 
 /* FONT TOGGLE */
 .font-btn{display:flex;align-items:center;gap:7px;background:rgba(255,255,255,.06);border:1px solid var(--border);border-radius:10px;padding:6px 14px;cursor:pointer;transition:all .2s;white-space:nowrap}
+.theme-btn{background:rgba(255,255,255,.06);border:1px solid var(--border);border-radius:10px;padding:6px 12px;cursor:pointer;font-size:18px;line-height:1;transition:all .2s;color:var(--text2)}
+.theme-btn:hover{background:rgba(255,255,255,.12);color:var(--text)}
 .font-btn:hover{border-color:var(--border-h);background:rgba(255,255,255,.1)}
 .font-btn-preview{font-family:var(--thai-font);font-size:18px;line-height:1;transition:font-family .3s}
 .font-btn-label{font-family:'Inter',sans-serif;font-size:12px;font-weight:600;color:var(--text2);transition:color .2s}
@@ -411,7 +448,7 @@ footer{border-top:1px solid var(--border);padding:40px 24px;text-align:center;co
   .logo .thai{font-size:19px;margin-right:5px}
   .nav-right{gap:6px}
   /* Cacher dict/notif/font du top — ils passent dans le menu ··· */
-  .dict-btn,.notif-btn,.font-btn{display:none}
+  .dict-btn,.notif-btn,.font-btn,.theme-btn{display:none}
   /* Afficher le bouton overflow ··· */
   .mob-overflow-btn{display:flex;align-items:center;justify-content:center;width:36px;height:36px;background:rgba(255,255,255,.07);border:1px solid var(--border);border-radius:9px;color:var(--text2);font-size:18px;cursor:pointer;flex-shrink:0;transition:all .15s;padding:0}
   .mob-overflow-btn:active{background:rgba(255,255,255,.14)}
@@ -1358,6 +1395,7 @@ body.romaji-on .cntq-rtgs.romaji-text{display:block;font-size:20px;font-style:it
       <button class="lang-opt active" id="langFR" onclick="setLang('fr')">FR</button>
       <button class="lang-opt" id="langEN" onclick="setLang('en')">EN</button>
     </div>
+    <button class="theme-btn" id="themeToggle" onclick="toggleTheme()" title="Mode clair / sombre">🌙</button>
     <button class="font-btn" id="fontToggle" onclick="toggleFont()" title="Changer la police">
       <span class="font-btn-preview" id="fbPreview">ก</span>
       <span class="font-btn-sep"></span>
@@ -6091,6 +6129,20 @@ function renderPhrases() {
 }
 
 // ─── FONT TOGGLE ──────────────────────────────────────────────────────────
+function toggleTheme() {
+  const isLight = document.body.classList.toggle('light');
+  document.getElementById('themeToggle').textContent = isLight ? '🌙' : '☀️';
+  localStorage.setItem('thai-theme', isLight ? 'light' : 'dark');
+}
+function loadThemePref() {
+  if(localStorage.getItem('thai-theme') === 'light') {
+    document.body.classList.add('light');
+    const btn = document.getElementById('themeToggle');
+    if(btn) btn.textContent = '🌙';
+    updateMobMenuTheme();
+  }
+}
+
 function toggleFont() {
   const isTrad = document.body.classList.toggle('trad');
   document.getElementById('fbLabel').textContent = isTrad ? T[currentLang].fontTrad : T[currentLang].fontModern;
@@ -6820,6 +6872,7 @@ auth.onAuthStateChanged(async (user) => {
 loadLangPref();
 applyLang();
 loadFontPref();
+loadThemePref();
 spawnFloatChars();
 renderConsonants();
 renderVowels();
@@ -7039,6 +7092,13 @@ function updateMobMenuFont() {
   const isTrad = document.body.classList.contains('trad');
   const lbl = document.getElementById('mobMenuFontLabel');
   if(lbl) lbl.textContent = isTrad ? 'Police Sarabun' : 'Police Noto';
+}
+function updateMobMenuTheme() {
+  const isLight = document.body.classList.contains('light');
+  const lbl  = document.getElementById('mobMenuThemeLabel');
+  const icon = document.getElementById('mobMenuThemeIcon');
+  if(lbl)  lbl.textContent  = isLight ? 'Mode sombre' : 'Mode clair';
+  if(icon) icon.textContent = isLight ? '🌙' : '☀️';
 }
 function mobMenuLogin() {
   closeMobMenu();
@@ -8872,6 +8932,9 @@ function clearTraceCanvas() {
     </button>
     <button class="mob-menu-item" onclick="toggleFont();updateMobMenuFont();closeMobMenu()">
       <span class="mob-menu-icon thai" id="mobMenuFontIcon">ก</span><span id="mobMenuFontLabel">Police Noto</span>
+    </button>
+    <button class="mob-menu-item" onclick="toggleTheme();updateMobMenuTheme();closeMobMenu()">
+      <span class="mob-menu-icon" id="mobMenuThemeIcon">☀️</span><span id="mobMenuThemeLabel">Mode clair</span>
     </button>
   </div>
 </div>
