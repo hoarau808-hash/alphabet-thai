@@ -13,7 +13,7 @@
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="อักษรไทย — Apprendre l'Alphabet Thaï">
 <meta name="twitter:description" content="Quiz interactifs pour apprendre l'alphabet thaï, les tons, le vocabulaire et la grammaire.">
-<link rel="canonical" href="https://hoarau808.github.io/alphabet/">
+<link rel="canonical" href="https://hoarau808-hash.github.io/alphabet-thai/">
 <link rel="manifest" href="manifest.json">
 <meta name="theme-color" content="#ffc300">
 <meta name="apple-mobile-web-app-capable" content="yes">
@@ -1952,7 +1952,7 @@ body.romaji-on .cntq-rtgs.romaji-text{display:block;font-size:20px;font-style:it
           <div class="pg-desc" id="phGateDesc">Vous avez utilisé vos 20 questions gratuites. Passez à Premium pour un accès illimité et le choix des catégories.</div>
           <div class="pg-btns">
             <button class="btn-g" id="phGateLogin" onclick="openAuth()">Se connecter</button>
-            <button class="btn-o" id="phGateReset" onclick="resetPhQuizCount()">Recommencer</button>
+            <button class="btn-g" id="phGatePrem" onclick="goTab('premium')" style="background:var(--gold);color:#000">Voir Premium</button>
           </div>
         </div>
       </div>
@@ -2378,6 +2378,11 @@ body.romaji-on .cntq-rtgs.romaji-text{display:block;font-size:20px;font-style:it
         <p style="color:var(--text2);font-size:14px;margin-bottom:20px;text-align:center" id="srsQDesc">Chaque lettre revient au bon moment pour que tu ne l'oublies jamais.</p>
         <div style="text-align:center;margin-bottom:16px">
           <span class="srs-due-badge" style="font-size:14px;padding:6px 14px" id="srsQDueCount">0 à réviser</span>
+        </div>
+        <div id="srsModeRow" style="display:flex;gap:8px;justify-content:center;margin-bottom:14px;flex-wrap:wrap">
+          <button class="qmode active" id="srsModecons" onclick="setSrsMode('cons',this)">Consonnes</button>
+          <button class="qmode" id="srsModevow" onclick="setSrsMode('vow',this)">Voyelles</button>
+          <button class="qmode" id="srsModevocab" onclick="setSrsMode('vocab',this)">Vocabulaire</button>
         </div>
         <div id="srsQNoneMsg" style="display:none;background:rgba(14,211,160,.08);border:1px solid rgba(14,211,160,.2);border-radius:12px;padding:14px;font-size:13px;color:var(--teal);text-align:center;margin-bottom:16px">
           ✓ <span id="srsNoneText">Aucune révision pour aujourd'hui. Reviens demain !</span>
@@ -4338,8 +4343,8 @@ const T = {
     phFreeLabel:'Questions gratuites utilisées',
     phFreeInfo:(n,max)=>`${n} / ${max} utilisées`,
     phGateTitle:'Limite gratuite atteinte',
-    phGateDesc:(max)=>`Vous avez utilisé vos ${max} questions gratuites. Connectez-vous pour un accès illimité et le choix des catégories.`,
-    phGateLogin:'Se connecter / S\'inscrire', phGateReset:'Recommencer (reset)',
+    phGateDesc:(max)=>`Vous avez utilisé vos ${max} questions gratuites du jour. Passez à Premium pour un accès illimité, toutes les catégories et bien plus.`,
+    phGateLogin:'Se connecter', phGatePrem:'Voir Premium', phGateReset:'Recommencer (reset)',
     phStartBtn:'Démarrer', phNewBtn:'Nouvelle partie',
     nlLabel:'Recevoir les nouveautés du site',
     nlBtn:"S'inscrire",
@@ -4499,8 +4504,8 @@ const T = {
     phFreeLabel:'Free questions used',
     phFreeInfo:(n,max)=>`${n} / ${max} used`,
     phGateTitle:'Free limit reached',
-    phGateDesc:(max)=>`You've used your ${max} free questions. Log in to get unlimited access and category selection.`,
-    phGateLogin:'Log in / Sign up', phGateReset:'Reset (restart)',
+    phGateDesc:(max)=>`You've used your ${max} free questions. Go Premium for unlimited access, all categories and more.`,
+    phGateLogin:'Log in', phGatePrem:'See Premium', phGateReset:'Reset (restart)',
     phStartBtn:'Start', phNewBtn:'New game',
     nlLabel:'Get site updates',
     nlBtn:'Subscribe',
@@ -4699,7 +4704,7 @@ function applyLang() {
   s('phCatLockText', t.phCatLockText);
   s('phStartFreeLabel', t.phFreeLabel); s('phPlayFreeLabel', t.phFreeLabel);
   s('phGateTitle', t.phGateTitle);
-  s('phGateLogin', t.phGateLogin); s('phGateReset', t.phGateReset);
+  s('phGateLogin', t.phGateLogin); s('phGatePrem', t.phGatePrem);
   s('phStartBtn', t.phStartBtn); s('phNewBtn', t.phNewBtn);
   s('phQLblOk', t.quizOk); s('phQLblKo', t.quizKo);
   const gd=document.getElementById('phGateDesc'); if(gd) gd.textContent=t.phGateDesc(FREE_PH_QUIZ_LIMIT);
@@ -4784,6 +4789,7 @@ function loadLangPref() {
 const learned = new Set(JSON.parse(localStorage.getItem('thai-learned')||'[]'));
 const favorites = new Set(JSON.parse(localStorage.getItem('thai-favorites')||'[]'));
 const _srsData = JSON.parse(localStorage.getItem('thai-srs') || '{}');
+let _srsMode = 'cons';
 let filter = 'all';
 let quizMode = 'c2r';
 let quizScore = {ok:0, ko:0};
@@ -6723,6 +6729,11 @@ auth.onAuthStateChanged(async (user) => {
         if(data.premium) {
           premiumBadge.style.display = '';
           document.querySelectorAll('.qcard-lock').forEach(el => el.style.display = 'none');
+          const m3btn = document.getElementById('mode3');
+          if(m3btn) m3btn.classList.remove('ph-locked');
+          const cntListenBtn = document.getElementById('cntBtnListen');
+          if(cntListenBtn) cntListenBtn.classList.remove('ph-locked');
+          renderVocab();
         }
         renderPhCatBtns(); updatePhStartFreeBar();
         if(data.learned && data.learned.length) {
@@ -8432,14 +8443,30 @@ function _showRevScore() {
 // ─── SRS — Répétition espacée (SM-2) ────────────────────────────────────────
 let _srsPool = [], _srsIdx = 0, _srsEasy = 0, _srsHard = 0;
 
+function setSrsMode(mode, btn) {
+  _srsMode = mode;
+  document.querySelectorAll('#srsModeRow .qmode').forEach(b => b.classList.remove('active'));
+  if (btn) btn.classList.add('active');
+  _updateSrsBadge();
+}
+
+function _srsKey(item) {
+  if (_srsMode === 'cons')  return item.id;
+  if (_srsMode === 'vow')   return 'vow_' + item.char;
+  return 'vocab_' + item.thai;
+}
+
 function _srsSave() {
   try { localStorage.setItem('thai-srs', JSON.stringify(_srsData)); } catch(e) {}
 }
 
 function _srsDueCards() {
   const now = new Date(); now.setHours(0,0,0,0);
-  return consonants.filter(c => {
-    const d = _srsData[c.id];
+  const pool = _srsMode === 'cons'  ? consonants
+             : _srsMode === 'vow'   ? vowelPool
+             : vocabData.filter(v => v.level === 'A1');
+  return pool.filter(c => {
+    const d = _srsData[_srsKey(c)];
     if (!d || !d.dueDate) return true;
     return new Date(d.dueDate) <= now;
   });
@@ -8501,8 +8528,20 @@ function _srsShowCard() {
   document.getElementById('srsQProg').textContent = (_srsIdx+1) + ' / ' + _srsPool.length;
   document.getElementById('srsQEasy').textContent = '✓ ' + _srsEasy;
   document.getElementById('srsQHard').textContent  = '✗ ' + _srsHard;
-  document.getElementById('srsQChar').textContent  = c.char;
-  document.getElementById('srsQPrompt').textContent = fr ? 'Quel est le son romanisé de cette consonne ?' : 'What is the romanized sound of this consonant?';
+  let charDisplay, prompt, fontSize;
+  if (_srsMode === 'cons') {
+    charDisplay = c.char; fontSize = '90px';
+    prompt = fr ? 'Quel est le son romanisé de cette consonne ?' : 'What is the romanized sound of this consonant?';
+  } else if (_srsMode === 'vow') {
+    charDisplay = c.char; fontSize = '90px';
+    prompt = fr ? 'Quelle est la prononciation de cette voyelle ?' : 'What is the pronunciation of this vowel?';
+  } else {
+    charDisplay = c.thai; fontSize = '56px';
+    prompt = fr ? 'Quelle est la traduction de ce mot ?' : 'What is the translation of this word?';
+  }
+  const qCharEl = document.getElementById('srsQChar');
+  qCharEl.textContent = charDisplay; qCharEl.style.fontSize = fontSize;
+  document.getElementById('srsQPrompt').textContent = prompt;
   document.getElementById('srsRevealBtn').textContent = fr ? 'Voir la réponse' : 'Show answer';
   document.getElementById('srsQPhase').style.display = '';
   document.getElementById('srsAPhase').style.display = 'none';
@@ -8511,13 +8550,27 @@ function _srsShowCard() {
 function _srsReveal() {
   const c = _srsPool[_srsIdx];
   const fr = currentLang !== 'en';
-  document.getElementById('srsAChar').textContent    = c.char;
-  document.getElementById('srsARtgs').textContent    = c.rtgs;
-  document.getElementById('srsAMeaning').textContent = c.emoji + ' ' + ((!fr && c.en) ? c.en : c.meaning);
-  const clsEl = document.getElementById('srsACls');
-  clsEl.textContent = c.cls; clsEl.className = 'cclslbl ' + c.cls;
-  const nextEasy = _srsNextInterval(c.id, 5);
-  const nextHard = _srsNextInterval(c.id, 2);
+  const key = _srsKey(c);
+  const aCharEl = document.getElementById('srsAChar');
+  const clsEl   = document.getElementById('srsACls');
+  if (_srsMode === 'cons') {
+    aCharEl.textContent = c.char; aCharEl.style.fontSize = '90px';
+    document.getElementById('srsARtgs').textContent    = c.rtgs;
+    document.getElementById('srsAMeaning').textContent = c.emoji + ' ' + ((!fr && c.en) ? c.en : c.meaning);
+    clsEl.textContent = c.cls; clsEl.className = 'cclslbl ' + c.cls; clsEl.style.display = '';
+  } else if (_srsMode === 'vow') {
+    aCharEl.textContent = c.char; aCharEl.style.fontSize = '90px';
+    document.getElementById('srsARtgs').textContent    = c.rtgs;
+    document.getElementById('srsAMeaning').textContent = c.desc + ' · ' + (fr ? c.length : c.length);
+    clsEl.style.display = 'none';
+  } else {
+    aCharEl.textContent = c.thai; aCharEl.style.fontSize = '56px';
+    document.getElementById('srsARtgs').textContent    = c.rtgs;
+    document.getElementById('srsAMeaning').textContent = (!fr && c.en) ? c.en : c.fr;
+    clsEl.style.display = 'none';
+  }
+  const nextEasy = _srsNextInterval(key, 5);
+  const nextHard = _srsNextInterval(key, 2);
   document.getElementById('srsHintEasy').textContent = fr ? 'dans ' + nextEasy + 'j' : 'in ' + nextEasy + 'd';
   document.getElementById('srsHintHard').textContent = fr ? 'dans ' + nextHard + 'j' : 'in ' + nextHard + 'd';
   document.getElementById('srsBtnEasyLbl').textContent = fr ? 'Facile'    : 'Easy';
@@ -8528,7 +8581,7 @@ function _srsReveal() {
 
 function _srsRate(rating) {
   const c = _srsPool[_srsIdx];
-  _srsUpdate(c.id, rating);
+  _srsUpdate(_srsKey(c), rating);
   if (rating >= 3) _srsEasy++; else _srsHard++;
   _srsIdx++;
   if (_srsIdx >= _srsPool.length) _showSrsScore();
@@ -8551,8 +8604,10 @@ function _showSrsScore() {
                               (fr ? 'Encore un effort !' : 'Keep practicing!');
   document.getElementById('srsScoreMsg').textContent = msg;
   const stillDue = _srsDueCards().length;
+  const modeNounFr = _srsMode === 'cons' ? 'consonnes' : _srsMode === 'vow' ? 'voyelles' : 'mots';
+  const modeNounEn = _srsMode === 'cons' ? 'consonants' : _srsMode === 'vow' ? 'vowels' : 'words';
   document.getElementById('srsNextInfo').textContent = stillDue > 0
-    ? (fr ? stillDue + ' consonnes encore à réviser aujourd\'hui.' : stillDue + ' consonants still due today.')
+    ? (fr ? stillDue + ' ' + modeNounFr + ' encore à réviser aujourd\'hui.' : stillDue + ' ' + modeNounEn + ' still due today.')
     : (fr ? 'Plus rien à réviser aujourd\'hui. Bravo !' : 'Nothing left for today. Great job!');
   const replayBtn = document.getElementById('srsReplayBtn');
   replayBtn.textContent = fr ? (_srsHard > 0 ? 'Rejouer les difficiles' : 'Tout revoir') : (_srsHard > 0 ? 'Replay hard ones' : 'Review all');
