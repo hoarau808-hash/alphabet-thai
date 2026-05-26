@@ -1195,7 +1195,7 @@ body.romaji-on .cntq-rtgs.romaji-text{display:block;font-size:20px;font-style:it
 .mic-btn:disabled{opacity:.45;cursor:not-allowed;animation:none}
 @keyframes micPulse{0%,100%{box-shadow:0 0 0 0 rgba(255,92,141,.5)}50%{box-shadow:0 0 0 18px rgba(255,92,141,0)}}
 /* ── PAGE PREMIUM ────────────────────────────────────────────────── */
-.prem-wrap{max-width:700px;margin:0 auto;padding:40px 20px 80px}
+.prem-wrap{max-width:860px;margin:0 auto;padding:40px 20px 80px}
 .prem-hero{text-align:center;margin-bottom:48px}
 .prem-hero-tag{display:inline-block;background:rgba(240,180,41,.12);border:1px solid rgba(240,180,41,.28);color:var(--gold);font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;padding:5px 14px;border-radius:20px;margin-bottom:18px}
 .prem-hero h1{font-size:clamp(26px,5vw,40px);font-weight:800;line-height:1.2;margin-bottom:14px}
@@ -1204,7 +1204,8 @@ body.romaji-on .cntq-rtgs.romaji-text{display:block;font-size:20px;font-style:it
 .prem-cards{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:40px}
 .prem-card{background:var(--bg3);border:1px solid var(--border);border-radius:20px;padding:28px 24px;display:flex;flex-direction:column;gap:0;position:relative;transition:all .3s}
 .prem-card.featured{border-color:rgba(240,180,41,.45);background:linear-gradient(160deg,rgba(240,180,41,.07) 0%,var(--bg3) 60%)}
-.prem-card.featured::before{content:'⭐ Recommandé';position:absolute;top:-13px;left:50%;transform:translateX(-50%);background:var(--gold);color:#000;font-size:11px;font-weight:800;padding:4px 14px;border-radius:20px;white-space:nowrap;letter-spacing:.3px}
+.prem-card.featured::before{content:'⭐ Meilleure offre';position:absolute;top:-13px;left:50%;transform:translateX(-50%);background:var(--gold);color:#000;font-size:11px;font-weight:800;padding:4px 14px;border-radius:20px;white-space:nowrap;letter-spacing:.3px}
+.prem-save-badge{display:inline-block;background:rgba(14,211,160,.15);color:var(--teal);border-radius:8px;font-size:11px;font-weight:700;padding:3px 10px;margin-bottom:16px;letter-spacing:.3px}
 .prem-card-name{font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--text2);margin-bottom:10px}
 .prem-card.featured .prem-card-name{color:var(--gold)}
 .prem-price{font-size:36px;font-weight:800;margin-bottom:4px;line-height:1}
@@ -1259,10 +1260,13 @@ body.romaji-on .cntq-rtgs.romaji-text{display:block;font-size:20px;font-style:it
 .prem-compare-table th.col-prem{color:var(--gold)}
 .prem-compare-table tr:hover td{background:rgba(255,255,255,.02)}
 @media(max-width:768px){
-  .prem-cards{grid-template-columns:1fr}
+  .prem-cards{grid-template-columns:1fr 1fr}
   .prem-waitlist{flex-direction:column}
   .prem-waitlist button{width:100%}
   .prem-wrap{padding:28px 16px 100px}
+}
+@media(max-width:520px){
+  .prem-cards{grid-template-columns:1fr}
 }
 @media(max-width:480px){
   .prem-hero h1{font-size:24px}
@@ -1829,8 +1833,8 @@ body.romaji-on .cntq-rtgs.romaji-text{display:block;font-size:20px;font-style:it
       <div class="qcard qcard-srs" id="qcard-srs" onclick="setQuizType('srs',this)">
         <span class="qcard-lock">🔒 Premium</span>
         <div class="qcard-icon">🧠</div>
-        <div class="qcard-title" id="srsCardTitle">Répétition espacée</div>
-        <div class="qcard-desc" id="srsCardDesc">Algorithme Anki · mémorise pour toujours</div>
+        <div class="qcard-title" id="srsCardTitle">Mémorisation progressive</div>
+        <div class="qcard-desc" id="srsCardDesc">Chaque lettre revient au bon moment</div>
         <div class="srs-due-badge" id="srsDueBadge">0 à réviser</div>
       </div>
     </div>
@@ -1867,7 +1871,6 @@ body.romaji-on .cntq-rtgs.romaji-text{display:block;font-size:20px;font-style:it
             <div class="qsi ok"><div class="qsv" id="qCorrect">0</div><div class="qsl" id="qLblOk">Correct</div></div>
             <div class="qsi ko"><div class="qsv" id="qWrong">0</div><div class="qsl" id="qLblKo">Erreur</div></div>
           </div>
-          <button class="romaji-btn" id="romajiBtnCons" onclick="toggleRomaji()">👁 Prononciation</button>
           <div class="qnum" id="qNum">Question 1</div>
           <div id="qCharDisplay" class="qchar"></div>
           <div id="qRtgsDisplay" class="qrtgs" style="display:none"></div>
@@ -2263,7 +2266,6 @@ body.romaji-on .cntq-rtgs.romaji-text{display:block;font-size:20px;font-style:it
 
       <!-- Écran jeu -->
       <div class="quiz-card" id="chronoQGame" style="display:none">
-        <button class="romaji-btn" id="romajiBtnChrono" onclick="toggleRomaji()">👁 Prononciation</button>
         <div class="chrono-timer-wrap">
           <svg width="90" height="90" class="chrono-ring" style="display:block;margin:0 auto 6px">
             <circle class="chrono-ring-bg" cx="45" cy="45" r="40"/>
@@ -2372,8 +2374,8 @@ body.romaji-on .cntq-rtgs.romaji-text{display:block;font-size:20px;font-style:it
       <button class="qcard-back" onclick="showQuizGrid()">← <span id="srsBackLbl">Changer de quiz</span></button>
       <!-- Start -->
       <div class="quiz-card" id="srsQStart">
-        <h2 style="font-size:24px;font-weight:800;margin-bottom:8px;text-align:center" id="srsQTitle">🧠 Répétition espacée</h2>
-        <p style="color:var(--text2);font-size:14px;margin-bottom:20px;text-align:center" id="srsQDesc">Système Anki : chaque consonne revient au bon moment.</p>
+        <h2 style="font-size:24px;font-weight:800;margin-bottom:8px;text-align:center" id="srsQTitle">🧠 Mémorisation progressive</h2>
+        <p style="color:var(--text2);font-size:14px;margin-bottom:20px;text-align:center" id="srsQDesc">Chaque lettre revient au bon moment pour que tu ne l'oublies jamais.</p>
         <div style="text-align:center;margin-bottom:16px">
           <span class="srs-due-badge" style="font-size:14px;padding:6px 14px" id="srsQDueCount">0 à réviser</span>
         </div>
@@ -3583,46 +3585,81 @@ body.romaji-on .cntq-rtgs.romaji-text{display:block;font-size:20px;font-style:it
 
     <!-- Cards -->
     <div class="prem-cards">
-      <!-- Free -->
+
+      <!-- Gratuit -->
       <div class="prem-card">
         <div class="prem-card-name">Gratuit</div>
         <div class="prem-price">0<sup>€</sup></div>
         <div class="prem-price-period">pour toujours</div>
         <div class="prem-divider"></div>
         <ul class="prem-feat-list">
-          <li class="yes"><span class="pfl-icon">✓</span>44 consonnes complètes</li>
-          <li class="yes"><span class="pfl-icon">✓</span>Voyelles &amp; tons</li>
-          <li class="yes"><span class="pfl-icon">✓</span>Leçon de grammaire</li>
-          <li class="yes"><span class="pfl-icon">✓</span>30 phrases A1</li>
-          <li class="yes"><span class="pfl-icon">✓</span>Vocabulaire A1</li>
-          <li class="yes"><span class="pfl-icon">✓</span>Quiz de base (cons., voyelles, tons, chiffres)</li>
+          <li class="yes"><span class="pfl-icon">✓</span>44 consonnes</li>
+          <li class="yes"><span class="pfl-icon">✓</span>Voyelles &amp; tons (basique)</li>
+          <li class="yes"><span class="pfl-icon">✓</span>20 questions de quiz / jour</li>
           <li class="no"><span class="pfl-icon">—</span>Phrases A2 / B1 &amp; situations</li>
-          <li class="no"><span class="pfl-icon">—</span>Vocabulaire A2 / B1</li>
+          <li class="no"><span class="pfl-icon">—</span>Vocabulaire avancé (A2 / B1)</li>
+          <li class="no"><span class="pfl-icon">—</span>Quiz sans limite</li>
           <li class="no"><span class="pfl-icon">—</span>Quiz marathon, chrono, fill-in</li>
-          <li class="no"><span class="pfl-icon">—</span>SRS &amp; révisions intelligentes</li>
+          <li class="no"><span class="pfl-icon">—</span>Mémorisation progressive</li>
+          <li class="no"><span class="pfl-icon">—</span>Statistiques détaillées</li>
         </ul>
-        <button class="prem-card-btn free-btn" onclick="goTab('consonnes')">Continuer gratuitement</button>
+        <button class="prem-card-btn free-btn" onclick="goTab('consonnes')">Rester en gratuit</button>
       </div>
-      <!-- Premium -->
-      <div class="prem-card featured">
-        <div class="prem-card-name">Premium</div>
-        <div class="prem-price"><sup>€</sup>4<sup style="font-size:13px;font-weight:600">,99</sup></div>
+
+      <!-- Mensuel -->
+      <div class="prem-card">
+        <div class="prem-card-name">Premium Mensuel</div>
+        <div class="prem-price"><sup>€</sup>7<sup style="font-size:13px;font-weight:600">,99</sup></div>
         <div class="prem-price-period">/ mois · bientôt disponible</div>
         <div class="prem-divider"></div>
         <ul class="prem-feat-list">
           <li class="yes"><span class="pfl-icon">✓</span>Tout le contenu gratuit</li>
           <li class="yes"><span class="pfl-icon">✓</span>Toutes les phrases (A1 → B1)</li>
-          <li class="yes"><span class="pfl-icon">✓</span>Situations pratiques complètes</li>
-          <li class="yes"><span class="pfl-icon">✓</span>Vocabulaire A1, A2 &amp; B1</li>
-          <li class="yes"><span class="pfl-icon">✓</span>Quiz marathon &amp; chrono</li>
-          <li class="yes"><span class="pfl-icon">✓</span>Quiz fill-in (compléter)</li>
-          <li class="yes"><span class="pfl-icon">✓</span>SRS — révisions espacées</li>
+          <li class="yes"><span class="pfl-icon">✓</span>Vocabulaire A2 &amp; B1</li>
+          <li class="yes"><span class="pfl-icon">✓</span>Quiz marathon, chrono, fill-in</li>
+          <li class="yes"><span class="pfl-icon">✓</span>Mémorisation progressive</li>
           <li class="yes"><span class="pfl-icon">✓</span>Statistiques avancées</li>
           <li class="yes"><span class="pfl-icon">✓</span>Sans publicité</li>
-          <li class="yes"><span class="pfl-icon">✓</span>Nouvelles fonctionnalités en avant-première</li>
         </ul>
         <button class="prem-card-btn gold-btn" onclick="_scrollToPremWaitlist()">Rejoindre la liste d'attente</button>
       </div>
+
+      <!-- Annuel PROMO (featured) -->
+      <div class="prem-card featured">
+        <div class="prem-card-name">Premium Annuel</div>
+        <div class="prem-price"><sup>€</sup>39<sup style="font-size:13px;font-weight:600">,99</sup></div>
+        <div class="prem-price-period">/ an · soit <strong>3,33€/mois</strong> · bientôt disponible</div>
+        <div class="prem-save-badge">✦ Économisez 58% vs mensuel</div>
+        <div class="prem-divider"></div>
+        <ul class="prem-feat-list">
+          <li class="yes"><span class="pfl-icon">✓</span>Tout le contenu gratuit</li>
+          <li class="yes"><span class="pfl-icon">✓</span>Toutes les phrases (A1 → B1)</li>
+          <li class="yes"><span class="pfl-icon">✓</span>Vocabulaire A2 &amp; B1</li>
+          <li class="yes"><span class="pfl-icon">✓</span>Quiz marathon, chrono, fill-in</li>
+          <li class="yes"><span class="pfl-icon">✓</span>Mémorisation progressive</li>
+          <li class="yes"><span class="pfl-icon">✓</span>Statistiques avancées</li>
+          <li class="yes"><span class="pfl-icon">✓</span>Sans publicité</li>
+        </ul>
+        <button class="prem-card-btn gold-btn" onclick="_scrollToPremWaitlist()">Rejoindre la liste d'attente</button>
+      </div>
+
+      <!-- À vie -->
+      <div class="prem-card">
+        <div class="prem-card-name">À vie</div>
+        <div class="prem-price"><sup>€</sup>79<sup style="font-size:13px;font-weight:600">,99</sup></div>
+        <div class="prem-price-period">paiement unique · bientôt disponible</div>
+        <div class="prem-divider"></div>
+        <ul class="prem-feat-list">
+          <li class="yes"><span class="pfl-icon">✓</span>Tout le contenu Premium</li>
+          <li class="yes"><span class="pfl-icon">✓</span>Accès illimité pour toujours</li>
+          <li class="yes"><span class="pfl-icon">✓</span>Toutes les futures mises à jour</li>
+          <li class="yes"><span class="pfl-icon">✓</span>Sans abonnement ni renouvellement</li>
+          <li class="yes"><span class="pfl-icon">✓</span>Statistiques avancées</li>
+          <li class="yes"><span class="pfl-icon">✓</span>Sans publicité</li>
+        </ul>
+        <button class="prem-card-btn gold-btn" onclick="_scrollToPremWaitlist()">Rejoindre la liste d'attente</button>
+      </div>
+
     </div>
 
     <!-- Coming soon + waitlist -->
@@ -3661,7 +3698,7 @@ body.romaji-on .cntq-rtgs.romaji-text{display:block;font-size:20px;font-style:it
           <tr><td>Quiz marathon (50 questions)</td><td><span class="chk-no">—</span></td><td><span class="chk-yes">✓</span></td></tr>
           <tr><td>Quiz chrono</td><td><span class="chk-no">—</span></td><td><span class="chk-yes">✓</span></td></tr>
           <tr><td>Quiz fill-in (compléter)</td><td><span class="chk-no">—</span></td><td><span class="chk-yes">✓</span></td></tr>
-          <tr><td>Révisions SRS</td><td><span class="chk-no">—</span></td><td><span class="chk-yes">✓</span></td></tr>
+          <tr><td>Mémorisation progressive</td><td><span class="chk-no">—</span></td><td><span class="chk-yes">✓</span></td></tr>
           <tr><td>Statistiques avancées</td><td><span class="chk-no">—</span></td><td><span class="chk-yes">✓</span></td></tr>
           <tr><td>Sans publicité</td><td><span class="chk-no">—</span></td><td><span class="chk-yes">✓</span></td></tr>
         </tbody>
@@ -3677,15 +3714,15 @@ body.romaji-on .cntq-rtgs.romaji-text{display:block;font-size:20px;font-style:it
       </div>
       <div class="prem-faq-item" onclick="toggleFaq(this)">
         <button class="prem-faq-q">Quand le paiement Premium sera-t-il disponible ? <span class="faq-arrow">▼</span></button>
-        <div class="prem-faq-a"><p>Le lancement est prévu prochainement. Inscris-toi à la liste d'attente pour être notifié en premier et obtenir un tarif de lancement exclusif.</p></div>
+        <div class="prem-faq-a"><p>Le lancement est prévu prochainement. Inscris-toi à la liste d'attente pour être notifié en premier.</p></div>
       </div>
       <div class="prem-faq-item" onclick="toggleFaq(this)">
         <button class="prem-faq-q">Puis-je annuler à tout moment ? <span class="faq-arrow">▼</span></button>
-        <div class="prem-faq-a"><p>Oui. L'abonnement Premium est mensuel et se résilie à tout moment en un clic, sans engagement ni frais cachés.</p></div>
+        <div class="prem-faq-a"><p>Oui. L'abonnement mensuel (7,99€/mois) et annuel (39,99€/an) se résilient à tout moment en un clic, sans engagement ni frais cachés. L'offre À vie est un paiement unique sans renouvellement.</p></div>
       </div>
       <div class="prem-faq-item" onclick="toggleFaq(this)">
-        <button class="prem-faq-q">Y aura-t-il un abonnement annuel ? <span class="faq-arrow">▼</span></button>
-        <div class="prem-faq-a"><p>Oui, un abonnement annuel avec réduction est prévu. Les membres de la liste d'attente bénéficieront d'un tarif préférentiel au lancement.</p></div>
+        <button class="prem-faq-q">Quelle est la différence entre Mensuel, Annuel et À vie ? <span class="faq-arrow">▼</span></button>
+        <div class="prem-faq-a"><p>Les fonctionnalités sont identiques dans les trois formules. L'annuel à 39,99€/an revient à 3,33€/mois — soit 58% moins cher que le mensuel. L'offre À vie à 79,99€ est un paiement unique qui inclut toutes les futures mises à jour.</p></div>
       </div>
     </div>
 
@@ -5373,7 +5410,7 @@ function nextQuestion() {
   cd.style.display='none'; rd.style.display='none'; sd.style.display='none';
 
   if(quizMode==='c2r') {
-    cd.innerHTML = correct.char + '<div class="romaji-text">' + correct.rtgs + ' · ' + correct.nr + '</div>';
+    cd.innerHTML = correct.char;
     cd.style.display='block';
     document.getElementById('qPrompt').textContent = T[currentLang].quizPC2R;
     document.getElementById('qOpts').innerHTML = opts.map(o=>
@@ -5384,14 +5421,14 @@ function nextQuestion() {
     rd.textContent = correct.rtgs; rd.style.display='block';
     document.getElementById('qPrompt').textContent = T[currentLang].quizPR2C;
     document.getElementById('qOpts').innerHTML = opts.map(o=>
-      `<button class="qopt qopt-thai" data-val="${o.char}" onclick="answerQuiz(this,'${o.char}','${correct.char}')">${o.char}<span class="romaji-text">${o.rtgs}</span></button>`
+      `<button class="qopt qopt-thai" data-val="${o.char}" onclick="answerQuiz(this,'${o.char}','${correct.char}')">${o.char}</button>`
     ).join('');
 
   } else {
     sd.style.display='block';
     document.getElementById('qPrompt').textContent = T[currentLang].quizPS2C;
     document.getElementById('qOpts').innerHTML = opts.map(o=>
-      `<button class="qopt qopt-thai" data-val="${o.char}" onclick="answerQuiz(this,'${o.char}','${correct.char}')">${o.char}<span class="romaji-text">${o.rtgs}</span></button>`
+      `<button class="qopt qopt-thai" data-val="${o.char}" onclick="answerQuiz(this,'${o.char}','${correct.char}')">${o.char}</button>`
     ).join('');
     setTimeout(()=>speakThai(correct.name), 400);
   }
@@ -7752,7 +7789,7 @@ function _buildDailyQuestions() {
     const opts = _seededShuffle([correct, ...wrongs], seed + i);
     questions.push({
       type: 'cons',
-      question: `<div class="qchar" style="font-size:52px;font-family:var(--thai-font)">${correct.char}<div class="romaji-text" style="font-size:15px">${correct.rtgs} · ${correct.nr}</div></div>`,
+      question: `<div class="qchar" style="font-size:52px;font-family:var(--thai-font)">${correct.char}</div>`,
       options: opts.map(c => c.rtgs),
       answer: correct.rtgs,
       tag: 'cons'
@@ -7957,7 +7994,7 @@ function _buildMarathonQuestions() {
     const c = cs[i];
     const wrongs = cs.filter(x => x.id !== c.id).slice(0, 3);
     const opts = shuffle([c, ...wrongs]);
-    qs.push({ type:'cons', question:`<div class="qchar" style="font-size:52px;font-family:var(--thai-font)">${c.char}<div class="romaji-text" style="font-size:15px">${c.rtgs} · ${c.nr}</div></div>`, options:opts.map(x=>x.rtgs), answer:c.rtgs, tag:'cons' });
+    qs.push({ type:'cons', question:`<div class="qchar" style="font-size:52px;font-family:var(--thai-font)">${c.char}</div>`, options:opts.map(x=>x.rtgs), answer:c.rtgs, tag:'cons' });
   }
 
   // 5 vocab (thai → fr/en)
@@ -8158,7 +8195,7 @@ function _nextChronoQ() {
   _chronoState.question = { correct, opts };
 
   document.getElementById('chronoQQuestion').innerHTML =
-    `<div class="qchar" style="font-size:56px;font-family:var(--thai-font)">${correct.char}<div class="romaji-text" style="font-size:16px">${correct.rtgs} · ${correct.nr}</div></div>`;
+    `<div class="qchar" style="font-size:56px;font-family:var(--thai-font)">${correct.char}</div>`;
   document.getElementById('chronoQFeedback').textContent = '';
   document.getElementById('chronoQFeedback').className = 'cntq-feedback';
 
