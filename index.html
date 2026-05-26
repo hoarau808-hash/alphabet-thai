@@ -240,6 +240,7 @@ nav.topnav{
 .cface{position:absolute;inset:0;border-radius:var(--r);border:1px solid var(--border);background:var(--bg3);backface-visibility:hidden;display:flex;flex-direction:column;align-items:center;justify-content:center;transition:border-color .25s,box-shadow .25s}
 .ccard:hover .cface{border-color:var(--border-h);box-shadow:0 8px 24px rgba(0,0,0,.35)}
 .cback{transform:rotateY(180deg);justify-content:flex-start;align-items:flex-start;padding:14px}
+.ccard.flipped .cface:not(.cback),.ccard.flipped .cface:not(.cback) *{pointer-events:none}
 .cface.mid{border-left:3px solid var(--mid)}
 .cface.high{border-left:3px solid var(--high)}
 .cface.low{border-left:3px solid var(--low)}
@@ -989,6 +990,13 @@ footer{border-top:1px solid var(--border);padding:40px 24px;text-align:center;co
 .qcard-desc{font-size:11px;color:var(--text3);line-height:1.4}
 .qcard-back{display:inline-flex;align-items:center;gap:6px;background:none;border:1px solid var(--border);border-radius:8px;color:var(--text2);font-size:12px;font-weight:600;padding:7px 14px;cursor:pointer;margin-bottom:20px;transition:all .2s}
 .qcard-back:hover{border-color:var(--border-h);color:var(--text)}
+.qcard-lock{position:absolute;top:8px;right:8px;font-size:10px;background:rgba(240,180,41,.12);border:1px solid rgba(240,180,41,.28);border-radius:5px;padding:2px 6px;color:var(--gold);font-weight:700;letter-spacing:.2px;pointer-events:none;line-height:1.4}
+.ph-locked{opacity:.5;cursor:not-allowed}
+.phrase-prem-banner{background:rgba(240,180,41,.04);border:1px solid rgba(240,180,41,.18);border-radius:12px;padding:24px 20px;text-align:center;margin:16px 0;grid-column:1/-1}
+.phrase-prem-banner .pg-icon{font-size:28px;margin-bottom:8px}
+.phrase-prem-banner .pg-title{font-size:16px;font-weight:700;margin-bottom:6px}
+.phrase-prem-banner .pg-desc{font-size:13px;color:var(--text2);margin-bottom:16px}
+#premiumOverlay{display:none;position:fixed;inset:0;z-index:600;background:rgba(0,0,0,.78);backdrop-filter:blur(8px);align-items:center;justify-content:center;padding:20px}
 @media(max-width:768px){.qgrid{grid-template-columns:repeat(2,1fr);gap:10px}.qcard{padding:18px 10px 14px}.qcard-icon{font-size:30px}.qcard-icon.thai{font-size:28px}.qcard-title{font-size:13px}.qcard-desc{font-size:10px}}
 /* ── BOUTON PLEIN ÉCRAN QUIZ (PC uniquement) ────────────────────── */
 .quiz-wrap{position:relative}
@@ -1184,19 +1192,80 @@ body.romaji-on .cntq-rtgs.romaji-text{display:block;font-size:20px;font-style:it
 .mic-btn.listening{background:var(--rose);color:#fff;animation:micPulse 1.2s infinite}
 .mic-btn:disabled{opacity:.45;cursor:not-allowed;animation:none}
 @keyframes micPulse{0%,100%{box-shadow:0 0 0 0 rgba(255,92,141,.5)}50%{box-shadow:0 0 0 18px rgba(255,92,141,0)}}
-.vocal-char{font-family:'Noto Sans Thai',sans-serif;font-size:110px;line-height:1;color:var(--gold);text-align:center;margin:8px 0}
-.vocal-char.vocal-phrase{font-size:clamp(22px,5vw,36px);line-height:1.4;margin:16px 0;font-family:'Noto Sans Thai',sans-serif}
-.vocal-char.vocal-vow{font-size:80px}
-.vocal-hint{font-size:15px;color:var(--text2);margin-bottom:6px;text-align:center}
-.vocal-meaning{font-size:13px;color:var(--text2);text-align:center;margin-bottom:18px}
-.vocal-mode-wrap{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-bottom:22px}
-.vocal-mode-wrap .qmode{flex:1;min-width:90px;text-align:center;font-size:12px;padding:8px 10px}
-.vocal-status{font-size:14px;min-height:22px;text-align:center;margin-bottom:16px;font-weight:600;transition:color .2s}
-.vocal-status.ok{color:var(--teal)}
-.vocal-status.ko{color:var(--rose)}
-.vocal-status.listening{color:var(--gold)}
-.vocal-result-wrap{display:flex;flex-direction:column;align-items:center;gap:6px;margin-bottom:14px;min-height:54px}
-.vocal-recognized{font-family:'Noto Sans Thai',sans-serif;font-size:22px;color:var(--text);background:rgba(255,255,255,.06);padding:6px 18px;border-radius:8px}
+/* ── PAGE PREMIUM ────────────────────────────────────────────────── */
+.prem-wrap{max-width:700px;margin:0 auto;padding:40px 20px 80px}
+.prem-hero{text-align:center;margin-bottom:48px}
+.prem-hero-tag{display:inline-block;background:rgba(240,180,41,.12);border:1px solid rgba(240,180,41,.28);color:var(--gold);font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;padding:5px 14px;border-radius:20px;margin-bottom:18px}
+.prem-hero h1{font-size:clamp(26px,5vw,40px);font-weight:800;line-height:1.2;margin-bottom:14px}
+.prem-hero h1 span{background:linear-gradient(135deg,var(--gold),var(--teal));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.prem-hero p{font-size:15px;color:var(--text2);max-width:480px;margin:0 auto;line-height:1.6}
+.prem-cards{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:40px}
+.prem-card{background:var(--bg3);border:1px solid var(--border);border-radius:20px;padding:28px 24px;display:flex;flex-direction:column;gap:0;position:relative;transition:all .3s}
+.prem-card.featured{border-color:rgba(240,180,41,.45);background:linear-gradient(160deg,rgba(240,180,41,.07) 0%,var(--bg3) 60%)}
+.prem-card.featured::before{content:'⭐ Recommandé';position:absolute;top:-13px;left:50%;transform:translateX(-50%);background:var(--gold);color:#000;font-size:11px;font-weight:800;padding:4px 14px;border-radius:20px;white-space:nowrap;letter-spacing:.3px}
+.prem-card-name{font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--text2);margin-bottom:10px}
+.prem-card.featured .prem-card-name{color:var(--gold)}
+.prem-price{font-size:36px;font-weight:800;margin-bottom:4px;line-height:1}
+.prem-price sup{font-size:18px;font-weight:700;vertical-align:super;line-height:0}
+.prem-price-period{font-size:12px;color:var(--text2);margin-bottom:20px}
+.prem-divider{height:1px;background:var(--border);margin:0 0 20px}
+.prem-feat-list{list-style:none;padding:0;margin:0 0 24px;flex:1;display:flex;flex-direction:column;gap:10px}
+.prem-feat-list li{display:flex;align-items:flex-start;gap:10px;font-size:13px;color:var(--text2);line-height:1.4}
+.prem-feat-list li .pfl-icon{width:18px;height:18px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;flex-shrink:0;margin-top:1px}
+.prem-feat-list li.yes .pfl-icon{background:rgba(14,211,160,.15);color:var(--teal)}
+.prem-feat-list li.no .pfl-icon{background:rgba(255,255,255,.05);color:var(--text3)}
+.prem-feat-list li.yes{color:var(--text)}
+.prem-card-btn{width:100%;padding:14px;border-radius:12px;font-family:'Inter',sans-serif;font-size:14px;font-weight:700;cursor:pointer;border:none;transition:all .2s;text-align:center}
+.prem-card-btn.free-btn{background:rgba(255,255,255,.07);color:var(--text);border:1px solid var(--border-h)}
+.prem-card-btn.free-btn:hover{background:rgba(255,255,255,.12)}
+.prem-card-btn.gold-btn{background:var(--gold);color:#000}
+.prem-card-btn.gold-btn:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(240,180,41,.4)}
+.prem-coming-box{background:rgba(14,211,160,.05);border:1px solid rgba(14,211,160,.18);border-radius:16px;padding:28px 24px;text-align:center;margin-bottom:40px}
+.prem-coming-icon{font-size:32px;margin-bottom:10px}
+.prem-coming-title{font-size:18px;font-weight:700;margin-bottom:8px}
+.prem-coming-desc{font-size:14px;color:var(--text2);margin-bottom:20px;line-height:1.6}
+.prem-waitlist{display:flex;gap:10px;max-width:400px;margin:0 auto}
+.prem-waitlist input{flex:1;padding:12px 16px;background:rgba(255,255,255,.06);border:1px solid var(--border-h);border-radius:10px;color:var(--text);font-family:'Inter',sans-serif;font-size:14px;outline:none;transition:border-color .2s}
+.prem-waitlist input:focus{border-color:var(--teal)}
+.prem-waitlist input::placeholder{color:var(--text3)}
+.prem-waitlist button{padding:12px 20px;background:var(--teal);color:#000;border:none;border-radius:10px;font-family:'Inter',sans-serif;font-size:14px;font-weight:700;cursor:pointer;transition:all .2s;white-space:nowrap;flex-shrink:0}
+.prem-waitlist button:hover{transform:translateY(-2px);box-shadow:0 6px 20px rgba(14,211,160,.35)}
+.prem-waitlist-msg{font-size:13px;margin-top:10px;min-height:20px}
+.prem-waitlist-msg.ok{color:var(--teal)}
+.prem-waitlist-msg.err{color:var(--rose)}
+.prem-faq{margin-bottom:40px}
+.prem-faq-title{font-size:18px;font-weight:700;margin-bottom:18px;text-align:center}
+.prem-faq-item{border:1px solid var(--border);border-radius:12px;overflow:hidden;margin-bottom:8px}
+.prem-faq-q{width:100%;background:var(--bg3);border:none;color:var(--text);font-family:'Inter',sans-serif;font-size:14px;font-weight:600;padding:16px 20px;text-align:left;cursor:pointer;display:flex;justify-content:space-between;align-items:center;gap:12px;transition:background .2s}
+.prem-faq-q:hover{background:rgba(255,255,255,.04)}
+.prem-faq-q .faq-arrow{font-size:12px;color:var(--text3);transition:transform .25s;flex-shrink:0}
+.prem-faq-item.open .faq-arrow{transform:rotate(180deg)}
+.prem-faq-a{max-height:0;overflow:hidden;transition:max-height .3s ease,padding .3s ease;background:var(--bg2)}
+.prem-faq-item.open .prem-faq-a{max-height:200px}
+.prem-faq-a p{padding:14px 20px;font-size:13px;color:var(--text2);line-height:1.6;margin:0}
+.prem-compare{margin-bottom:40px}
+.prem-compare-title{font-size:18px;font-weight:700;margin-bottom:18px;text-align:center}
+.prem-compare-table{width:100%;border-collapse:collapse}
+.prem-compare-table th{padding:12px 16px;font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--text3);text-align:left;border-bottom:1px solid var(--border)}
+.prem-compare-table th:not(:first-child){text-align:center}
+.prem-compare-table td{padding:12px 16px;font-size:13px;border-bottom:1px solid rgba(255,255,255,.04)}
+.prem-compare-table td:not(:first-child){text-align:center}
+.prem-compare-table tr:last-child td{border-bottom:none}
+.prem-compare-table .chk-yes{color:var(--teal);font-size:16px}
+.prem-compare-table .chk-no{color:var(--text3);font-size:16px}
+.prem-compare-table .chk-partial{color:var(--gold);font-size:12px;font-weight:700}
+.prem-compare-table th.col-prem{color:var(--gold)}
+.prem-compare-table tr:hover td{background:rgba(255,255,255,.02)}
+@media(max-width:768px){
+  .prem-cards{grid-template-columns:1fr}
+  .prem-waitlist{flex-direction:column}
+  .prem-waitlist button{width:100%}
+  .prem-wrap{padding:28px 16px 100px}
+}
+@media(max-width:480px){
+  .prem-hero h1{font-size:24px}
+  .prem-compare-table th,.prem-compare-table td{padding:10px 10px;font-size:12px}
+}
 /* ── TRACÉ DES LETTRES ───────────────────────────────────────────── */
 .trace-overlay{position:fixed;inset:0;background:rgba(0,0,0,.82);backdrop-filter:blur(12px);z-index:400;display:none;align-items:center;justify-content:center}
 .trace-overlay.open{display:flex}
@@ -1265,6 +1334,7 @@ body.romaji-on .cntq-rtgs.romaji-text{display:block;font-size:20px;font-style:it
     <button class="ntab" id="ntab-voyelles" onclick="goTab('voyelles',this)">Voyelles</button>
     <button class="ntab" id="ntab-tons" onclick="goTab('tons',this)">Tons</button>
     <button class="ntab" id="ntab-quiz" onclick="goTab('quiz',this)">Quiz</button>
+    <button class="ntab" id="ntab-premium" onclick="goTab('premium',this)" style="color:var(--gold)">⭐ Premium</button>
   </div>
   <div class="nav-right">
     <div id="userBadge" class="user-badge" style="display:none">
@@ -1348,8 +1418,8 @@ body.romaji-on .cntq-rtgs.romaji-text{display:block;font-size:20px;font-style:it
       </div>
       <div class="feat-card" onclick="goTab('quiz')">
         <div class="feat-icon">🧩</div>
-        <div class="feat-name" id="feat2t">11 modes de quiz</div>
-        <p class="feat-desc" id="feat2d">Consonnes, voyelles, tons, vocabulaire, phrases, chrono, vocal… Un quiz pour chaque façon d'apprendre.</p>
+        <div class="feat-name" id="feat2t">10 modes de quiz</div>
+        <p class="feat-desc" id="feat2d">Consonnes, voyelles, tons, vocabulaire, phrases, chrono… Un quiz pour chaque façon d'apprendre.</p>
       </div>
       <div class="feat-card" onclick="goTab('apprentissage')">
         <div class="feat-icon">📝</div>
@@ -1365,11 +1435,6 @@ body.romaji-on .cntq-rtgs.romaji-text{display:block;font-size:20px;font-style:it
         <div class="feat-icon">🔢</div>
         <div class="feat-name" id="feat5t">Chiffres jusqu'à 1000</div>
         <p class="feat-desc" id="feat5d">1 à 100, centaines et milliers — avec audio pour entendre la prononciation correcte.</p>
-      </div>
-      <div class="feat-card" onclick="goTab('quiz')">
-        <div class="feat-icon">🎤</div>
-        <div class="feat-name" id="feat6t">Quiz vocal</div>
-        <p class="feat-desc" id="feat6d">Prononce les consonnes, voyelles et phrases à voix haute. Le micro vérifie ta prononciation.</p>
       </div>
     </div>
   </section>
@@ -1702,6 +1767,7 @@ body.romaji-on .cntq-rtgs.romaji-text{display:block;font-size:20px;font-style:it
         <div class="qcard-desc" id="qcardDescCons">Identifie les 44 consonnes thaïes</div>
       </div>
       <div class="qcard" id="qcard-phrases" onclick="setQuizType('phrases',this)">
+        <span class="qcard-lock" id="phrasesLockBadge">🔒 Limité</span>
         <div class="qcard-icon">💬</div>
         <div class="qcard-title" id="qtype-phrases">Phrases</div>
         <div class="qcard-desc" id="qcardDescPhrases">Traduis des phrases courantes</div>
@@ -1721,12 +1787,8 @@ body.romaji-on .cntq-rtgs.romaji-text{display:block;font-size:20px;font-style:it
         <div class="qcard-title" id="qtype-tone">Tons</div>
         <div class="qcard-desc" id="qcardDescTone">Distingue les 5 tons du thaï</div>
       </div>
-      <div class="qcard" id="qcard-vocal" onclick="setQuizType('vocal',this)">
-        <div class="qcard-icon">🎤</div>
-        <div class="qcard-title" id="qtypeVocalLbl">Vocal</div>
-        <div class="qcard-desc" id="qcardDescVocal">Prononce les consonnes à voix haute</div>
-      </div>
       <div class="qcard" id="qcard-vocab" onclick="setQuizType('vocab',this)">
+        <span class="qcard-lock">🔒 Premium</span>
         <div class="qcard-icon">📚</div>
         <div class="qcard-title" id="qtypeVocabLbl">Vocabulaire</div>
         <div class="qcard-desc" id="qcardDescVocab">Teste ton vocabulaire</div>
@@ -1738,27 +1800,32 @@ body.romaji-on .cntq-rtgs.romaji-text{display:block;font-size:20px;font-style:it
         <span class="qcard-badge" id="dailyBadge" style="display:none"></span>
       </div>
       <div class="qcard qcard-marathon" id="qcard-marathon" onclick="setQuizType('marathon',this)">
+        <span class="qcard-lock">🔒 Premium</span>
         <div class="qcard-icon">🏃</div>
         <div class="qcard-title" id="qtypeMarathonLbl">Quiz Marathon</div>
         <div class="qcard-desc" id="qcardDescMarathon">20 questions mixtes sans pause</div>
       </div>
       <div class="qcard qcard-chrono" id="qcard-chrono" onclick="setQuizType('chrono',this)">
+        <span class="qcard-lock">🔒 Premium</span>
         <div class="qcard-icon">⏱️</div>
         <div class="qcard-title" id="qtypeChronoLbl">Mode Chrono</div>
         <div class="qcard-desc" id="qcardDescChrono">60 secondes · consonnes rapides</div>
       </div>
       <div class="qcard qcard-fill" id="qcard-fill" onclick="setQuizType('fill',this)">
+        <span class="qcard-lock">🔒 Premium</span>
         <div class="qcard-icon">✏️</div>
         <div class="qcard-title" id="fillCardTitleLbl">Mots manquants</div>
         <div class="qcard-desc" id="fillCardDescLbl">10 phrases · complète les blancs · +30 XP</div>
       </div>
       <div class="qcard qcard-review" id="qcard-review" onclick="setQuizType('review',this)">
+        <span class="qcard-lock">🔒 Premium</span>
         <div class="qcard-icon">⭐</div>
         <div class="qcard-title" id="reviewCardTitle">Révision perso</div>
         <div class="qcard-desc" id="reviewCardDesc">Retravaille les consonnes marquées ⭐</div>
         <div class="fav-count-badge" id="reviewFavCount">0 marquées</div>
       </div>
       <div class="qcard qcard-srs" id="qcard-srs" onclick="setQuizType('srs',this)">
+        <span class="qcard-lock">🔒 Premium</span>
         <div class="qcard-icon">🧠</div>
         <div class="qcard-title" id="srsCardTitle">Répétition espacée</div>
         <div class="qcard-desc" id="srsCardDesc">Algorithme Anki · mémorise pour toujours</div>
@@ -2003,48 +2070,6 @@ body.romaji-on .cntq-rtgs.romaji-text{display:block;font-size:20px;font-style:it
       </div>
     </div><!-- /toneQuizWrap -->
 
-    <div id="vocalQuizWrap" style="display:none">
-      <button class="qcard-back" onclick="showQuizGrid()">← <span>Changer de quiz</span></button>
-      <!-- Écran départ -->
-      <div class="quiz-card" id="vocalQStart">
-        <h2 style="font-size:26px;font-weight:800;margin-bottom:6px;text-align:center" id="vocalQTitle">Quiz Vocal</h2>
-        <p style="color:var(--text2);font-size:14px;margin-bottom:18px;text-align:center" id="vocalQDesc">Prononcez à voix haute ce qui est affiché. 10 questions.</p>
-        <div class="vocal-mode-wrap">
-          <button class="qmode active" id="vocalModeCons" onclick="setVocalMode('cons',this)">ก Consonnes</button>
-          <button class="qmode" id="vocalModeVow" onclick="setVocalMode('vow',this)">◌ Voyelles</button>
-          <button class="qmode" id="vocalModePhr" onclick="setVocalMode('phrases',this)">💬 Phrases</button>
-        </div>
-        <div id="vocalNoSR" style="display:none;background:rgba(255,92,141,.1);border:1px solid rgba(255,92,141,.3);border-radius:10px;padding:12px 16px;font-size:13px;color:var(--rose);margin-bottom:20px;text-align:center">⚠️ Votre navigateur ne supporte pas la reconnaissance vocale. Utilisez Chrome.</div>
-        <button class="btn-g" id="vocalStartBtn" onclick="startVocalQuiz()" id="vocalStartBtnEl">Commencer</button>
-      </div>
-      <!-- Écran jeu -->
-      <div class="quiz-card" id="vocalQGame" style="display:none">
-        <div class="qprog" id="vocalQProg" style="margin-bottom:14px;text-align:center;font-size:13px;color:var(--text2)">1 / 10</div>
-        <div class="vocal-char" id="vocalQChar">ก</div>
-        <div class="vocal-hint" id="vocalQHint"></div>
-        <div class="vocal-meaning" id="vocalQMeaning"></div>
-        <div class="vocal-result-wrap">
-          <div class="vocal-status" id="vocalQStatus"></div>
-          <div class="vocal-recognized" id="vocalQRecognized" style="display:none"></div>
-        </div>
-        <div style="display:flex;flex-direction:column;align-items:center;gap:14px">
-          <button class="mic-btn" id="vocalMicBtn" onclick="startVocalListen()">🎤</button>
-          <div style="display:flex;gap:10px">
-            <button class="btn-g" id="vocalNextBtn" style="display:none;min-width:120px" onclick="nextVocalQ()">Suivant →</button>
-            <button class="btn-o" id="vocalSkipBtn" style="min-width:100px;font-size:13px" onclick="skipVocalQ()">Passer</button>
-
-          </div>
-        </div>
-      </div>
-      <!-- Écran score -->
-      <div class="quiz-card" id="vocalQScore" style="display:none">
-        <div class="qscore" style="margin-bottom:12px">
-          <div class="qsi ok"><div class="qsv" id="vocalQScoreVal">0</div><div class="qsl">/ 10</div></div>
-        </div>
-        <div id="vocalQScoreMsg" style="font-size:16px;font-weight:700;margin-bottom:28px;color:var(--text2)"></div>
-        <button class="btn-g" id="vocalReplayBtn" onclick="startVocalQuiz()">Rejouer</button>
-      </div>
-    </div><!-- /vocalQuizWrap -->
 
     <!-- QUIZ VOCABULAIRE -->
     <div id="vocabQuizWrap" style="display:none">
@@ -3543,6 +3568,127 @@ body.romaji-on .cntq-rtgs.romaji-text{display:block;font-size:20px;font-style:it
   </div>
 </div>
 
+<div id="tab-premium" class="tab-content">
+  <div class="prem-wrap">
+
+    <!-- Hero -->
+    <div class="prem-hero">
+      <div class="prem-hero-tag">✦ Abonnement</div>
+      <h1>Débloquez tout<br><span>Thai ABC Premium</span></h1>
+      <p>Tout le contenu gratuit reste gratuit pour toujours. Premium débloque les fonctionnalités avancées pour aller plus loin.</p>
+    </div>
+
+    <!-- Cards -->
+    <div class="prem-cards">
+      <!-- Free -->
+      <div class="prem-card">
+        <div class="prem-card-name">Gratuit</div>
+        <div class="prem-price">0<sup>€</sup></div>
+        <div class="prem-price-period">pour toujours</div>
+        <div class="prem-divider"></div>
+        <ul class="prem-feat-list">
+          <li class="yes"><span class="pfl-icon">✓</span>44 consonnes complètes</li>
+          <li class="yes"><span class="pfl-icon">✓</span>Voyelles &amp; tons</li>
+          <li class="yes"><span class="pfl-icon">✓</span>Leçon de grammaire</li>
+          <li class="yes"><span class="pfl-icon">✓</span>30 phrases A1</li>
+          <li class="yes"><span class="pfl-icon">✓</span>Vocabulaire A1</li>
+          <li class="yes"><span class="pfl-icon">✓</span>Quiz de base (cons., voyelles, tons, chiffres)</li>
+          <li class="no"><span class="pfl-icon">—</span>Phrases A2 / B1 &amp; situations</li>
+          <li class="no"><span class="pfl-icon">—</span>Vocabulaire A2 / B1</li>
+          <li class="no"><span class="pfl-icon">—</span>Quiz marathon, chrono, fill-in</li>
+          <li class="no"><span class="pfl-icon">—</span>SRS &amp; révisions intelligentes</li>
+        </ul>
+        <button class="prem-card-btn free-btn" onclick="goTab('consonnes')">Continuer gratuitement</button>
+      </div>
+      <!-- Premium -->
+      <div class="prem-card featured">
+        <div class="prem-card-name">Premium</div>
+        <div class="prem-price"><sup>€</sup>4<sup style="font-size:13px;font-weight:600">,99</sup></div>
+        <div class="prem-price-period">/ mois · bientôt disponible</div>
+        <div class="prem-divider"></div>
+        <ul class="prem-feat-list">
+          <li class="yes"><span class="pfl-icon">✓</span>Tout le contenu gratuit</li>
+          <li class="yes"><span class="pfl-icon">✓</span>Toutes les phrases (A1 → B1)</li>
+          <li class="yes"><span class="pfl-icon">✓</span>Situations pratiques complètes</li>
+          <li class="yes"><span class="pfl-icon">✓</span>Vocabulaire A1, A2 &amp; B1</li>
+          <li class="yes"><span class="pfl-icon">✓</span>Quiz marathon &amp; chrono</li>
+          <li class="yes"><span class="pfl-icon">✓</span>Quiz fill-in (compléter)</li>
+          <li class="yes"><span class="pfl-icon">✓</span>SRS — révisions espacées</li>
+          <li class="yes"><span class="pfl-icon">✓</span>Statistiques avancées</li>
+          <li class="yes"><span class="pfl-icon">✓</span>Sans publicité</li>
+          <li class="yes"><span class="pfl-icon">✓</span>Nouvelles fonctionnalités en avant-première</li>
+        </ul>
+        <button class="prem-card-btn gold-btn" onclick="_scrollToPremWaitlist()">Rejoindre la liste d'attente</button>
+      </div>
+    </div>
+
+    <!-- Coming soon + waitlist -->
+    <div class="prem-coming-box">
+      <div class="prem-coming-icon">🚀</div>
+      <div class="prem-coming-title">Lancement bientôt</div>
+      <div class="prem-coming-desc">Le paiement Premium arrive prochainement. Laisse ton email pour être notifié en premier et bénéficier d'un tarif de lancement exclusif.</div>
+      <div class="prem-waitlist" id="premWaitlistBox">
+        <input type="email" id="premEmailInput" placeholder="ton@email.com" onkeydown="if(event.key==='Enter')submitPremWaitlist()">
+        <button onclick="submitPremWaitlist()">Me notifier</button>
+      </div>
+      <div class="prem-waitlist-msg" id="premWaitlistMsg"></div>
+    </div>
+
+    <!-- Tableau comparatif -->
+    <div class="prem-compare">
+      <div class="prem-compare-title">Comparatif détaillé</div>
+      <table class="prem-compare-table">
+        <thead>
+          <tr>
+            <th>Fonctionnalité</th>
+            <th>Gratuit</th>
+            <th class="col-prem">Premium</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>44 consonnes + audio</td><td><span class="chk-yes">✓</span></td><td><span class="chk-yes">✓</span></td></tr>
+          <tr><td>Voyelles &amp; tons</td><td><span class="chk-yes">✓</span></td><td><span class="chk-yes">✓</span></td></tr>
+          <tr><td>Leçon de grammaire</td><td><span class="chk-yes">✓</span></td><td><span class="chk-yes">✓</span></td></tr>
+          <tr><td>Phrases A1 (30)</td><td><span class="chk-yes">✓</span></td><td><span class="chk-yes">✓</span></td></tr>
+          <tr><td>Toutes les phrases A1→B1</td><td><span class="chk-no">—</span></td><td><span class="chk-yes">✓</span></td></tr>
+          <tr><td>Situations pratiques</td><td><span class="chk-no">—</span></td><td><span class="chk-yes">✓</span></td></tr>
+          <tr><td>Vocabulaire A1</td><td><span class="chk-yes">✓</span></td><td><span class="chk-yes">✓</span></td></tr>
+          <tr><td>Vocabulaire A2 &amp; B1</td><td><span class="chk-no">—</span></td><td><span class="chk-yes">✓</span></td></tr>
+          <tr><td>Quiz consonnes / voyelles / tons</td><td><span class="chk-yes">✓</span></td><td><span class="chk-yes">✓</span></td></tr>
+          <tr><td>Quiz marathon (50 questions)</td><td><span class="chk-no">—</span></td><td><span class="chk-yes">✓</span></td></tr>
+          <tr><td>Quiz chrono</td><td><span class="chk-no">—</span></td><td><span class="chk-yes">✓</span></td></tr>
+          <tr><td>Quiz fill-in (compléter)</td><td><span class="chk-no">—</span></td><td><span class="chk-yes">✓</span></td></tr>
+          <tr><td>Révisions SRS</td><td><span class="chk-no">—</span></td><td><span class="chk-yes">✓</span></td></tr>
+          <tr><td>Statistiques avancées</td><td><span class="chk-no">—</span></td><td><span class="chk-yes">✓</span></td></tr>
+          <tr><td>Sans publicité</td><td><span class="chk-no">—</span></td><td><span class="chk-yes">✓</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- FAQ -->
+    <div class="prem-faq">
+      <div class="prem-faq-title">Questions fréquentes</div>
+      <div class="prem-faq-item" onclick="toggleFaq(this)">
+        <button class="prem-faq-q">Est-ce que le contenu gratuit restera toujours gratuit ? <span class="faq-arrow">▼</span></button>
+        <div class="prem-faq-a"><p>Oui, absolument. Les 44 consonnes, voyelles, tons, leçon de grammaire et les phrases A1 sont et resteront 100% gratuits, sans limite de temps.</p></div>
+      </div>
+      <div class="prem-faq-item" onclick="toggleFaq(this)">
+        <button class="prem-faq-q">Quand le paiement Premium sera-t-il disponible ? <span class="faq-arrow">▼</span></button>
+        <div class="prem-faq-a"><p>Le lancement est prévu prochainement. Inscris-toi à la liste d'attente pour être notifié en premier et obtenir un tarif de lancement exclusif.</p></div>
+      </div>
+      <div class="prem-faq-item" onclick="toggleFaq(this)">
+        <button class="prem-faq-q">Puis-je annuler à tout moment ? <span class="faq-arrow">▼</span></button>
+        <div class="prem-faq-a"><p>Oui. L'abonnement Premium est mensuel et se résilie à tout moment en un clic, sans engagement ni frais cachés.</p></div>
+      </div>
+      <div class="prem-faq-item" onclick="toggleFaq(this)">
+        <button class="prem-faq-q">Y aura-t-il un abonnement annuel ? <span class="faq-arrow">▼</span></button>
+        <div class="prem-faq-a"><p>Oui, un abonnement annuel avec réduction est prévu. Les membres de la liste d'attente bénéficieront d'un tarif préférentiel au lancement.</p></div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
 <footer>
   <div class="thai" style="font-size:28px;margin-bottom:8px">ขอบคุณ</div>
   <div><span id="footerTxt">Merci d'apprendre le thaï —</span> <span style="color:var(--gold)">ยิ่งเรียน ยิ่งรู้</span> <span id="footerQuote">« Plus on apprend, plus on sait »</span></div>
@@ -3577,6 +3723,10 @@ body.romaji-on .cntq-rtgs.romaji-text{display:block;font-size:20px;font-style:it
   <button class="mtab" onclick="goTab('quiz',this)">
     <span class="mtab-icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1.5" class="ico-fill"/></svg></span>
     <span id="mtab-quiz">Quiz</span>
+  </button>
+  <button class="mtab" onclick="goTab('premium',this)" style="color:var(--gold)">
+    <span class="mtab-icon" style="font-size:22px">⭐</span>
+    <span id="mtab-premium">Premium</span>
   </button>
 </nav>
 
@@ -4035,11 +4185,10 @@ const T = {
     heroTrust:'✓ Gratuit · ✓ Sans inscription · ✓ Mobile friendly',
     featTag:'Tout-en-un', featTitle:'Tout ce qu\'il faut pour apprendre le thaï', featDesc:'Du premier caractère à la première conversation — une seule app, gratuite.',
     feat1t:'Alphabet interactif', feat1d:'44 consonnes avec audio, romanisation et tracé. Retourne les cartes pour apprendre.',
-    feat2t:'11 modes de quiz', feat2d:'Consonnes, voyelles, tons, vocabulaire, phrases, chrono, vocal… Un quiz pour chaque façon d\'apprendre.',
+    feat2t:'10 modes de quiz', feat2d:'Consonnes, voyelles, tons, vocabulaire, phrases, chrono… Un quiz pour chaque façon d\'apprendre.',
     feat3t:'Grammaire claire', feat3d:'Structure SVO, particules de politesse, temps, interrogatifs — expliqués avec des exemples.',
     feat4t:'Lecture guidée', feat4d:'Des textes réels mot par mot, avec traduction et romanisation au clic. Niveaux A1 à B1.',
     feat5t:'Chiffres jusqu\'à 1000', feat5d:'1 à 100, centaines et milliers — avec audio pour entendre la prononciation correcte.',
-    feat6t:'Quiz vocal', feat6d:'Prononce les consonnes, voyelles et phrases. Le micro vérifie ta prononciation.',
     howTag:'Méthode', howTitle:'Apprendre le thaï en 3 étapes',
     how1t:'Explore l\'alphabet', how1d:'Parcours les 44 consonnes, écoute leur son, retourne les cartes pour mémoriser.',
     how2t:'Entraîne-toi avec les quiz', how2d:'Caractère → son, son → caractère, mode chrono, marathon de 50 questions…',
@@ -4056,8 +4205,7 @@ const T = {
     fAll:'Tous', fMid:'Moyenne (9)', fHigh:'Haute (11)', fLow:'Basse (24)',
     srchPh:'Chercher : ก, k, poulet…',
     voiceWarnTxt:'⚠️ Aucune voix thaïe détectée. Pour activer les sons, allez dans <strong>Préférences Système → Accessibilité → Contenu vocal</strong> et téléchargez une voix thaïe (ex. : <strong>Kanya</strong>), puis rechargez la page.',
-    cardIni:'Début', cardFin:'Fin', cardMark:'Marquer appris', cardDone:'✓ Maîtrisé', cardTrace:'✏️ Tracé', vocalQuizTitle:'Quiz Vocal', vocalQuizDesc:'Prononcez à voix haute ce qui est affiché. 10 questions.',
-    vocalModeCons:'ก Consonnes', vocalModeVow:'◌ Voyelles', vocalModePhr:'💬 Phrases', shareBtn:'📤 Partager ma progression', shareTitle:'Partager ma progression', shareDl:'⬇ Télécharger', shareCopy:'📋 Copier le texte', shareNative:'📤 Partager', vocabQTitleTxt:'📚 Quiz Vocabulaire', vocabQDescTxt:'10 questions sur le vocabulaire thaï.', vocabM1T:'Thaï → Traduction', vocabM1D:'Voir le mot thaï, trouver sa traduction', vocabM2T:'Traduction → Thaï', vocabM2D:'Voir la traduction, trouver le mot thaï', vocabQLvl:'Niveau', vocabLvlAll:'Tous', vocabQStart:'Commencer', vocabQNext:'Question suivante →', vocabQReplay:'Rejouer',
+    cardIni:'Début', cardFin:'Fin', cardMark:'Marquer appris', cardDone:'✓ Maîtrisé', cardTrace:'✏️ Tracé', shareBtn:'📤 Partager ma progression', shareTitle:'Partager ma progression', shareDl:'⬇ Télécharger', shareCopy:'📋 Copier le texte', shareNative:'📤 Partager', vocabQTitleTxt:'📚 Quiz Vocabulaire', vocabQDescTxt:'10 questions sur le vocabulaire thaï.', vocabM1T:'Thaï → Traduction', vocabM1D:'Voir le mot thaï, trouver sa traduction', vocabM2T:'Traduction → Thaï', vocabM2D:'Voir la traduction, trouver le mot thaï', vocabQLvl:'Niveau', vocabLvlAll:'Tous', vocabQStart:'Commencer', vocabQNext:'Question suivante →', vocabQReplay:'Rejouer',
     cntSecTag:'Compter en thaï', cntSecTitle:'Les nombres de 1 à 100', cntSecDesc:'Cliquez sur un nombre pour l\'entendre. Apprenez à compter en thaï !',
     cntHundredsTag:'Grands nombres', cntHundredsTitle:'Centaines et milliers', cntHundredsDesc:'En thaï, les centaines se forment avec ร้อย (roi) et les milliers avec พัน (phan).',
     onboardTitle:'Bienvenue sur Thai ABC', onboardSub:'La façon la plus fun d\'apprendre l\'alphabet thaï et bien plus. Tout est gratuit, sans inscription.',
@@ -4198,11 +4346,10 @@ const T = {
     heroTrust:'✓ Free · ✓ No sign-up · ✓ Mobile friendly',
     featTag:'All-in-one', featTitle:'Everything you need to learn Thai', featDesc:'From first character to first conversation — one free app.',
     feat1t:'Interactive alphabet', feat1d:'44 consonants with audio, romanization and stroke animation. Flip cards to memorize.',
-    feat2t:'11 quiz modes', feat2d:'Consonants, vowels, tones, vocab, phrases, speed quiz, vocal… A quiz for every learning style.',
+    feat2t:'10 quiz modes', feat2d:'Consonants, vowels, tones, vocab, phrases, speed quiz… A quiz for every learning style.',
     feat3t:'Clear grammar', feat3d:'SVO structure, politeness particles, tenses, question words — explained simply with examples.',
     feat4t:'Guided reading', feat4d:'Real texts word by word, with translation and romanization on click. Levels A1 to B1.',
     feat5t:'Numbers up to 1000', feat5d:'1 to 100, hundreds and thousands — with audio to hear the correct pronunciation.',
-    feat6t:'Vocal quiz', feat6d:'Pronounce consonants, vowels and phrases out loud. The mic checks your pronunciation.',
     howTag:'Method', howTitle:'Learn Thai in 3 steps',
     how1t:'Explore the alphabet', how1d:'Browse the 44 Thai consonants, listen to their sounds, flip cards to memorize.',
     how2t:'Practice with quizzes', how2d:'Character → sound, sound → character, speed mode, 50-question marathon…',
@@ -4219,8 +4366,7 @@ const T = {
     fAll:'All', fMid:'Middle (9)', fHigh:'High (11)', fLow:'Low (24)',
     srchPh:'Search: ก, k, chicken…',
     voiceWarnTxt:'⚠️ No Thai voice detected. To enable audio, go to <strong>System Preferences → Accessibility → Spoken Content</strong> and download a Thai voice (e.g. <strong>Kanya</strong>), then reload the page.',
-    cardIni:'Initial', cardFin:'Final', cardMark:'Mark as learned', cardDone:'✓ Mastered', cardTrace:'✏️ Trace', vocalQuizTitle:'Vocal Quiz', vocalQuizDesc:'Pronounce out loud what is shown. 10 questions.',
-    vocalModeCons:'ก Consonants', vocalModeVow:'◌ Vowels', vocalModePhr:'💬 Phrases', shareBtn:'📤 Share my progress', shareTitle:'Share my progress', shareDl:'⬇ Download', shareCopy:'📋 Copy text', shareNative:'📤 Share', vocabQTitleTxt:'📚 Vocabulary Quiz', vocabQDescTxt:'10 questions on Thai vocabulary.', vocabM1T:'Thai → Translation', vocabM1D:'See the Thai word, find its translation', vocabM2T:'Translation → Thai', vocabM2D:'See the translation, find the Thai word', vocabQLvl:'Level', vocabLvlAll:'All', vocabQStart:'Start', vocabQNext:'Next question →', vocabQReplay:'Play again',
+    cardIni:'Initial', cardFin:'Final', cardMark:'Mark as learned', cardDone:'✓ Mastered', cardTrace:'✏️ Trace', shareBtn:'📤 Share my progress', shareTitle:'Share my progress', shareDl:'⬇ Download', shareCopy:'📋 Copy text', shareNative:'📤 Share', vocabQTitleTxt:'📚 Vocabulary Quiz', vocabQDescTxt:'10 questions on Thai vocabulary.', vocabM1T:'Thai → Translation', vocabM1D:'See the Thai word, find its translation', vocabM2T:'Translation → Thai', vocabM2D:'See the translation, find the Thai word', vocabQLvl:'Level', vocabLvlAll:'All', vocabQStart:'Start', vocabQNext:'Next question →', vocabQReplay:'Play again',
     cntSecTag:'Count in Thai', cntSecTitle:'Numbers from 1 to 100', cntSecDesc:'Click on a number to hear it. Learn to count in Thai!',
     cntHundredsTag:'Large numbers', cntHundredsTitle:'Hundreds and thousands', cntHundredsDesc:'In Thai, hundreds use ร้อย (roi) and thousands use พัน (phan).',
     onboardTitle:'Welcome to Thai ABC', onboardSub:'The most fun way to learn the Thai alphabet and more. Free, no account needed.',
@@ -4417,7 +4563,7 @@ function applyLang() {
   s('featTag', t.featTag); s('featTitle', t.featTitle); s('featDesc', t.featDesc);
   s('feat1t', t.feat1t); s('feat1d', t.feat1d); s('feat2t', t.feat2t); s('feat2d', t.feat2d);
   s('feat3t', t.feat3t); s('feat3d', t.feat3d); s('feat4t', t.feat4t); s('feat4d', t.feat4d);
-  s('feat5t', t.feat5t); s('feat5d', t.feat5d); s('feat6t', t.feat6t); s('feat6d', t.feat6d);
+  s('feat5t', t.feat5t); s('feat5d', t.feat5d);
   s('howTag', t.howTag); s('howTitle', t.howTitle);
   s('how1t', t.how1t); s('how1d', t.how1d); s('how2t', t.how2t); s('how2d', t.how2d); s('how3t', t.how3t); s('how3d', t.how3d);
   // Classes section
@@ -4507,13 +4653,6 @@ function applyLang() {
   s('phQLblOk', t.quizOk); s('phQLblKo', t.quizKo);
   const gd=document.getElementById('phGateDesc'); if(gd) gd.textContent=t.phGateDesc(FREE_PH_QUIZ_LIMIT);
   renderPhCatBtns(); updatePhStartFreeBar();
-  s('vocalQTitle', t.vocalQuizTitle); s('vocalQDesc', t.vocalQuizDesc);
-  s('vocalModeCons', t.vocalModeCons); s('vocalModeVow', t.vocalModeVow); s('vocalModePhr', t.vocalModePhr);
-  s('vocalStartBtn', currentLang==='en' ? 'Start' : 'Commencer');
-  s('vocalNoSR', currentLang==='en' ? '⚠️ Your browser does not support speech recognition. Please use Chrome.' : '⚠️ Votre navigateur ne supporte pas la reconnaissance vocale. Utilisez Chrome.');
-  s('vocalNextBtn', currentLang==='en' ? 'Next →' : 'Suivant →');
-  s('vocalSkipBtn', currentLang==='en' ? 'Skip' : 'Passer');
-  s('vocalReplayBtn', currentLang==='en' ? 'Play again' : 'Rejouer');
   s('vocabReplayBtn', t.vocabQReplay);
   s('dictTitle', currentLang==='en' ? '🔍 Dictionary' : '🔍 Dictionnaire');
   const di = document.getElementById('dictInput');
@@ -4611,8 +4750,8 @@ function goTab(tab, btnEl) {
   document.querySelectorAll('.mtab').forEach(b=>b.classList.remove('active'));
   if(btnEl) btnEl.classList.add('active');
   // sync both navs
-  const didx = {home:0,lesson:1,phrases:2,vocab:3,consonnes:4,voyelles:5,tons:6,quiz:7}[tab];
-  const midx = {home:0,lesson:1,phrases:2,vocab:3,consonnes:4,voyelles:5,quiz:6}[tab];
+  const didx = {home:0,lesson:1,phrases:2,vocab:3,consonnes:4,voyelles:5,tons:6,quiz:7,premium:8}[tab];
+  const midx = {home:0,lesson:1,phrases:2,vocab:3,consonnes:4,voyelles:5,quiz:6,premium:7}[tab];
   const ntabs = document.querySelectorAll('.ntab');
   const mtabs = document.querySelectorAll('.mtab');
   if(ntabs[didx]!=null) ntabs[didx].classList.add('active');
@@ -4938,9 +5077,11 @@ function initVocab(){
   ];
   levels.forEach(({k,lbl,cls})=>{
     const b=document.createElement('button');
-    b.className='vlbtn'+( k===vocabLevelFilter?' active '+cls:'');
-    b.textContent=lbl;
+    const isLocked = !userPremium && (k==='A2'||k==='B1');
+    b.className='vlbtn'+( k===vocabLevelFilter?' active '+cls:'')+(isLocked?' ph-locked':'');
+    b.textContent=lbl+(isLocked?' 🔒':'');
     b.onclick=()=>{
+      if((k==='A2'||k==='B1') && !userPremium) { showPremiumModal(); return; }
       vocabLevelFilter=k;
       lvlWrap.querySelectorAll('.vlbtn').forEach(x=>x.className='vlbtn');
       b.className='vlbtn active '+cls;
@@ -4969,14 +5110,20 @@ const _catEN={Couleurs:'Colours',Famille:'Family',Nourriture:'Food',Corps:'Body'
 function renderVocab(){
   const q=(document.getElementById('vsrchInput')?.value||'').toLowerCase();
   const lang=currentLang;
+  const fr=lang!=='en';
+  // Pour les non-premium : forcer A1 uniquement
+  const effectiveLvl = !userPremium && vocabLevelFilter!=='A1' && vocabLevelFilter!=='__ALL__' ? 'A1'
+                     : !userPremium && vocabLevelFilter==='__ALL__' ? 'A1'
+                     : vocabLevelFilter;
   const list=vocabData.filter(v=>{
-    const lvlOk=vocabLevelFilter==='__ALL__'||v.level===vocabLevelFilter;
+    const lvlOk=!userPremium ? v.level==='A1' : (effectiveLvl==='__ALL__'||v.level===effectiveLvl);
     const catOk=vocabCatFilter==='__ALL__'||v.cat===vocabCatFilter;
     const srchOk=!q||v.fr.toLowerCase().includes(q)||v.en.toLowerCase().includes(q)||v.thai.includes(q)||v.rtgs.toLowerCase().includes(q);
     return lvlOk&&catOk&&srchOk;
   });
   document.getElementById('vcount').textContent=T[lang].vocCount(list.length);
   const grid=document.getElementById('vocabGrid');
+  const vocabPremBanner = !userPremium ? `<div class="phrase-prem-banner" style="grid-column:1/-1"><div class="pg-icon">🔒</div><div class="pg-title">${fr?'Vocabulaire A2 + B1 Premium':'A2 + B1 Vocabulary — Premium'}</div><div class="pg-desc">${fr?'~119 mots supplémentaires (A2 Élémentaire + B1 Intermédiaire) disponibles avec Premium.':'~119 additional words (A2 Elementary + B1 Intermediate) available with Premium.'}</div><button class="btn-g" style="margin:0 auto" onclick="showPremiumModal()">${fr?'Découvrir Premium':'Discover Premium'}</button></div>` : '';
   grid.innerHTML=list.map(v=>`
     <div class="vcard">
       ${v.color
@@ -4989,7 +5136,7 @@ function renderVocab(){
       </div>
       <span class="vcard-level ${v.level}">${v.level}</span>
       <button class="pspk" onclick="speakThai('${v.thai}',this)">🔊</button>
-    </div>`).join('');
+    </div>`).join('') + vocabPremBanner;
 }
 
 // ─── CONSONANTS ────────────────────────────────────────────────────────────
@@ -5022,7 +5169,7 @@ function cardHTML(c, i) {
   const finD = (c.fin === '—' || c.fin === '-') ? '—' : '-' + c.fin;
   const iniD = (c.ini === '—') ? '—' : c.ini + '-';
   return `
-  <div class="ccard ${c.cls} ${isL?'learned':''} ${isF?'faved':''}" onclick="flipCard(this,${c.id})" style="animation-delay:${i*0.03}s">
+  <div class="ccard ${c.cls} ${isL?'learned':''} ${isF?'faved':''}" data-cid="${c.id}" onclick="flipCard(this,${c.id})" style="animation-delay:${i*0.03}s">
     <div class="ccard-inner">
       <div class="cface ${c.cls}">
         <div class="ldot"></div>
@@ -5063,25 +5210,34 @@ function flipCard(el, id) {
   el.classList.toggle('flipped');
 }
 
-function toggleLearned(e, id) {
-  e.stopPropagation();
+function toggleLearnedById(id) {
   const wasLearned = learned.has(id);
   if(wasLearned) learned.delete(id);
   else learned.add(id);
   localStorage.setItem('thai-learned', JSON.stringify([...learned]));
   saveProgressToCloud();
-  renderConsonants();
+  const card = document.querySelector('#alphGrid [data-cid="'+id+'"]');
+  if(card) {
+    card.classList.toggle('learned', !wasLearned);
+    const lbtn = card.querySelector('.lbtn');
+    if(lbtn) {
+      lbtn.classList.toggle('done', !wasLearned);
+      lbtn.textContent = !wasLearned ? T[currentLang].cardDone : T[currentLang].cardMark;
+    }
+  }
+  updateProgress();
   if(!wasLearned) { addXP(5); checkBadges('letter'); }
 }
+function toggleLearned(e, id) { if(e) e.stopPropagation(); toggleLearnedById(id); }
 
-function toggleFavorite(e, id) {
-  e.stopPropagation();
+function toggleFavoriteById(id) {
   if(favorites.has(id)) favorites.delete(id);
   else favorites.add(id);
   localStorage.setItem('thai-favorites', JSON.stringify([...favorites]));
   renderConsonants();
   _updateReviewBadge();
 }
+function toggleFavorite(e, id) { if(e) e.stopPropagation(); toggleFavoriteById(id); }
 
 function _updateReviewBadge() {
   const n = favorites.size;
@@ -5247,6 +5403,59 @@ function answerQuiz(btn, chosen, correct) {
 
 // ─── PHRASES QUIZ ──────────────────────────────────────────────────────────
 let userPremium = false;
+const _PREMIUM_QUIZ = new Set(['vocab','marathon','chrono','fill','review','srs']);
+const FREE_PHRASE_LISTING = 30;
+
+function showPremiumModal(title, desc) {
+  const el = document.getElementById('premiumOverlay');
+  const fr = currentLang !== 'en';
+  document.getElementById('pmTitle').textContent = title || (fr ? 'Contenu Premium' : 'Premium Content');
+  document.getElementById('pmDesc').textContent  = desc  || (fr ? 'Cette fonctionnalité sera disponible avec l\'abonnement Premium. Bientôt disponible !' : 'This feature will be available with a Premium subscription. Coming soon!');
+  document.getElementById('pmLoginBtn').textContent = fr ? 'Se connecter / S\'inscrire' : 'Log in / Sign up';
+  el.style.display = 'flex';
+}
+function closePremiumModal() {
+  document.getElementById('premiumOverlay').style.display = 'none';
+}
+
+function toggleFaq(item) {
+  item.classList.toggle('open');
+}
+
+function _scrollToPremWaitlist() {
+  const box = document.getElementById('premWaitlistBox');
+  if(box) { box.scrollIntoView({behavior:'smooth',block:'center'}); }
+  const inp = document.getElementById('premEmailInput');
+  if(inp) { setTimeout(()=>inp.focus(),400); }
+}
+
+function submitPremWaitlist() {
+  const inp = document.getElementById('premEmailInput');
+  const msg = document.getElementById('premWaitlistMsg');
+  const email = inp ? inp.value.trim() : '';
+  if(!email || !email.includes('@')) {
+    msg.textContent = 'Adresse email invalide.';
+    msg.className = 'prem-waitlist-msg err';
+    return;
+  }
+  // Save to Firestore waitlist collection
+  db.collection('waitlist').add({ email, ts: firebase.firestore.FieldValue.serverTimestamp(), lang: currentLang })
+    .then(() => {
+      msg.textContent = '✓ Super ! Tu seras notifié(e) dès le lancement.';
+      msg.className = 'prem-waitlist-msg ok';
+      if(inp) inp.value = '';
+    })
+    .catch(() => {
+      // Fallback: save locally
+      const list = JSON.parse(localStorage.getItem('thai-waitlist') || '[]');
+      list.push(email);
+      localStorage.setItem('thai-waitlist', JSON.stringify(list));
+      msg.textContent = '✓ Enregistré ! Tu seras notifié(e) dès le lancement.';
+      msg.className = 'prem-waitlist-msg ok';
+      if(inp) inp.value = '';
+    });
+}
+
 let phQuizMode = 't2f';
 let selectedPhCats = [...new Set(phrases.map(p=>p.cat))];
 let phQuizScore = {ok:0, ko:0};
@@ -5294,7 +5503,7 @@ function toggleRomaji() {
 }
 
 function showQuizGrid() {
-  ['consQuizWrap','phQuizWrap','cntQuizWrap','vowQuizWrap','toneQuizWrap','vocalQuizWrap','vocabQuizWrap','dailyQuizWrap','marathonQuizWrap','chronoQuizWrap','fillQuizWrap','reviewQuizWrap','srsQuizWrap']
+  ['consQuizWrap','phQuizWrap','cntQuizWrap','vowQuizWrap','toneQuizWrap','vocabQuizWrap','dailyQuizWrap','marathonQuizWrap','chronoQuizWrap','fillQuizWrap','reviewQuizWrap','srsQuizWrap']
     .forEach(id => { const el=document.getElementById(id); if(el) el.style.display='none'; });
   document.querySelectorAll('.qcard').forEach(c => c.classList.remove('active'));
   _showRomaji = false;
@@ -5305,12 +5514,13 @@ function showQuizGrid() {
 }
 
 function setQuizType(type, cardEl) {
+  if(_PREMIUM_QUIZ.has(type) && !userPremium) { showPremiumModal(); return; }
   // Activate selected card
   document.querySelectorAll('.qcard').forEach(c => c.classList.remove('active'));
   if(cardEl) cardEl.classList.add('active');
   // Show selected wrap, hide others
   const map = {cons:'consQuizWrap', phrases:'phQuizWrap', cnt:'cntQuizWrap',
-                vow:'vowQuizWrap', tone:'toneQuizWrap', vocal:'vocalQuizWrap', vocab:'vocabQuizWrap',
+                vow:'vowQuizWrap', tone:'toneQuizWrap', vocab:'vocabQuizWrap',
                 daily:'dailyQuizWrap', marathon:'marathonQuizWrap', chrono:'chronoQuizWrap', fill:'fillQuizWrap', review:'reviewQuizWrap', srs:'srsQuizWrap'};
   Object.entries(map).forEach(([k,id]) => {
     const el = document.getElementById(id);
@@ -5337,11 +5547,6 @@ function setQuizType(type, cardEl) {
     document.getElementById('toneQStart').style.display='';
     document.getElementById('toneQGame').style.display='none';
     document.getElementById('toneQScore').style.display='none';
-  } else if(type==='vocal') {
-    document.getElementById('vocalQStart').style.display='';
-    document.getElementById('vocalQGame').style.display='none';
-    document.getElementById('vocalQScore').style.display='none';
-    _vocalCheckSupport();
   } else if(type==='vocab') {
     document.getElementById('vocabQStart').style.display='';
     document.getElementById('vocabQGame').style.display='none';
@@ -5560,6 +5765,7 @@ function resetPhQuizCount() {
 let phraseFilter = 'all';
 let phLevelFilter = '__ALL__';
 function setPhLevel(level, btn) {
+  if((level==='A2'||level==='B1') && !userPremium) { showPremiumModal(); return; }
   phLevelFilter = level;
   document.querySelectorAll('#phLvlBtns .phlvl-btn').forEach(b => b.classList.remove('active'));
   if(btn) btn.classList.add('active');
@@ -5698,6 +5904,7 @@ const situations = [
 ];
 
 function setPhView(view, btn) {
+  if(view==='situations' && !userPremium) { showPremiumModal(); return; }
   document.querySelectorAll('.ph-view-btn').forEach(b=>b.classList.remove('active'));
   if(btn) btn.classList.add('active');
   document.getElementById('phrasesSection').style.display = view==='phrases' ? '' : 'none';
@@ -5752,10 +5959,15 @@ function renderPhrases() {
       {k:'A2', l:t.phLvlA2||'A2'},
       {k:'B1', l:t.phLvlB1||'B1'},
     ];
-    lvlEl.innerHTML = lvls.map(lv=>`<button class="phlvl-btn${phLevelFilter===lv.k?' active':''}" onclick="setPhLevel('${lv.k}',this)">${lv.l}</button>`).join('');
+    lvlEl.innerHTML = lvls.map(lv=>{
+      const locked = !userPremium && (lv.k==='A2'||lv.k==='B1');
+      return `<button class="phlvl-btn${phLevelFilter===lv.k?' active':''}${locked?' ph-locked':''}" onclick="setPhLevel('${lv.k}',this)">${lv.l}${locked?' 🔒':''}</button>`;
+    }).join('');
   }
+  // Pour les non-premium : forcer A1 uniquement
+  const effectiveLevel = !userPremium && (phLevelFilter==='A2'||phLevelFilter==='B1') ? 'A1' : phLevelFilter;
   // Level-filtered pool
-  const pool = phLevelFilter==='__ALL__' ? phrases : phrases.filter(p=>p.level===phLevelFilter);
+  const pool = effectiveLevel==='__ALL__' ? phrases : phrases.filter(p=>p.level===effectiveLevel);
   // Category buttons (from current level pool)
   const cats = [...new Set(pool.map(p=>p.cat))];
   const pcats = document.getElementById('pcats');
@@ -5769,6 +5981,16 @@ function renderPhrases() {
     if(q){ const s=q.toLowerCase(); const tr=p[t.phField]||p.fr; return p.thai.includes(q)||p.rtgs.toLowerCase().includes(s)||tr.toLowerCase().includes(s); }
     return true;
   });
+  // Limite free : 30 phrases A1
+  let premBanner = '';
+  if(!userPremium) {
+    const total = items.length;
+    items = items.slice(0, FREE_PHRASE_LISTING);
+    if(total > FREE_PHRASE_LISTING) {
+      const fr = currentLang !== 'en';
+      premBanner = `<div class="phrase-prem-banner"><div class="pg-icon">🔒</div><div class="pg-title">${fr?'+ '+(total-FREE_PHRASE_LISTING)+' phrases Premium':'+ '+(total-FREE_PHRASE_LISTING)+' Premium phrases'}</div><div class="pg-desc">${fr?'Passez à Premium pour accéder à toutes les phrases, niveaux A2 et B1, et les situations pratiques.':'Go Premium to access all phrases, A2 & B1 levels, and real-life situations.'}</div><button class="btn-g" style="margin:0 auto" onclick="showPremiumModal()">${fr?'Découvrir Premium':'Discover Premium'}</button></div>`;
+    }
+  }
   const count = document.getElementById('phraseCount');
   if(count) count.textContent = t.phCount(items.length);
   const grid = document.getElementById('phraseGrid');
@@ -5784,7 +6006,7 @@ function renderPhrases() {
         <div class="pcard-fr">${p[t.phField]||p.fr}</div>
       </div>
       <button class="pspk" data-phrase="${p.thai}" onclick="speakThai(this.dataset.phrase,this)" title="Listen">🔊</button>
-    </div>`).join('');
+    </div>`).join('') + premBanner;
 }
 
 // ─── FONT TOGGLE ──────────────────────────────────────────────────────────
@@ -6445,7 +6667,10 @@ auth.onAuthStateChanged(async (user) => {
       if(snap.exists) {
         const data = snap.data();
         userPremium = data.premium || false;
-        if(data.premium) premiumBadge.style.display = '';
+        if(data.premium) {
+          premiumBadge.style.display = '';
+          document.querySelectorAll('.qcard-lock').forEach(el => el.style.display = 'none');
+        }
         renderPhCatBtns(); updatePhStartFreeBar();
         if(data.learned && data.learned.length) {
           data.learned.forEach(id => learned.add(id));
@@ -6497,7 +6722,6 @@ const BADGES = [
   {id:'vocab-done', icon:'🗣️', name:'Vocabulaire',        xp:25,  desc:'Terminer un quiz vocab'},
   {id:'vocab-b1',   icon:'🎓', name:'Niveau B1',          xp:75,  desc:'Quiz vocab niveau B1'},
   {id:'explorer',   icon:'🗺️', name:'Explorateur',        xp:20,  desc:'Visiter toutes les sections'},
-  {id:'phonetic',   icon:'🎤', name:'Phonéticien',        xp:30,  desc:'Compléter le quiz vocal'},
 ];
 
 const XP_LEVELS = [
@@ -6627,7 +6851,6 @@ function checkBadges(ctx, data) {
     const lv = data.level||'__ALL__';
     if(lv === 'B1') _tryUnlock('vocab-b1');
   }
-  if(ctx === 'vocal')  _tryUnlock('phonetic');
   if(ctx === 'trace')  _tryUnlock('calligraphe');
   if(ctx === 'tab') {
     _visitedTabs.add(data.tab);
@@ -6704,6 +6927,34 @@ document.addEventListener('click', e => {
     closeMobMenu();
   }
 });
+
+// Fix Safari WebKit 3D hit-testing : détection par coordonnées visuelles (capture phase)
+function _rectHit(x, y, el) {
+  if(!el) return false;
+  const r = el.getBoundingClientRect();
+  return x >= r.left && x <= r.right && y >= r.top && y <= r.bottom;
+}
+document.addEventListener('click', function(e) {
+  const grid = document.getElementById('alphGrid');
+  if(!grid) return;
+  const cards = grid.querySelectorAll('.ccard.flipped');
+  if(!cards.length) return;
+  const x = e.clientX, y = e.clientY;
+  for(const card of cards) {
+    const back = card.querySelector('.cback');
+    if(!back) continue;
+    const id = parseInt(card.dataset.cid);
+    if(_rectHit(x, y, back.querySelector('.lbtn'))) {
+      e.stopPropagation(); toggleLearnedById(id); return;
+    }
+    if(_rectHit(x, y, back.querySelector('.fbtn'))) {
+      e.stopPropagation(); toggleFavoriteById(id); return;
+    }
+    if(_rectHit(x, y, back.querySelector('.tbtn'))) {
+      e.stopPropagation(); openTrace(e, id); return;
+    }
+  }
+}, true);
 // Met à jour le label login dans le menu selon l'état auth
 auth.onAuthStateChanged(user => {
   const lbl = document.getElementById('mobMenuLoginLabel');
@@ -7116,7 +7367,6 @@ function _statsTypeChart(fr){
     {k:'cnt',  l:fr?'Chiffres':'Numbers',    c:'#60A5FA'},
     {k:'vow',  l:fr?'Voyelles':'Vowels',     c:'var(--teal)'},
     {k:'tone', l:fr?'Tons':'Tones',          c:'var(--rose)'},
-    {k:'vocal',l:'Vocal',                    c:'#A78BFA'},
     {k:'vocab',l:'Vocab',                    c:'#34D399'},
   ];
   const max=Math.max(1,...types.map(t=>bt[t.k]||0));
@@ -7293,249 +7543,6 @@ async function nativeShare() {
       files: navigator.canShare && navigator.canShare({ files: [file] }) ? [file] : undefined,
     });
   } catch(e) {}
-}
-
-// ─── QUIZ VOCAL ─────────────────────────────────────────────────────────────
-let vocalPool = [], vocalIdx = 0, vocalScore = 0, vocalRecognizer = null, vocalAnswered = false, vocalTimer = null;
-let vocalMode = 'cons'; // 'cons' | 'vow' | 'phrases'
-
-function setVocalMode(mode, btn) {
-  vocalMode = mode;
-  document.querySelectorAll('.vocal-mode-wrap .qmode').forEach(b => b.classList.remove('active'));
-  if(btn) btn.classList.add('active');
-}
-
-function _vocalCheckSupport() {
-  const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
-  const noSR = document.getElementById('vocalNoSR');
-  const btn  = document.getElementById('vocalStartBtn');
-  if(!SR) { noSR.style.display='block'; btn.disabled=true; }
-  else    { noSR.style.display='none';  btn.disabled=false; }
-}
-
-function startVocalQuiz() {
-  if(vocalMode === 'vow') {
-    const allVow = [...vowels.short, ...vowels.long];
-    vocalPool = shuffle(allVow).slice(0, 10);
-  } else if(vocalMode === 'phrases') {
-    const easy = phrases.filter(p => p.level === 'A1' || p.level === 'A2');
-    vocalPool = shuffle(easy).slice(0, 10);
-  } else {
-    vocalPool = shuffle([...consonants]).slice(0, 10);
-  }
-  vocalIdx = 0; vocalScore = 0;
-  document.getElementById('vocalQStart').style.display = 'none';
-  document.getElementById('vocalQScore').style.display = 'none';
-  document.getElementById('vocalQGame').style.display  = '';
-  _showVocalQ();
-}
-
-function _showVocalQ() {
-  if(vocalTimer) { clearTimeout(vocalTimer); vocalTimer = null; }
-  if(vocalRecognizer) { try{ vocalRecognizer.abort(); }catch(e){} vocalRecognizer = null; }
-  const c = vocalPool[vocalIdx];
-  vocalAnswered = false;
-  const fr = currentLang !== 'en';
-  document.getElementById('vocalQProg').textContent = (vocalIdx+1) + ' / 10';
-
-  const charEl = document.getElementById('vocalQChar');
-  charEl.className = 'vocal-char';
-
-  if(vocalMode === 'vow') {
-    charEl.classList.add('vocal-vow');
-    charEl.textContent = c.char;
-    document.getElementById('vocalQHint').textContent = c.rtgs;
-    document.getElementById('vocalQMeaning').textContent = fr ? c.desc : c.en;
-    const st = document.getElementById('vocalQStatus');
-    st.textContent = fr ? 'Appuyez sur 🎤 et prononcez le son' : 'Press 🎤 and pronounce the sound';
-    st.className = 'vocal-status';
-  } else if(vocalMode === 'phrases') {
-    charEl.classList.add('vocal-phrase');
-    charEl.textContent = c.thai;
-    document.getElementById('vocalQHint').textContent = c.rtgs;
-    document.getElementById('vocalQMeaning').textContent = fr ? c.fr : c.en;
-    const st = document.getElementById('vocalQStatus');
-    st.textContent = fr ? 'Appuyez sur 🎤 et prononcez la phrase' : 'Press 🎤 and pronounce the phrase';
-    st.className = 'vocal-status';
-  } else {
-    charEl.textContent = c.char;
-    const exWord = c.name.split(' ').slice(1).join(' ');
-    document.getElementById('vocalQHint').textContent = '→ ' + exWord + '  (' + c.rtgs + ')';
-    document.getElementById('vocalQMeaning').textContent = c.emoji + ' ' + (!fr && c.en ? c.en : c.meaning);
-    const st = document.getElementById('vocalQStatus');
-    st.textContent = fr ? 'Appuyez sur 🎤 et prononcez le nom' : 'Press 🎤 and pronounce the name';
-    st.className = 'vocal-status';
-  }
-
-  document.getElementById('vocalQRecognized').style.display = 'none';
-  document.getElementById('vocalQRecognized').textContent = '';
-  document.getElementById('vocalNextBtn').style.display = 'none';
-  document.getElementById('vocalSkipBtn').style.display = '';
-  const mic = document.getElementById('vocalMicBtn');
-  mic.classList.remove('listening');
-  mic.disabled = false;
-  mic.textContent = '🎤';
-}
-
-function startVocalListen() {
-  if(vocalAnswered) return;
-  const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
-  if(!SR) return;
-  const mic = document.getElementById('vocalMicBtn');
-  const st  = document.getElementById('vocalQStatus');
-  const fr  = currentLang !== 'en';
-
-  if(vocalRecognizer) { try{ vocalRecognizer.abort(); }catch(e){} }
-  if(vocalTimer) { clearTimeout(vocalTimer); vocalTimer = null; }
-
-  const recog = new SR();
-  vocalRecognizer = recog;
-  recog.lang = 'th-TH';
-  recog.continuous = false;
-  recog.interimResults = false;
-  recog.maxAlternatives = 5;
-
-  mic.classList.add('listening');
-  mic.disabled = true;
-  mic.textContent = '⏹';
-  st.textContent = fr ? '🎙 Écoute en cours...' : '🎙 Listening...';
-  st.className = 'vocal-status listening';
-
-  let gotResult = false;
-
-  recog.onresult = e => {
-    gotResult = true;
-    if(vocalTimer) { clearTimeout(vocalTimer); vocalTimer = null; }
-    let best = '';
-    const alternatives = [];
-    for(let i = 0; i < e.results.length; i++) {
-      for(let j = 0; j < e.results[i].length; j++) {
-        alternatives.push(e.results[i][j].transcript.trim());
-      }
-    }
-    best = alternatives[0] || '';
-    _vocalShowResult(best, alternatives);
-  };
-
-  recog.onerror = ev => {
-    if(gotResult) return;
-    if(vocalTimer) { clearTimeout(vocalTimer); vocalTimer = null; }
-    mic.classList.remove('listening');
-    mic.disabled = false;
-    mic.textContent = '🎤';
-    if(ev.error === 'not-allowed') {
-      st.textContent = fr ? '⚠️ Accès micro refusé — autorisez le micro dans Chrome' : '⚠️ Mic access denied — allow mic in Chrome';
-      st.className = 'vocal-status ko';
-    } else if(ev.error === 'no-speech') {
-      st.textContent = fr ? 'Rien détecté, réessayez' : 'No speech detected, try again';
-      st.className = 'vocal-status ko';
-    } else {
-      st.textContent = fr ? 'Erreur, réessayez' : 'Error, try again';
-      st.className = 'vocal-status ko';
-    }
-  };
-
-  recog.onend = () => {
-    if(gotResult) return;
-    mic.classList.remove('listening');
-    mic.textContent = '🎤';
-    if(!vocalAnswered) mic.disabled = false;
-  };
-
-  recog.start();
-
-  // Timeout 7s — si aucun résultat, débloquer
-  vocalTimer = setTimeout(() => {
-    if(!gotResult && !vocalAnswered) {
-      try{ recog.abort(); }catch(e){}
-      mic.classList.remove('listening');
-      mic.disabled = false;
-      mic.textContent = '🎤';
-      st.textContent = fr ? 'Pas de réponse, réessayez ou passez' : 'No response, retry or skip';
-      st.className = 'vocal-status ko';
-    }
-  }, 7000);
-}
-
-function _vocalShowResult(best, alternatives) {
-  const mic = document.getElementById('vocalMicBtn');
-  const st  = document.getElementById('vocalQStatus');
-  const fr  = currentLang !== 'en';
-  const c   = vocalPool[vocalIdx];
-
-  mic.classList.remove('listening');
-  mic.disabled = true;
-  mic.textContent = '🎤';
-  vocalAnswered = true;
-
-  const rec = document.getElementById('vocalQRecognized');
-  rec.textContent = best || (fr ? '(rien reconnu)' : '(nothing recognized)');
-  rec.style.display = 'block';
-
-  let correct = false;
-  let expectedLabel = '';
-
-  if(vocalMode === 'vow') {
-    correct = alternatives.some(r =>
-      r.includes(c.char.replace('อ','').trim()) || r.includes(c.char) || r.includes(c.rtgs)
-    );
-    expectedLabel = c.char + ' (' + c.rtgs + ')';
-  } else if(vocalMode === 'phrases') {
-    const thaiWords = c.thai.trim().split(/\s+/);
-    correct = alternatives.some(r => {
-      const matchCount = thaiWords.filter(w => w.length > 1 && r.includes(w)).length;
-      return matchCount >= Math.max(1, Math.floor(thaiWords.length * 0.4));
-    });
-    expectedLabel = c.thai;
-  } else {
-    const exWord = c.name.split(' ').slice(1).join(' ');
-    correct = alternatives.some(r =>
-      r.includes(exWord) || r.includes(c.char) ||
-      r.replace(/\s/g,'').includes(exWord.replace(/\s/g,''))
-    );
-    expectedLabel = exWord;
-  }
-
-  if(correct) {
-    vocalScore++;
-    st.textContent = fr ? '✓ Correct !' : '✓ Correct!';
-    st.className = 'vocal-status ok';
-  } else {
-    st.textContent = (fr ? '✗ Attendu : ' : '✗ Expected: ') + expectedLabel;
-    st.className = 'vocal-status ko';
-  }
-  document.getElementById('vocalNextBtn').style.display = '';
-  document.getElementById('vocalSkipBtn').style.display = 'none';
-}
-
-function skipVocalQ() {
-  if(vocalTimer) { clearTimeout(vocalTimer); vocalTimer = null; }
-  if(vocalRecognizer) { try{ vocalRecognizer.abort(); }catch(e){} vocalRecognizer = null; }
-  nextVocalQ();
-}
-
-function nextVocalQ() {
-  vocalIdx++;
-  if(vocalIdx >= 10) _showVocalScore();
-  else _showVocalQ();
-}
-
-function _showVocalScore() {
-  document.getElementById('vocalQGame').style.display  = 'none';
-  document.getElementById('vocalQScore').style.display = '';
-  document.getElementById('vocalQScoreVal').textContent = vocalScore;
-  const fr = currentLang !== 'en';
-  const pct = vocalScore * 10;
-  let msg = '';
-  if(pct===100) msg = fr ? 'Parfait ! Excellente prononciation !' : 'Perfect! Excellent pronunciation!';
-  else if(pct>=70) msg = fr ? 'Bien joué ! Continuez à pratiquer.' : 'Well done! Keep practising.';
-  else if(pct>=40) msg = fr ? 'Bon début, continuez !' : 'Good start, keep going!';
-  else msg = fr ? 'Continuez à vous entraîner !' : 'Keep practising!';
-  document.getElementById('vocalQScoreMsg').textContent = msg;
-  _saveQuizHistory(vocalScore, 'vocal');
-  // XP & badges
-  addXP(10 + vocalScore * 2);
-  checkBadges('vocal');
 }
 
 // ─── QUIZ VOCABULAIRE ──────────────────────────────────────────────────────
@@ -8859,6 +8866,19 @@ function clearTraceCanvas() {
     </div>
     <button class="onboard-btn" id="onboardBtn" onclick="closeOnboard()">Commencer maintenant ✨</button>
     <button class="onboard-skip" id="onboardSkip" onclick="closeOnboard()">Passer</button>
+  </div>
+</div>
+
+<!-- MODAL PREMIUM -->
+<div id="premiumOverlay" onclick="closePremiumModal()">
+  <div class="premium-gate-box" onclick="event.stopPropagation()" style="max-width:380px;width:100%;position:relative">
+    <button onclick="closePremiumModal()" style="position:absolute;top:10px;right:14px;background:none;border:none;color:var(--text2);font-size:22px;cursor:pointer;line-height:1">×</button>
+    <div class="pg-icon">🔒</div>
+    <div class="pg-title" id="pmTitle">Contenu Premium</div>
+    <div class="pg-desc" id="pmDesc">Cette fonctionnalité sera disponible avec l'abonnement Premium. Bientôt disponible !</div>
+    <div class="pg-btns">
+      <button class="btn-g" onclick="openAuth();closePremiumModal()" id="pmLoginBtn">Se connecter / S'inscrire</button>
+    </div>
   </div>
 </div>
 
