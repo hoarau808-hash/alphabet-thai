@@ -1958,8 +1958,8 @@ body.romaji-on .cntq-rtgs.romaji-text{display:block;font-size:20px;font-style:it
       <button class="qcard-back" onclick="showQuizGrid()">← <span>Changer de quiz</span></button>
       <div class="quiz-card" id="cntQStart">
         <div class="qmodes">
-          <button class="qmode active" id="cntBtnListen" onclick="setCntMode('listen',this)">🎧 Écoute</button>
-          <button class="qmode" id="cntBtnWrite" onclick="setCntMode('write',this)">✍️ Traduction</button>
+          <button class="qmode ph-locked" id="cntBtnListen" onclick="setCntMode('listen',this)">🎧 Écoute 🔒</button>
+          <button class="qmode active" id="cntBtnWrite" onclick="setCntMode('write',this)">✍️ Traduction</button>
         </div>
         <p class="cntq-mode-desc" id="cntModeDesc">Écoutez le nombre thaï et choisissez parmi 3 réponses.</p>
         <button class="btn-g" id="cntStartBtn" style="display:block;margin:0 auto" onclick="startCntQuiz()">Commencer</button>
@@ -4260,7 +4260,7 @@ const T = {
     phViewPhrases:'📋 Phrases de base', phViewSit:'🎭 Situations pratiques',
     sitTag:'Conversations', sitTitle:'Situations pratiques',
     sitDesc:'Des dialogues complets pour les situations du quotidien en Thaïlande. Cliquez sur une situation pour dérouler le dialogue.',
-    cntBtnListenLbl:'🎧 Écoute', cntBtnWriteLbl:'✍️ Traduction',
+    cntBtnListenLbl:'🎧 Écoute 🔒', cntBtnWriteLbl:'✍️ Traduction',
     cntModeDescListen:'Écoutez le nombre thaï et choisissez parmi 3 réponses.',
     cntModeDescWrite:'Voyez le nombre en thaï et tapez le chiffre correspondant.',
     qStart:'Commencer', qNext:'Question suivante →', qReplay:'Rejouer', qValidate:'Valider', qReplaySound:'Réécouter',
@@ -4421,7 +4421,7 @@ const T = {
     phViewPhrases:'📋 Basic Phrases', phViewSit:'🎭 Real Situations',
     sitTag:'Conversations', sitTitle:'Real-life situations',
     sitDesc:'Complete dialogues for everyday situations in Thailand. Click a card to expand the dialogue.',
-    cntBtnListenLbl:'🎧 Listen', cntBtnWriteLbl:'✍️ Translation',
+    cntBtnListenLbl:'🎧 Listen 🔒', cntBtnWriteLbl:'✍️ Translation',
     cntModeDescListen:'Listen to the Thai number and choose from 3 answers.',
     cntModeDescWrite:'See the number in Thai and type the matching digit.',
     qStart:'Start', qNext:'Next question →', qReplay:'Play again', qValidate:'Submit', qReplaySound:'Replay',
@@ -4629,6 +4629,8 @@ function applyLang() {
   s('sitSecTag', t.sitTag); s('sitSecTitle', t.sitTitle); s('sitSecDesc', t.sitDesc);
   // Quiz Chiffres
   s('cntBtnListen', t.cntBtnListenLbl); s('cntBtnWrite', t.cntBtnWriteLbl);
+  const cntListenBtn = document.getElementById('cntBtnListen');
+  if(cntListenBtn) { cntListenBtn.classList.toggle('ph-locked', !userPremium); cntListenBtn.classList.toggle('active', userPremium && cntQState.mode==='listen'); }
   s('cntModeDesc', cntQState&&cntQState.mode==='write' ? t.cntModeDescWrite : t.cntModeDescListen);
   s('cntStartBtn', t.qStart); s('cntReplayLbl', t.qReplaySound);
   s('cntQNext', t.qNext); s('cntRestartBtn', t.qReplay);
@@ -6106,9 +6108,10 @@ const cntData=[
   {n:800,thai:'แปดร้อย',rtgs:'paet roi'},{n:1000,thai:'หนึ่งพัน',rtgs:'nueng phan'}
 ];
 
-let cntQState={mode:'listen',questions:[],idx:0,score:0,answered:false};
+let cntQState={mode:'write',questions:[],idx:0,score:0,answered:false};
 
 function setCntMode(mode,btn){
+  if(mode==='listen' && !userPremium){ showPremiumModal(); return; }
   cntQState.mode=mode;
   document.querySelectorAll('#cntQStart .qmode').forEach(b=>b.classList.remove('active'));
   if(btn) btn.classList.add('active');
