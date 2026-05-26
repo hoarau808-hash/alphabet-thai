@@ -999,6 +999,7 @@ footer{border-top:1px solid var(--border);padding:40px 24px;text-align:center;co
 .phrase-prem-banner .pg-title{font-size:16px;font-weight:700;margin-bottom:6px}
 .phrase-prem-banner .pg-desc{font-size:13px;color:var(--text2);margin-bottom:16px}
 #premiumOverlay{display:none;position:fixed;inset:0;z-index:600;background:rgba(0,0,0,.78);backdrop-filter:blur(8px);align-items:center;justify-content:center;padding:20px}
+#authGateOverlay{display:none;position:fixed;inset:0;z-index:600;background:rgba(0,0,0,.82);backdrop-filter:blur(10px);align-items:center;justify-content:center;padding:20px}
 @media(max-width:768px){.qgrid{grid-template-columns:repeat(2,1fr);gap:10px}.qcard{padding:18px 10px 14px}.qcard-icon{font-size:30px}.qcard-icon.thai{font-size:28px}.qcard-title{font-size:13px}.qcard-desc{font-size:10px}}
 /* ── BOUTON PLEIN ÉCRAN QUIZ (PC uniquement) ────────────────────── */
 .quiz-wrap{position:relative}
@@ -4810,9 +4811,12 @@ let quizMode = 'c2r';
 let quizScore = {ok:0, ko:0};
 let quizQ = null;
 let lastConsId = null;
+let isLoggedIn = false;
+const _AUTH_TABS = new Set(['quiz','vocab','phrases']);
 
 // ─── NAVIGATION ────────────────────────────────────────────────────────────
 function goTab(tab, btnEl) {
+  if(_AUTH_TABS.has(tab) && !isLoggedIn) { showAuthGate(tab); return; }
   checkBadges('tab', {tab});
   document.querySelectorAll('.tab-content').forEach(t=>t.classList.remove('active'));
   document.getElementById('tab-'+tab).classList.add('active');
@@ -6546,6 +6550,30 @@ function spawnFloatChars() {
 }
 
 // ─── AUTH UI ───────────────────────────────────────────────────────────────
+function showAuthGate(tab) {
+  const fr = currentLang !== 'en';
+  const titles = {
+    quiz:    fr ? '🎯 Quiz — Connexion requise'        : '🎯 Quiz — Login Required',
+    vocab:   fr ? '📚 Vocabulaire — Connexion requise' : '📚 Vocabulary — Login Required',
+    phrases: fr ? '💬 Phrases — Connexion requise'     : '💬 Phrases — Login Required',
+  };
+  const descs = {
+    quiz:    fr ? 'Crée un compte gratuit pour accéder aux quiz interactifs et suivre ta progression !'
+               : 'Create a free account to access interactive quizzes and track your progress!',
+    vocab:   fr ? 'Crée un compte gratuit pour accéder à tout le vocabulaire classé par niveau !'
+               : 'Create a free account to access all vocabulary sorted by level!',
+    phrases: fr ? 'Crée un compte gratuit pour accéder aux 104 phrases de base et bien plus !'
+               : 'Create a free account to access 104 essential phrases and more!',
+  };
+  document.getElementById('agTitle').textContent = titles[tab] || (fr ? 'Connexion requise' : 'Login Required');
+  document.getElementById('agDesc').textContent  = descs[tab]  || (fr ? 'Crée un compte gratuit pour accéder à cette section.' : 'Create a free account to access this section.');
+  document.getElementById('authGateOverlay').style.display = 'flex';
+}
+function closeAuthGate() {
+  const el = document.getElementById('authGateOverlay');
+  if(el) el.style.display = 'none';
+}
+
 function openAuth(tab) {
   document.getElementById('authOverlay').classList.add('open');
   switchAuthTab(tab || 'login');
@@ -6745,6 +6773,8 @@ auth.onAuthStateChanged(async (user) => {
   const userAvatar  = document.getElementById('userAvatar');
   const premiumBadge= document.getElementById('premiumBadge');
   if(user) {
+    isLoggedIn = true;
+    closeAuthGate();
     loginBtn.style.display  = 'none';
     userBadge.style.display = 'flex';
     userEmailTxt.textContent = user.email;
@@ -6777,6 +6807,7 @@ auth.onAuthStateChanged(async (user) => {
       }
     } catch(e) {}
   } else {
+    isLoggedIn = false;
     loginBtn.style.display  = '';
     userBadge.style.display = 'none';
     premiumBadge.style.display = 'none';
@@ -9016,6 +9047,20 @@ function clearTraceCanvas() {
     </div>
     <button class="onboard-btn" id="onboardBtn" onclick="closeOnboard()">Commencer maintenant ✨</button>
     <button class="onboard-skip" id="onboardSkip" onclick="closeOnboard()">Passer</button>
+  </div>
+</div>
+
+<!-- MODAL AUTH GATE -->
+<div id="authGateOverlay" onclick="closeAuthGate()">
+  <div class="premium-gate-box" onclick="event.stopPropagation()" style="max-width:400px;width:100%;position:relative;border-color:rgba(14,211,160,.3);background:rgba(14,211,160,.05)">
+    <button onclick="closeAuthGate()" style="position:absolute;top:10px;right:14px;background:none;border:none;color:var(--text2);font-size:22px;cursor:pointer;line-height:1">×</button>
+    <div class="pg-icon">🔐</div>
+    <div class="pg-title" id="agTitle">Connexion requise</div>
+    <div class="pg-desc" id="agDesc">Crée un compte gratuit pour accéder à cette section et suivre ta progression.</div>
+    <div class="pg-btns">
+      <button class="btn-g" onclick="openAuth('register');closeAuthGate()">S'inscrire gratuitement</button>
+      <button class="btn-o" onclick="openAuth('login');closeAuthGate()" style="border:1px solid var(--border)">Se connecter</button>
+    </div>
   </div>
 </div>
 
