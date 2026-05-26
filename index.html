@@ -992,6 +992,8 @@ footer{border-top:1px solid var(--border);padding:40px 24px;text-align:center;co
 .qcard-back:hover{border-color:var(--border-h);color:var(--text)}
 .qcard-lock{position:absolute;top:8px;right:8px;font-size:10px;background:rgba(240,180,41,.12);border:1px solid rgba(240,180,41,.28);border-radius:5px;padding:2px 6px;color:var(--gold);font-weight:700;letter-spacing:.2px;pointer-events:none;line-height:1.4}
 .ph-locked{opacity:.5;cursor:not-allowed}
+.prem-mode-badge{display:block;font-size:9px;font-weight:800;color:var(--gold);letter-spacing:.6px;text-transform:uppercase;margin-bottom:3px;opacity:1}
+.qmode.prem-wrap-btn{display:flex;flex-direction:column;align-items:center;gap:0;line-height:1.3}
 .phrase-prem-banner{background:rgba(240,180,41,.04);border:1px solid rgba(240,180,41,.18);border-radius:12px;padding:24px 20px;text-align:center;margin:16px 0;grid-column:1/-1}
 .phrase-prem-banner .pg-icon{font-size:28px;margin-bottom:8px}
 .phrase-prem-banner .pg-title{font-size:16px;font-weight:700;margin-bottom:6px}
@@ -1850,7 +1852,8 @@ body.romaji-on .cntq-rtgs.romaji-text{display:block;font-size:20px;font-style:it
             <span class="qmc-title" id="consM2Title">Son → Trouver</span>
             <span class="qmc-desc" id="consM2Desc">On te donne le son romanisé, trouve le caractère thaï</span>
           </button>
-          <button class="qmode-card" id="mode3" onclick="setMode('s2c',this)">
+          <button class="qmode-card ph-locked" id="mode3" onclick="setMode('s2c',this)">
+            <span class="prem-mode-badge">🔒 Premium</span>
             <span class="qmc-icon">🔊</span>
             <span class="qmc-title" id="consM3Title">Écouter → Trouver</span>
             <span class="qmc-desc" id="consM3Desc">On joue le son thaï, trouve le bon caractère</span>
@@ -1958,7 +1961,7 @@ body.romaji-on .cntq-rtgs.romaji-text{display:block;font-size:20px;font-style:it
       <button class="qcard-back" onclick="showQuizGrid()">← <span>Changer de quiz</span></button>
       <div class="quiz-card" id="cntQStart">
         <div class="qmodes">
-          <button class="qmode ph-locked" id="cntBtnListen" onclick="setCntMode('listen',this)">🎧 Écoute 🔒</button>
+          <button class="qmode ph-locked prem-wrap-btn" id="cntBtnListen" onclick="setCntMode('listen',this)"><span class="prem-mode-badge">🔒 Premium</span>🎧 Écoute</button>
           <button class="qmode active" id="cntBtnWrite" onclick="setCntMode('write',this)">✍️ Traduction</button>
         </div>
         <p class="cntq-mode-desc" id="cntModeDesc">Écoutez le nombre thaï et choisissez parmi 3 réponses.</p>
@@ -4260,7 +4263,7 @@ const T = {
     phViewPhrases:'📋 Phrases de base', phViewSit:'🎭 Situations pratiques',
     sitTag:'Conversations', sitTitle:'Situations pratiques',
     sitDesc:'Des dialogues complets pour les situations du quotidien en Thaïlande. Cliquez sur une situation pour dérouler le dialogue.',
-    cntBtnListenLbl:'🎧 Écoute 🔒', cntBtnWriteLbl:'✍️ Traduction',
+    cntBtnListenLbl:'🎧 Écoute', cntBtnWriteLbl:'✍️ Traduction',
     cntModeDescListen:'Écoutez le nombre thaï et choisissez parmi 3 réponses.',
     cntModeDescWrite:'Voyez le nombre en thaï et tapez le chiffre correspondant.',
     qStart:'Commencer', qNext:'Question suivante →', qReplay:'Rejouer', qValidate:'Valider', qReplaySound:'Réécouter',
@@ -4421,7 +4424,7 @@ const T = {
     phViewPhrases:'📋 Basic Phrases', phViewSit:'🎭 Real Situations',
     sitTag:'Conversations', sitTitle:'Real-life situations',
     sitDesc:'Complete dialogues for everyday situations in Thailand. Click a card to expand the dialogue.',
-    cntBtnListenLbl:'🎧 Listen 🔒', cntBtnWriteLbl:'✍️ Translation',
+    cntBtnListenLbl:'🎧 Listen', cntBtnWriteLbl:'✍️ Translation',
     cntModeDescListen:'Listen to the Thai number and choose from 3 answers.',
     cntModeDescWrite:'See the number in Thai and type the matching digit.',
     qStart:'Start', qNext:'Next question →', qReplay:'Play again', qValidate:'Submit', qReplaySound:'Replay',
@@ -4592,6 +4595,7 @@ function applyLang() {
   s('consM1Title', t.consM1Title); s('consM1Desc', t.consM1Desc);
   s('consM2Title', t.consM2Title); s('consM2Desc', t.consM2Desc);
   s('consM3Title', t.consM3Title); s('consM3Desc', t.consM3Desc);
+  const m3btn = document.getElementById('mode3'); if(m3btn) m3btn.classList.toggle('ph-locked', !userPremium);
   s('quizStartBtn', t.quizStart); s('qLblOk', t.quizOk); s('qLblKo', t.quizKo);
   s('qReplayLbl', t.quizReplay); s('quizNewBtn', t.quizNew);
   // Phrases tab
@@ -4628,9 +4632,17 @@ function applyLang() {
   s('phViewPh', t.phViewPhrases); s('phViewSit', t.phViewSit);
   s('sitSecTag', t.sitTag); s('sitSecTitle', t.sitTitle); s('sitSecDesc', t.sitDesc);
   // Quiz Chiffres
-  s('cntBtnListen', t.cntBtnListenLbl); s('cntBtnWrite', t.cntBtnWriteLbl);
+  s('cntBtnWrite', t.cntBtnWriteLbl);
   const cntListenBtn = document.getElementById('cntBtnListen');
-  if(cntListenBtn) { cntListenBtn.classList.toggle('ph-locked', !userPremium); cntListenBtn.classList.toggle('active', userPremium && cntQState.mode==='listen'); }
+  if(cntListenBtn) {
+    cntListenBtn.classList.toggle('ph-locked', !userPremium);
+    cntListenBtn.classList.toggle('active', userPremium && cntQState.mode==='listen');
+    // Preserve badge span, update only text node
+    const badge = cntListenBtn.querySelector('.prem-mode-badge');
+    cntListenBtn.childNodes.forEach(n=>{ if(n.nodeType===3) n.textContent=''; });
+    cntListenBtn.appendChild(document.createTextNode(t.cntBtnListenLbl));
+    if(badge) cntListenBtn.insertBefore(badge, cntListenBtn.firstChild);
+  }
   s('cntModeDesc', cntQState&&cntQState.mode==='write' ? t.cntModeDescWrite : t.cntModeDescListen);
   s('cntStartBtn', t.qStart); s('cntReplayLbl', t.qReplaySound);
   s('cntQNext', t.qNext); s('cntRestartBtn', t.qReplay);
@@ -5315,6 +5327,7 @@ function renderTones() {
 
 // ─── QUIZ ──────────────────────────────────────────────────────────────────
 function setMode(m, btn) {
+  if(m==='s2c' && !userPremium){ showPremiumModal(); return; }
   quizMode = m;
   document.querySelectorAll('#quizStart .qmode-card').forEach(b=>b.classList.remove('active'));
   btn.classList.add('active');
