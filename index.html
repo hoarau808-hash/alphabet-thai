@@ -4209,27 +4209,21 @@ const phrases = [
 // ─── LANGUAGE ──────────────────────────────────────────────────────────────
 let currentLang = localStorage.getItem('thai-lang') || 'fr';
 const FREE_PH_QUIZ_LIMIT = 20;
-const FREE_DAILY_LIMIT = 15;
-
-function _getFreeCount() {
-  try {
-    const s = JSON.parse(localStorage.getItem('thai-free-daily') || '{}');
-    return s.date === _todayStr() ? (s.count || 0) : 0;
-  } catch(e) { return 0; }
+function _getDailyCount(key) {
+  try { const s=JSON.parse(localStorage.getItem(key)||'{}'); return s.date===_todayStr()?(s.count||0):0; } catch(e){return 0;}
 }
-function _incFreeCount() {
-  if (userPremium) return;
-  const count = _getFreeCount() + 1;
-  try { localStorage.setItem('thai-free-daily', JSON.stringify({date:_todayStr(), count})); } catch(e) {}
+function _incDailyCount(key) {
+  if(userPremium) return;
+  try { localStorage.setItem(key, JSON.stringify({date:_todayStr(), count:_getDailyCount(key)+1})); } catch(e){}
 }
-function _checkAndBlockFree() {
-  if (userPremium) return false;
-  if (_getFreeCount() >= FREE_DAILY_LIMIT) {
+function _checkDailyLimit(key, limit) {
+  if(userPremium) return false;
+  if(_getDailyCount(key) >= limit) {
     const fr = currentLang !== 'en';
     showPremiumModal(
-      fr ? `Limite de ${FREE_DAILY_LIMIT} questions atteinte` : `${FREE_DAILY_LIMIT} questions reached today`,
-      fr ? `Tu as utilisé tes ${FREE_DAILY_LIMIT} questions gratuites du jour. La limite se renouvelle chaque nuit à minuit. Passe à Premium pour un accès illimité !`
-         : `You've used your ${FREE_DAILY_LIMIT} free questions for today. The limit resets at midnight. Go Premium for unlimited access!`
+      fr ? `Limite de ${limit} questions atteinte` : `${limit} questions reached today`,
+      fr ? `Tu as utilisé tes ${limit} questions gratuites du jour pour ce quiz. La limite se renouvelle chaque nuit à minuit. Passe à Premium pour un accès illimité !`
+         : `You've used your ${limit} free questions for today on this quiz. The limit resets at midnight. Go Premium for unlimited access!`
     );
     return true;
   }
@@ -5403,7 +5397,6 @@ function resetQuizUI() {
 }
 
 function startQuiz() {
-  if(_checkAndBlockFree()) return;
   quizScore = {ok:0, ko:0};
   document.getElementById('qCorrect').textContent='0';
   document.getElementById('qWrong').textContent='0';
@@ -5413,7 +5406,6 @@ function startQuiz() {
 }
 
 function nextQuestion() {
-  if(_checkAndBlockFree()) { document.getElementById('quizPlay').style.display='none'; document.getElementById('quizStart').style.display='block'; return; }
   let correct;
   do { correct = consonants[Math.floor(Math.random()*consonants.length)]; }
   while(correct.id === lastConsId && consonants.length > 1);
@@ -5479,7 +5471,6 @@ function answerQuiz(btn, chosen, correct) {
   else { quizScore.ko++; document.getElementById('qWrong').textContent=quizScore.ko; }
   const total=quizScore.ok+quizScore.ko;
   if(total>0 && total%10===0) saveQuizResult(Math.round(quizScore.ok/total*10), 'cons');
-  _incFreeCount();
   setTimeout(nextQuestion, 1400);
 }
 
@@ -5737,7 +5728,7 @@ function updatePhPlayFreeBar() {
 }
 
 function startPhraseQuiz() {
-  if(_checkAndBlockFree()) return;
+  if(_checkDailyLimit('thai-daily-ph', 20)) return;
   if(!userPremium && phQuizCount >= FREE_PH_QUIZ_LIMIT) { showPhPremiumGate(); return; }
   phQuizScore = {ok:0, ko:0};
   document.getElementById('phQCorrect').textContent = '0';
@@ -5750,7 +5741,7 @@ function startPhraseQuiz() {
 }
 
 function nextPhraseQuestion() {
-  if(_checkAndBlockFree()) { document.getElementById('phQuizPlay').style.display='none'; document.getElementById('phQuizStart').style.display=''; return; }
+  if(_checkDailyLimit('thai-daily-ph', 20)) { document.getElementById('phQuizPlay').style.display='none'; document.getElementById('phQuizStart').style.display=''; return; }
   if(!userPremium && phQuizCount >= FREE_PH_QUIZ_LIMIT) {
     document.getElementById('phQuizPlay').style.display = 'none';
     showPhPremiumGate();
@@ -5818,7 +5809,7 @@ function answerPhraseQuiz(btn, chosenIdx) {
     localStorage.setItem('ph-quiz-count', phQuizCount);
     updatePhPlayFreeBar();
   }
-  _incFreeCount();
+  _incDailyCount('thai-daily-ph');
   setTimeout(nextPhraseQuestion, 1400);
 }
 
@@ -6205,7 +6196,7 @@ function setCntMode(mode,btn){
 }
 
 function startCntQuiz(){
-  if(cntQState.mode !== 'listen' && _checkAndBlockFree()) return;
+  if(cntQState.mode !== 'listen' && _checkDailyLimit('thai-daily-cnt', 20)) return;
   const s=cntQState;
   s.questions=shuffle(cntData).slice(0,10);
   s.idx=0; s.score=0; s.answered=false;
@@ -6286,7 +6277,7 @@ function answerCntWrite(correct,btn,q){
     showCntFeedback(false,q);
   }
   document.querySelectorAll('#cntQWriteOpts .qopt').forEach(b=>b.disabled=true);
-  _incFreeCount();
+  _incDailyCount('thai-daily-cnt');
   document.getElementById('cntQNext').style.display='block';
 }
 
@@ -6297,7 +6288,7 @@ function showCntFeedback(correct,q){
 }
 
 function nextCntQ(){
-  if(cntQState.mode !== 'listen' && _checkAndBlockFree()) { document.getElementById('cntQGame').style.display='none'; document.getElementById('cntQStart').style.display='block'; return; }
+  if(cntQState.mode !== 'listen' && _checkDailyLimit('thai-daily-cnt', 20)) { document.getElementById('cntQGame').style.display='none'; document.getElementById('cntQStart').style.display='block'; return; }
   cntQState.idx++;
   if(cntQState.idx>=10){
     document.getElementById('cntQGame').style.display='none';
@@ -6328,7 +6319,7 @@ function setVowMode(mode,btn){
 }
 
 function startVowQuiz(){
-  if(_checkAndBlockFree()) return;
+  if(_checkDailyLimit('thai-daily-vow', 10)) return;
   vowQState.questions=shuffle(vowelPool).slice(0,10);
   vowQState.idx=0; vowQState.score=0; vowQState.answered=false;
   document.getElementById('vowQStart').style.display='none';
@@ -6392,12 +6383,12 @@ function answerVowQ(correct,btn,q,mode){
   fb.className='cntq-feedback '+(correct?'ok':'ko');
   fb.textContent=correct?'✓ Correct !':`✗ C'était : ${q.char} = ${q.rtgs} (${q.length})`;
   document.querySelectorAll('#vowQOpts .qopt').forEach(b=>b.disabled=true);
-  _incFreeCount();
+  _incDailyCount('thai-daily-vow');
   document.getElementById('vowQNext').style.display='block';
 }
 
 function nextVowQ(){
-  if(_checkAndBlockFree()) { document.getElementById('vowQGame').style.display='none'; document.getElementById('vowQStart').style.display='block'; return; }
+  if(_checkDailyLimit('thai-daily-vow', 10)) { document.getElementById('vowQGame').style.display='none'; document.getElementById('vowQStart').style.display='block'; return; }
   vowQState.idx++;
   if(vowQState.idx>=10){
     document.getElementById('vowQGame').style.display='none';
@@ -6424,7 +6415,7 @@ function setToneMode(mode,btn){
 }
 
 function startToneQuiz(){
-  if(_checkAndBlockFree()) return;
+  if(_checkDailyLimit('thai-daily-tone', 10)) return;
   // 10 questions : chaque ton apparaît exactement 2 fois, ordre mélangé
   toneQState.questions=shuffle([...tones,...tones]);
   toneQState.idx=0; toneQState.score=0; toneQState.answered=false;
@@ -6487,12 +6478,12 @@ function answerToneQ(correct,btn,q){
   fb.className='cntq-feedback '+(correct?'ok':'ko');
   fb.textContent=correct?'✓ Correct !':`✗ C'était : ${q.name} (${q.mark})`;
   document.querySelectorAll('#toneQOpts .qopt').forEach(b=>b.disabled=true);
-  _incFreeCount();
+  _incDailyCount('thai-daily-tone');
   document.getElementById('toneQNext').style.display='block';
 }
 
 function nextToneQ(){
-  if(_checkAndBlockFree()) { document.getElementById('toneQGame').style.display='none'; document.getElementById('toneQStart').style.display='block'; return; }
+  if(_checkDailyLimit('thai-daily-tone', 10)) { document.getElementById('toneQGame').style.display='none'; document.getElementById('toneQStart').style.display='block'; return; }
   toneQState.idx++;
   if(toneQState.idx>=10){
     document.getElementById('toneQGame').style.display='none';
