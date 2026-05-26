@@ -1896,24 +1896,17 @@ body.romaji-on .cntq-rtgs.romaji-text{display:block;font-size:20px;font-style:it
         <h2 id="phQuizTitle">Quiz Phrases</h2>
         <p id="phQuizDesc">Testez votre compréhension des phrases de base.</p>
         <div class="qmode-cards">
-          <button class="qmode-card phmode active" id="phmode1" onclick="setPhMode('t2f',this)">
+          <button class="qmode-card phmode ph-locked prem-wrap-btn" id="phmode1" onclick="setPhMode('t2f',this)">
+            <span class="prem-mode-badge">🔒 Premium</span>
             <span class="qmc-icon">🇹🇭</span>
             <span class="qmc-title" id="phM1Title">Thaï → Traduction</span>
             <span class="qmc-desc" id="phM1Desc">Lis la phrase thaïe, trouve sa traduction</span>
           </button>
-          <button class="qmode-card phmode" id="phmode2" onclick="setPhMode('f2t',this)">
+          <button class="qmode-card phmode active" id="phmode2" onclick="setPhMode('f2t',this)">
             <span class="qmc-icon">💬</span>
             <span class="qmc-title" id="phM2Title">Traduction → Thaï</span>
             <span class="qmc-desc" id="phM2Desc">Lis la traduction, retrouve la phrase en thaï</span>
           </button>
-        </div>
-        <div class="ph-cats-wrap">
-          <div class="ph-cats-title" id="phCatTitle">Catégories</div>
-          <div class="ph-cats-grid" id="phCatGrid"></div>
-          <div class="cat-lock-box" id="phCatLockBox">
-            <div class="cat-lock-icon">🔒</div>
-            <div class="cat-lock-text" id="phCatLockText">Les catégories sont disponibles en Premium. En gratuit, toutes les catégories sont incluses aléatoirement.</div>
-          </div>
         </div>
         <div class="free-bar" id="phStartFreeBar">
           <span class="free-bar-label" id="phStartFreeLabel">Questions gratuites utilisées</span>
@@ -2383,6 +2376,7 @@ body.romaji-on .cntq-rtgs.romaji-text{display:block;font-size:20px;font-style:it
           <button class="qmode active" id="srsModecons" onclick="setSrsMode('cons',this)">Consonnes</button>
           <button class="qmode" id="srsModevow" onclick="setSrsMode('vow',this)">Voyelles</button>
           <button class="qmode" id="srsModevocab" onclick="setSrsMode('vocab',this)">Vocabulaire</button>
+          <button class="qmode" id="srsModeph" onclick="setSrsMode('ph',this)">Phrases</button>
         </div>
         <div id="srsQNoneMsg" style="display:none;background:rgba(14,211,160,.08);border:1px solid rgba(14,211,160,.2);border-radius:12px;padding:14px;font-size:13px;color:var(--teal);text-align:center;margin-bottom:16px">
           ✓ <span id="srsNoneText">Aucune révision pour aujourd'hui. Reviens demain !</span>
@@ -4701,7 +4695,8 @@ function applyLang() {
   s('phQuizTitle', t.phQuizTitle); s('phQuizDesc', t.phQuizDesc);
   s('phM1Title', t.phM1Title); s('phM1Desc', t.phM1Desc);
   s('phM2Title', t.phM2Title); s('phM2Desc', t.phM2Desc);
-  s('phCatLockText', t.phCatLockText);
+  const phmode1btn = document.getElementById('phmode1');
+  if(phmode1btn) phmode1btn.classList.toggle('ph-locked', !userPremium);
   s('phStartFreeLabel', t.phFreeLabel); s('phPlayFreeLabel', t.phFreeLabel);
   s('phGateTitle', t.phGateTitle);
   s('phGateLogin', t.phGateLogin); s('phGatePrem', t.phGatePrem);
@@ -5514,7 +5509,7 @@ function submitPremWaitlist() {
     });
 }
 
-let phQuizMode = 't2f';
+let phQuizMode = 'f2t';
 let selectedPhCats = [...new Set(phrases.map(p=>p.cat))];
 let phQuizScore = {ok:0, ko:0};
 let phQuizQ = null;
@@ -5647,6 +5642,7 @@ function setQuizType(type, cardEl) {
 }
 
 function setPhMode(m, btn) {
+  if(m === 't2f' && !userPremium) { showPremiumModal(); return; }
   phQuizMode = m;
   document.querySelectorAll('#phQuizStart .qmode-card').forEach(b=>b.classList.remove('active'));
   if(btn) btn.classList.add('active');
@@ -5729,7 +5725,7 @@ function nextPhraseQuestion() {
     showPhPremiumGate();
     return;
   }
-  const pool = phrases.filter(p => selectedPhCats.includes(p.cat));
+  const pool = userPremium && selectedPhCats.length ? phrases.filter(p => selectedPhCats.includes(p.cat)) : phrases;
   if(pool.length < 4) return;
   let correct;
   do { correct = pool[Math.floor(Math.random()*pool.length)]; }
@@ -6733,6 +6729,8 @@ auth.onAuthStateChanged(async (user) => {
           if(m3btn) m3btn.classList.remove('ph-locked');
           const cntListenBtn = document.getElementById('cntBtnListen');
           if(cntListenBtn) cntListenBtn.classList.remove('ph-locked');
+          const phmode1btn = document.getElementById('phmode1');
+          if(phmode1btn) phmode1btn.classList.remove('ph-locked');
           renderVocab();
         }
         renderPhCatBtns(); updatePhStartFreeBar();
@@ -8453,6 +8451,7 @@ function setSrsMode(mode, btn) {
 function _srsKey(item) {
   if (_srsMode === 'cons')  return item.id;
   if (_srsMode === 'vow')   return 'vow_' + item.char;
+  if (_srsMode === 'ph')    return 'ph_' + item.thai;
   return 'vocab_' + item.thai;
 }
 
@@ -8464,6 +8463,7 @@ function _srsDueCards() {
   const now = new Date(); now.setHours(0,0,0,0);
   const pool = _srsMode === 'cons'  ? consonants
              : _srsMode === 'vow'   ? vowelPool
+             : _srsMode === 'ph'    ? phrases
              : vocabData.filter(v => v.level === 'A1');
   return pool.filter(c => {
     const d = _srsData[_srsKey(c)];
@@ -8535,12 +8535,16 @@ function _srsShowCard() {
   } else if (_srsMode === 'vow') {
     charDisplay = c.char; fontSize = '90px';
     prompt = fr ? 'Quelle est la prononciation de cette voyelle ?' : 'What is the pronunciation of this vowel?';
+  } else if (_srsMode === 'ph') {
+    charDisplay = fr ? (c.fr || c.thai) : (c.en || c.fr || c.thai); fontSize = '18px';
+    prompt = fr ? 'Comment dit-on cette phrase en thaï ?' : 'How do you say this phrase in Thai?';
   } else {
     charDisplay = c.thai; fontSize = '56px';
     prompt = fr ? 'Quelle est la traduction de ce mot ?' : 'What is the translation of this word?';
   }
   const qCharEl = document.getElementById('srsQChar');
   qCharEl.textContent = charDisplay; qCharEl.style.fontSize = fontSize;
+  qCharEl.style.fontFamily = _srsMode === 'ph' ? "'Inter',sans-serif" : 'var(--thai-font)';
   document.getElementById('srsQPrompt').textContent = prompt;
   document.getElementById('srsRevealBtn').textContent = fr ? 'Voir la réponse' : 'Show answer';
   document.getElementById('srsQPhase').style.display = '';
@@ -8553,6 +8557,7 @@ function _srsReveal() {
   const key = _srsKey(c);
   const aCharEl = document.getElementById('srsAChar');
   const clsEl   = document.getElementById('srsACls');
+  aCharEl.style.fontFamily = 'var(--thai-font)';
   if (_srsMode === 'cons') {
     aCharEl.textContent = c.char; aCharEl.style.fontSize = '90px';
     document.getElementById('srsARtgs').textContent    = c.rtgs;
@@ -8562,6 +8567,11 @@ function _srsReveal() {
     aCharEl.textContent = c.char; aCharEl.style.fontSize = '90px';
     document.getElementById('srsARtgs').textContent    = c.rtgs;
     document.getElementById('srsAMeaning').textContent = c.desc + ' · ' + (fr ? c.length : c.length);
+    clsEl.style.display = 'none';
+  } else if (_srsMode === 'ph') {
+    aCharEl.textContent = c.thai; aCharEl.style.fontSize = '28px';
+    document.getElementById('srsARtgs').textContent    = c.rtgs || '';
+    document.getElementById('srsAMeaning').textContent = fr ? (c.fr || '') : (c.en || c.fr || '');
     clsEl.style.display = 'none';
   } else {
     aCharEl.textContent = c.thai; aCharEl.style.fontSize = '56px';
@@ -8604,8 +8614,8 @@ function _showSrsScore() {
                               (fr ? 'Encore un effort !' : 'Keep practicing!');
   document.getElementById('srsScoreMsg').textContent = msg;
   const stillDue = _srsDueCards().length;
-  const modeNounFr = _srsMode === 'cons' ? 'consonnes' : _srsMode === 'vow' ? 'voyelles' : 'mots';
-  const modeNounEn = _srsMode === 'cons' ? 'consonants' : _srsMode === 'vow' ? 'vowels' : 'words';
+  const modeNounFr = _srsMode === 'cons' ? 'consonnes' : _srsMode === 'vow' ? 'voyelles' : _srsMode === 'ph' ? 'phrases' : 'mots';
+  const modeNounEn = _srsMode === 'cons' ? 'consonants' : _srsMode === 'vow' ? 'vowels' : _srsMode === 'ph' ? 'phrases' : 'words';
   document.getElementById('srsNextInfo').textContent = stillDue > 0
     ? (fr ? stillDue + ' ' + modeNounFr + ' encore à réviser aujourd\'hui.' : stillDue + ' ' + modeNounEn + ' still due today.')
     : (fr ? 'Plus rien à réviser aujourd\'hui. Bravo !' : 'Nothing left for today. Great job!');
